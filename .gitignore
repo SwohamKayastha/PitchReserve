@@ -1,5 +1,59 @@
-.env
+# Ignore Python compiled files
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.db
+
+# Ignore virtual environments
+venv/
+env/
+*.env
+
+# Django secret files and local settings
+*.secret
+local_settings.py
+config/settings/local.py
+
+# Logs
+*.log
+logs/
+
+# Static and media files
+staticfiles/
+media/
+
+# Ignore migrations
+*/migrations/*
+
+# Ignore Node.js dependencies and build files
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+*.lock
+
+# React build output
+build/
+dist/
+
+# Editor & OS files
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Ignore coverage and test reports
+.coverage
+htmlcov/
+.pytest_cache/
+*.cover
+junit.xml
+test-results/
+
+# Ignore Git hooks and local git settings
+.hooks/
+
+
+vid.mp4
