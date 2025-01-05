@@ -1,11 +1,11 @@
-/* body {
+body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f4f7fc;
 }
 
-.register-container {
+.login-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,7 +13,7 @@
     background-color: #f4f7fc;
 }
 
-.register-form {
+.login-form {
     background-color: white;
     padding: 30px;
     border-radius: 8px;
@@ -22,7 +22,7 @@
     max-width: 400px;
 }
 
-.register-form h2 {
+.login-form h2 {
     text-align: center;
     color: #4caf50;
     margin-bottom: 20px;
@@ -74,4 +74,4 @@ label {
 
 .redirect a:hover {
     text-decoration: underline;
-} */
+}
