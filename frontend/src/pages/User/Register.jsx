@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { register } from '../api/auth'; // Import register function
-import '../styles/Register.css'; // Import custom styles
+import { register } from '../../api/auth'; // Import register function
+import '../../styles/User/Register.css'; // Import custom styles
 
 const Register = () => {
     const [username, setUsername] = useState('');

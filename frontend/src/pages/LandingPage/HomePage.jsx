@@ -1,7 +1,7 @@
 // Home Page Code.. edit later
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import '../styles/HomePage.css';
+// import '../styles/LandingPage/HomePage.css';
 
 const Home = () => {
 return (
