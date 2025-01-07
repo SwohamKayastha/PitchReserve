@@ -9,6 +9,7 @@ from .models import Owner
 from .serializers import OwnerSerializer, UserSerializer
 from django.conf import settings
 import requests
+import mimetypes
 
 # Register Owner
 class OwnerRegisterView(APIView):
@@ -80,26 +81,27 @@ class OwnerFormView(APIView):
         number_of_venues = request.data.get('number_of_venues')
         location = request.data.get('location')
         additional_info = request.data.get('additional_info')
-        # image = request.FILES.get('image_url')
+        image = request.FILES.get('image_url')
 
         # Fetch the owner profile
         owner = Owner.objects.get(user=request.user)
 
-    #    # Upload image to Supabase storage using HTTP requests
-    #     if image:
-    #         file_name = f"field_image/{owner.user.username}_{image.name}"
-    #         url = f"{settings.SUPABASE_URL}/storage/v1/object/{file_name}"
-    #         headers = {
-    #             "apikey": settings.SUPABASE_KEY,
-    #             "Authorization": f"Bearer {settings.SUPABASE_KEY}",
-    #             "Content-Type": "application/octet-stream"
-    #         }
-    #         response = requests.post(url, headers=headers, data=image.read())
-    #         if response.status_code == 200:
-    #             image_url = f"{settings.SUPABASE_URL}/storage/v1/object/public/{file_name}"
-    #             owner.image_url = image_url
-    #         else:
-    #             return Response({'error': f'Failed to upload image to Supabase: {response.text}'}, status=response.status_code)
+        # Upload image to Supabase storage using HTTP requests
+        if image:
+            file_name = f"field_image/{owner.user.username}_{image.name}"
+            url = f"{settings.SUPABASE_URL}/storage/v1/object/{file_name}"
+            mime_type, _ = mimetypes.guess_type(image.name)
+            headers = {
+                "apikey": settings.SUPABASE_KEY,
+                "Authorization": f"Bearer {settings.SUPABASE_KEY}",
+                "Content-Type": mime_type or "application/octet-stream"
+            }
+            response = requests.post(url, headers=headers, data=image.read())
+            if response.status_code == 200:
+                image_url = f"{settings.SUPABASE_URL}/storage/v1/object/public/{file_name}"
+                owner.image_url = image_url
+            else:
+                return Response({'error': f'Failed to upload image to Supabase: {response.text}'}, status=response.status_code)
 
         # Update the owner profile with the form data
         owner.phone_number = phone_number
