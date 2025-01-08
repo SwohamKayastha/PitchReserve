@@ -32,7 +32,8 @@ class LoginView(APIView):
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
-        user = authenticate(username=username, password=password)
+        email = request.data.get('email')
+        user = authenticate(email=email, password=password)
 
         if not user:
             return Response({'error': 'Invalid credentials'}, status=400)
