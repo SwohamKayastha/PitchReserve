@@ -15,6 +15,8 @@ export const registerUser = async (userData) => {
 export const loginUser = async (userData) => {
   try {
     const response = await axios.post(`${API_URL}/login/`, userData);
+    const { access_token } = response.data;
+    localStorage.setItem('access_token', access_token);
     return response.data;
   } catch (error) {
     if (error.response && error.response.data) {
@@ -36,14 +38,30 @@ export const registerOwner = async (ownerData) => {
 
 export const loginOwner = async (userData) => {
   try {
-    const response = await axios.post(`${API_URL}/owner/register/`, userData);
-    return response.data;
+      const response = await axios.post(`${API_URL}/owner/login/`, userData);
+      const { access_token } = response.data;
+      localStorage.setItem('access_token', access_token);
+      return response.data;
   } catch (error) {
     if (error.response && error.response.data) {
       throw new Error(error.response.data.message || 'Login failed');
     } else {
       throw new Error('An error occurred');
     }
+  }
+};
+
+
+export const fetchOwnerProfile = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/owner/profile/`,{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      },
+    });
+    return response.data.owner;
+  } catch (err) {
+    throw new Error(err.response?.data?.error || err.message);
   }
 };
 

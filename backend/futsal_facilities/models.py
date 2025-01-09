@@ -1,6 +1,8 @@
 from django.db import models
+from Owner.models import Owner  # Import the Owner model
 
 class FutsalFacility(models.Model):
+    owner = models.ForeignKey(Owner, on_delete=models.CASCADE, related_name="futsal_facilities")  # One-to-many relationship with Owner
     facility_id = models.AutoField(primary_key=True)  # Auto-increment ID
     name = models.CharField(max_length=255)          # Facility name
     location = models.CharField(max_length=255)      # Facility location
@@ -18,4 +20,3 @@ class FutsalFacility(models.Model):
 
     def __str__(self):
         return self.name
-
