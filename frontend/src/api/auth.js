@@ -11,12 +11,39 @@ export const registerUser = async (userData) => {
   }
 };
 
+
 export const loginUser = async (userData) => {
   try {
     const response = await axios.post(`${API_URL}/login/`, userData);
     return response.data;
   } catch (error) {
+    if (error.response && error.response.data) {
+      throw new Error(error.response.data.message || 'Login failed');
+    } else {
+      throw new Error('An error occurred');
+    }
+  }
+};
+
+export const registerOwner = async (ownerData) => {
+  try {
+    const response = await axios.post(`${API_URL}/owner/register/`, ownerData);
+    return response.data;
+  } catch (error) {
     throw error.response.data;
+  }
+};
+
+export const loginOwner = async (userData) => {
+  try {
+    const response = await axios.post(`${API_URL}/owner/register/`, userData);
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      throw new Error(error.response.data.message || 'Login failed');
+    } else {
+      throw new Error('An error occurred');
+    }
   }
 };
 

@@ -6,9 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Alert } from '@/components/ui/alert';
 import { Mail, User, Lock } from 'lucide-react';
-import { registerUser } from '../../api/auth';
+import { registerUser } from '../../../api/auth';
 
-const RegisterForm = ({ isOwner }) => {
+const RegisterUserForm = ({ isOwner }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
@@ -81,4 +81,4 @@ const RegisterForm = ({ isOwner }) => {
   );
 };
 
-export default RegisterForm;
+export default RegisterUserForm;
