@@ -5,8 +5,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Switch } from '@/components/ui/switch';
 import { Building2, X, Menu } from 'lucide-react';
 import logo from '../assets/logo.png';
-import RegisterForm from '../components/LoginPage/RegisterForm';
-import LoginForm from '../components/LoginPage/LoginForm';
+import RegisterUserForm from '../components/LoginPage/User/RegisterForm';
+import LoginUserForm from '../components/LoginPage/User/LoginUserForm';
+import RegisterOwnerForm from '../components/LoginPage/Owner/RegisterOwnerForm';
+import LoginOwnerForm from '../components/LoginPage/Owner/LoginOwnerForm';
 
 const TitleBar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -147,13 +149,22 @@ const LoginPage = () => {
                   <TabsTrigger value="login">Login</TabsTrigger>
                 </TabsList>
                 
-                <TabsContent value="register">
+                {/* <TabsContent value="register">
                   <RegisterForm isOwner={isOwner} />
+                </TabsContent> */}
+
+                <TabsContent value="register">
+                  {isOwner ? <RegisterOwnerForm /> : <RegisterUserForm />}
                 </TabsContent>
 
-                <TabsContent value="login">
+                {/* <TabsContent value="login">
                   <LoginForm isOwner={isOwner} />
+                </TabsContent> */}
+
+                <TabsContent value="login">
+                  {isOwner ? <LoginOwnerForm /> : <LoginUserForm />}
                 </TabsContent>
+
               </Tabs>
             </CardContent>
           </Card>
@@ -166,16 +177,22 @@ const LoginPage = () => {
 export default LoginPage;
 
 // import React, { useState } from 'react';
-// import { Link, useLocation } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom'
 // import { Card, CardHeader, CardContent } from '@/components/ui/card';
 // import { Input } from '@/components/ui/input';
 // import { Button } from '@/components/ui/button';
 // import { Label } from '@/components/ui/label';
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+// import {Checkbox } from '@/components/ui/checkbox';
 // import { Alert } from '@/components/ui/alert';
-// import { Lock, Mail, User, X, Menu, Building2 } from 'lucide-react';
+// import { Lock, Mail, User, X, Menu } from 'lucide-react';
 // import { Switch } from '@/components/ui/switch';
+
 // import logo from '../assets/logo.png';
+// import loginBg from '../assets/loginBg.jpg';
+
+// import { Building2 } from 'lucide-react';
 
 // const TitleBar = () => {
 //   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -258,10 +275,13 @@ export default LoginPage;
 // };
 
 // const LoginPage = () => {
+
 //   const location = useLocation();
-//   const fromPartnership = location.state?.fromPartnership || false;
+
+//   const fromPartnership = location.state?.fromPartnership || false; // Check if coming from Partnership
 
 //   const [activeTab, setActiveTab] = useState('register');
+//   // const [isOwner, setIsOwner] = useState(false);
 //   const [formData, setFormData] = useState({
 //     email: '',
 //     username: '',
@@ -277,6 +297,9 @@ export default LoginPage;
 //       ...formData,
 //       [name]: type === 'checkbox' ? checked : value,
 //     });
+//     if (e.target.name === 'isOwner') {
+//       setIsOwner(e.target.checked);
+//     }
 //     setError('');
 //   };
 
@@ -293,7 +316,10 @@ export default LoginPage;
 //       setError("Passwords don't match");
 //       return;
 //     }
-//     alert('Form submitted successfully!');
+//     else {
+//       alert('Form submitted successfully!');
+
+//     }
 //     console.log('Form submitted:', formData);
 //   };
 
@@ -301,6 +327,7 @@ export default LoginPage;
 //     <div
 //       className="min-h-screen bg-gradient-to-b from-green-50/80 to-green-100/80 relative"
 //       style={{
+//         //backgroundImage: `url(${loginBg})`,
 //         backgroundSize: 'cover',
 //         backgroundPosition: 'center',
 //         backgroundRepeat: 'no-repeat',
@@ -315,7 +342,7 @@ export default LoginPage;
 //             <CardHeader className="text-center space-y-4 pb-8">
 //               <h2 className="text-3xl font-bold text-gray-900">Welcome to Pitch Reserve</h2>
 //               <p className="text-gray-600">
-//                 {activeTab !== 'login' ? 'Create your account' : 'Sign in to your account'}
+//                 {activeTab != 'login' ? 'Create your account' : 'Sign in to your '}
 //               </p>
 //               <div className="flex items-center justify-center space-x-4 p-4 bg-green-100 rounded-lg">
 //                 <span className={`text-sm font-medium ${!formData.isOwner ? 'text-green-900' : 'text-gray-500'}`}>
@@ -341,8 +368,10 @@ export default LoginPage;
 //             <CardContent>
 //               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
 //                 <TabsList className="grid w-full grid-cols-2 mb-8 bg-green-100 rounded-lg">
+                  
 //                   <TabsTrigger value="register">Register</TabsTrigger>
 //                   <TabsTrigger value="login">Login</TabsTrigger>
+                  
 //                 </TabsList>
                 
 //                 <TabsContent value="register">
@@ -376,6 +405,30 @@ export default LoginPage;
 //                       </div>
 //                     </div>
 //                     {error && <Alert variant="destructive">{error}</Alert>}
+//                     {/* <div className="p-4 bg-green-100 rounded-lg border border-green-200 hover:bg-green-50 transition-colors duration-200">
+//                       <div className="flex items-start space-x-3">
+//                         <div className="flex items-center h-6">
+//                           <Input
+//                             id="isOwner"
+//                             name="isOwner"
+//                             type="checkbox"
+//                             checked={formData.isOwner}
+//                             className="w-4 h-4 text-green-600 border-green-300 rounded focus:ring-green-500"
+//                             onChange={handleInputChange}
+//                           />
+//                         </div>
+//                         <div className="flex-1">
+//                           <Label htmlFor="isOwner" className="font-medium text-gray-900 block">
+//                             Futsal Venue Owner
+//                           </Label>
+//                           <p className="text-sm text-gray-500">
+//                             Register as a venue owner to list your facilities, manage bookings, and grow your business with our platform.
+//                           </p>
+//                         </div>
+//                         <Building2 className="h-6 w-6 text-green-600 flex-shrink-0" />
+//                       </div>
+//                     </div> */}
+
 //                     <Button type="submit" className="w-full bg-green-900 hover:bg-green-700 h-12 text-lg font-medium">
 //                       Create Account
 //                     </Button>
@@ -430,4 +483,4 @@ export default LoginPage;
 //   );
 // };
 
-// export default LoginPage;
+// export default LoginPage; 
