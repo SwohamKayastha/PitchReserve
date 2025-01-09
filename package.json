@@ -1,0 +1,25 @@
+{
+  "name": "pitchreserve",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "react-scripts start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SwohamKayastha/PitchReserve.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/SwohamKayastha/PitchReserve/issues"
+  },
+  "homepage": "https://github.com/SwohamKayastha/PitchReserve#readme",
+  "description": "",
+  "dependencies": {
+    "react-scripts": "^5.0.1"
+  }
+}

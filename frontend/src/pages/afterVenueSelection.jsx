@@ -1,3 +1,6 @@
+
+// INCOMPLETE CODE
+
 import React from 'react';
 
 // Frame component
