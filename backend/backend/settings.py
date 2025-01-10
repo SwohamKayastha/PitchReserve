@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'corsheaders', 
     'users',
     'Owner',
-    'futsal_facilities',
+    'facilities',
 ]
 
 MIDDLEWARE = [
