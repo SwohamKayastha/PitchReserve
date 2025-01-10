@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Alert } from '@/components/ui/alert';
 import { User, Lock } from 'lucide-react';
-import { loginUser } from '../../../api/auth';
+import { loginOwner } from '../../../api/auth';
 
 const LoginOwnerForm = () => {
   const navigate = useNavigate();
@@ -27,9 +27,9 @@ const LoginOwnerForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await loginUser(formData);
+      await loginOwner(formData);
       alert('Login successful!');
-      navigate('/');
+      navigate('/owner/profile');
     } catch (error) {
       setError(error.message || 'An error occurred');
     }

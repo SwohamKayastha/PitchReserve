@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from .models import Owner
 from .serializers import OwnerSerializer, UserSerializer
 from django.conf import settings
+from backend.settings import supabase
 import requests
 import mimetypes
 
@@ -60,6 +61,12 @@ class OwnerLoginView(APIView):
 
         if not user:
             return Response({'error': 'Invalid credentials'}, status=400)
+        
+        try:
+            owner = Owner.objects.get(user=user)
+        except Owner.DoesNotExist:
+            return Response({'error': 'You are not authorized to access this page'}, status=403)
+
 
         # If authenticated, generate JWT token
         refresh = RefreshToken.for_user(user)
@@ -131,11 +138,24 @@ class OwnerProfileView(APIView):
             owner = Owner.objects.get(user=request.user)
         except Owner.DoesNotExist:
             return Response({'error': 'Owner profile does not exist'}, status=404)
+        
+        
+        # Generate signed URL for the image
+        if owner.image_url:
+            bucket_name = "field_image"
+            file_path = owner.image_url.split('/')[-1]  # Extract file path from URL
+            signed_url_response = supabase.storage.from_(bucket_name).create_signed_url(file_path, expires_in=3600)  # URL expires in 1 hour
+            signed_url = signed_url_response.get('signedURL')
+        else:
+            signed_url = None
+
 
         owner_serializer = OwnerSerializer(owner)
+        owner_data = owner_serializer.data
+        owner_data['image_url'] = signed_url
 
         # Return the access token and owner data
         return Response({
             "access_token": access_token,
-            "owner": owner_serializer.data
+            "owner": owner_data
         }, status=200)

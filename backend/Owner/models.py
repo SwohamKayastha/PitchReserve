@@ -11,4 +11,4 @@ class Owner(models.Model):
     image_url = models.URLField(max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return self.user.username
+        return f"{self.field_name} - {self.user.username}"
