@@ -37,7 +37,7 @@ const RegisterOwnerForm = () => {
     try {
       await registerOwner(formData);
       alert('Registration successful!');
-      navigate('/');
+      navigate('/login');
     } catch (error) {
       setError(error.message || 'An error occurred');
     }

@@ -28,7 +28,8 @@
         <div className="flex items-center">
           <button className="felx items-center bg-transparent hover:bg-gray-00">
             <div className="relative h-10 w-auto p-0">
-              <a href ="/playerProfile">
+              {/* <a href ="/player/profile"> */}
+              <a href ="/login">
                 <img 
                   src={profileIcon} 
                   alt="profile" 

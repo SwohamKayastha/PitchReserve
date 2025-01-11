@@ -11,12 +11,12 @@ export const registerUser = async (userData) => {
   }
 };
 
-
 export const loginUser = async (userData) => {
   try {
     const response = await axios.post(`${API_URL}/login/`, userData);
     const { access_token } = response.data;
     localStorage.setItem('access_token', access_token);
+    localStorage.setItem('refress_token', access_token);
     return response.data;
   } catch (error) {
     if (error.response && error.response.data) {
@@ -27,13 +27,28 @@ export const loginUser = async (userData) => {
   }
 };
 
+
+export const fetchPlayerProfile = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/profile/`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response?.data?.error || err.message);
+  }
+};
+
+
 export const registerOwner = async (ownerData) => {
   try {
     const response = await axios.post(`${API_URL}/owner/register/`, ownerData);
     return response.data;
   } catch (error) {
     throw error.response.data;
-  }
+  } 
 };
 
 export const loginOwner = async (userData) => {
