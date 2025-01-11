@@ -60,7 +60,7 @@ const TitleBar = () => {
               <ul className="space-y-4">
                 {[
                   { name: 'Home', path: '/' },
-                  { name: 'About Us', path: '/about' },
+                  { name: 'About Us', path: '/aboutUs' },
                   { name: 'Book Venue', path: '/book' },
                   { name: 'Login/ Partnership', path: '/Partnership' },
                   { name: 'Subscriptions', path: '/subscriptions' },
