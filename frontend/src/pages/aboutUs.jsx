@@ -3,6 +3,125 @@ import { Users, Trophy, MapPin, Linkedin, GraduationCap, MapPinIcon } from 'luci
 import { Card, CardContent } from '@/components/ui/card';
 import aayush from '../assets/aayush.jpg';
 import parichit from '../assets/parichit.jpg';
+import { useState } from 'react';
+import { X, Menu } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import logo from '../assets/logo.png';
+import profileIcon from '../assets/profileIcon.png';
+
+
+const TitleBar = () => {
+  const [isMenuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!isMenuOpen);
+  };
+
+  return (
+    <div className="fixed top-0 left-0 w-full flex justify-between items-center p-1 z-50">
+      <div className="flex items-center">
+        <button className="felx items-center bg-transparent hover:bg-gray-00">
+          <div className="relative h-10 w-auto p-0">
+            {/* <a href ="/player/profile"> */}
+            <a href ="/login">
+              <img 
+                src={profileIcon} 
+                alt="profile" 
+                className="h-10 w-auto"
+                style={{
+                  filter: 'brightness(1) contrast(1)',
+                  backgroundColor: 'transparent'
+                }}
+              />``
+            </a>  
+          </div>
+        </button>
+      </div>
+
+
+      <div className="flex items-center">
+        <button className="felx items-right bg-transparent hover:bg-gray-00">
+          <div className="relative h-10 w-auto p-0">
+            <img 
+              src={logo} 
+              alt="Logo" 
+              className="h-10 w-auto"
+              style={{
+                filter: 'brightness(1) contrast(1)',
+                backgroundColor: 'transparent'
+              }}
+            />
+          </div>
+        </button>
+      </div>
+      
+      <div className="relative">
+        <button
+          className="p-2 text-black bg-transparent hover:bg-gray-400 rounded-lg transition-colors duration-200 focus:outline-none"
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
+        >
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+
+        {/* Sliding Menu */}
+        <div 
+          className={`fixed right-0 top-0 w-64 h-full bg-gray-900 shadow-lg transform transition-transform duration-300 ease-in-out ${
+            isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          } z-50`}
+        >
+          <div className="flex flex-col p-4">
+            <button 
+              onClick={toggleMenu}
+              className="self-end p-2 text-white hover:bg-gray-800 rounded-lg transition-colors duration-200"
+              aria-label="Close menu"
+            >
+              <X size={24} />
+            </button>
+
+            <nav className="mt-8">
+              <ul className="space-y-4">
+                {[
+                  { name: 'Home', path: '/' },
+                  { name: 'About Us', path: '/about' },
+                  { name: 'Book Venue', path: '/book' },
+                  { name: 'Login/ Partnership', path: '/Partnership' },
+                  { name: 'Subscriptions', path: '/subscriptions' },
+                  { name: 'Blogs', path: '/blogs' }
+                ].map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      to={item.path}
+                      className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+      
+      {/* Overlay when menu is open */}
+      {isMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={toggleMenu}
+        />
+      )}
+
+              {isMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={toggleMenu}
+        />
+      )}
+    </div>
+  );
+};
+
 
 const AboutUs = () => {
   const stats = [
@@ -74,7 +193,8 @@ const AboutUs = () => {
   };
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-gradient-to-b from-green-50 to-white">
+     <div className="fixed top-0 left-0 w-full flex justify-between items-center p-1 z-50">
+      <TitleBar />
       {/* Main container */}
       <div className="w-full max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section */}

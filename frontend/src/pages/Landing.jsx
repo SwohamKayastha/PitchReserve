@@ -198,7 +198,7 @@ const Footer = () => {
           <div className="col-span-1 text-center relative">
             <ul className="space-y-2">
               <li><a href="#" className="hover:text-gray-300">Home</a></li>
-              <li><a href="#" className="hover:text-gray-300">About us</a></li>
+              <li><a href="/aboutUs" className="hover:text-gray-300">About us</a></li>
               <li><a href="/Partnership" className="hover:text-gray-300">Partner With Us</a></li>
               <li><a href="#" className="hover:text-gray-300">Membership/Subscriptions</a></li>
               <li><a href="#" className="hover:text-gray-300">Book Now</a></li>
