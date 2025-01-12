@@ -55,11 +55,3 @@ class ProfileView(APIView):
             'username': user.username,
             'email': user.email,
         })
-    
-# # Logout View (optional: token blacklisting)
-# class LogoutView(APIView):
-#     permission_classes = [IsAuthenticated]
-
-#     def post(self, request):
-#         logout(request)
-#         return Response({'message': 'Logged out successfully'}, status=200)
