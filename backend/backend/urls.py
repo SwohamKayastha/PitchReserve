@@ -23,4 +23,5 @@ urlpatterns = [
     path('api/auth/owner/', include('Owner.urls')),
     path('futsal-facilities/', include('facilities.urls')),
     path('booking/', include('court_booking.urls')),
+    path('schedules/', include('schedules.urls')),
 ]
