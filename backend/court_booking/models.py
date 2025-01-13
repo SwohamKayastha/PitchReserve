@@ -18,7 +18,7 @@ class CourtBooking(models.Model):
     schedule = models.ForeignKey(
         Schedule, 
         on_delete=models.CASCADE, 
-        related_name='bookings'
+        related_name='schedules'
     )  # Foreign key to Schedule
     booking_date = models.DateTimeField(auto_now_add=True)  # Timestamp of booking
     payment_status = models.CharField(
