@@ -29,7 +29,7 @@ const LoginOwnerForm = () => {
     try {
       await loginOwner(formData);
       alert('Login successful!');
-      navigate('/owner/profile');
+      navigate('/ownerProfile');
     } catch (error) {
       setError(error.message || 'An error occurred');
     }
