@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'users',
     'Owner',
     'facilities',
+    'schedules',
+    'court_booking',
 ]
 
 MIDDLEWARE = [
