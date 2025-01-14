@@ -12,10 +12,15 @@ class FutsalFacility(models.Model):
     availability_end_time = models.TimeField()
     price_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
     has_changing_room = models.BooleanField(default=False)
-    parking_facilities = models.CharField(max_length=100, blank=True, null=True)
+    # parking_facilities = models.CharField(max_length=100, blank=True, null=True)
+    parking_facilities = models.BooleanField(default=False)
     water_availability = models.BooleanField(default=False)
     event_capacity = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
+    image_url = models.URLField(max_length=200, blank=True, null=True)
+    lights = models.BooleanField(default=False)
+    cafeteria = models.BooleanField(default=False)
+    equipment = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.name} - {self.location}"

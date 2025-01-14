@@ -3,6 +3,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Schedule
 from .serializers import SchedulesSerializer
+from facilities.models import FutsalFacility
+from django.shortcuts import get_object_or_404
+from datetime import datetime, timedelta
+from rest_framework.response import Response
 
 
 class SchedulesListView(APIView):
@@ -55,3 +59,35 @@ class SchedulesDetailView(APIView):
             return Response({'error': 'Schedule not found'}, status=status.HTTP_404_NOT_FOUND)
         schedule.delete()
         return Response({'message': 'Schedule deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+
+
+
+class GenerateTimeSlotsView(APIView):
+    def post(self, request, facility_id, date):
+        # Convert date string to datetime.date object
+        try:
+            date_obj = datetime.strptime(date, '%Y-%m-%d').date()
+        except ValueError:
+            return Response({'error': 'Invalid date format. Use YYYY-MM-DD.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        facility = get_object_or_404(FutsalFacility, id=facility_id)
+        start_time = datetime.combine(date_obj, facility.availability_start_time)
+        end_time = datetime.combine(date_obj, facility.availability_end_time)
+        time_slots = []
+
+        while start_time < end_time:
+            slot_end_time = start_time + timedelta(hours=1)
+            if slot_end_time > end_time:
+                break
+            time_slot = Schedule(
+                date=date_obj,
+                start_time=start_time.time(),
+                end_time=slot_end_time.time(),
+                facility=facility
+            )
+            time_slot.save()
+            time_slots.append(time_slot)
+            start_time = slot_end_time
+
+        serializer = SchedulesSerializer(time_slots, many=True)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
