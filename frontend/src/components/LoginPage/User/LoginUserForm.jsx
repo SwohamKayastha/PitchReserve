@@ -29,7 +29,7 @@ const LoginUserForm = () => {
     try {
       await loginUser(formData);
       alert('Login successful!');
-      navigate('/player/profile');
+      navigate('/playerProfile');
     } catch (error) {
       setError(error.message || 'An error occurred');
     }

@@ -18,7 +18,7 @@ const TitleBar = () => {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full flex justify-between items-center p-1 z-50">
+    <div className="fixed tosp-0 left-0 w-full flex justify-between items-center p-1 z-50">
       <div className="flex items-center">
         <button className="felx items-center bg-transparent hover:bg-gray-00">
           <div className="relative h-10 w-auto p-0">
