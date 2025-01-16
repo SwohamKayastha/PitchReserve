@@ -5,6 +5,7 @@ import { fetchOwnerProfile } from "@/api/auth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import FutsalUploadForm from "./futsalFacilitiesForm";
+import {Select } from "@/components/ui/select";
 
 const Profile = () => {
   const [showEditProfile, setShowEditProfile] = useState(false);
@@ -259,6 +260,14 @@ const Profile = () => {
                     {ownerData.field_name}
                   </p>
                 </div>
+                <select
+                   className="bg-blue-50 text-blue-900 border border-blue-300 rounded-md shadow-sm px-2 py-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    >
+                    <option value="all">Select Venue</option>
+                    <option value="venue1">Venue 1</option>
+                    <option value="venue2">Venue 2</option>
+  
+                </select> 
                 <button 
                   onClick={() => setShowFacilitiesForm(true)}
                   className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition shadow-lg flex items-center gap-2"

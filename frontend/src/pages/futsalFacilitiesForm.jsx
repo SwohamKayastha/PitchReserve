@@ -119,7 +119,7 @@ const FutsalUploadForm = ({ onClose }) => {
                   name="name"
                   value={futsalData.name}
                   onChange={handleInputChange}
-                  className="px-4 py-2 rounded-lg border focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                  className="px-4 py-2 rounded-lg border focus:border-blue-500 bg-white focus:ring-2 focus:ring-blue-200"
                   placeholder="Facility Name *"
                   required
                 />
@@ -128,7 +128,7 @@ const FutsalUploadForm = ({ onClose }) => {
                   name="location"
                   value={futsalData.location}
                   onChange={handleInputChange}
-                  className="px-4 py-2 rounded-lg border focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                  className="px-4 py-2 rounded-lg border focus:border-blue-500 bg-white focus:ring-2 focus:ring-blue-200"
                   placeholder="Location *"
                   required
                 />
@@ -138,7 +138,11 @@ const FutsalUploadForm = ({ onClose }) => {
                   value={futsalData.number_of_pitches}
                   onChange={handleInputChange}
                   min="1"
+<<<<<<< HEAD
                   className="px-4 py-2 rounded-lg border"
+=======
+                  className="px-4 py-2 rounded-lg border focus:border-blue-500 bg-white focus:ring-2 focus:ring-blue-200"
+>>>>>>> f44c257191de2a9a617bb6244f698e6340672541
                   placeholder="Number of Pitches *"
                   required
                 />
@@ -148,7 +152,11 @@ const FutsalUploadForm = ({ onClose }) => {
                   value={futsalData.price_per_hour}
                   onChange={handleInputChange}
                   min="0"
+<<<<<<< HEAD
                   className="px-4 py-2 rounded-lg border"
+=======
+                  className="px-4 py-2 rounded-lg border focus:border-blue-500 focus:ring-2 bg-white focus:ring-blue-200"
+>>>>>>> f44c257191de2a9a617bb6244f698e6340672541
                   placeholder="Price per Hour (Rs) *"
                   required
                 />
@@ -157,7 +165,7 @@ const FutsalUploadForm = ({ onClose }) => {
                   name="availability_start_time"
                   value={futsalData.availability_start_time}
                   onChange={handleInputChange}
-                  className="px-4 py-2 rounded-lg border focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                  className="px-4 py-2 rounded-lg border focus:border-blue-500 bg-white focus:ring-2 focus:ring-blue-200"
                   required
                 />
                 <input
@@ -165,7 +173,7 @@ const FutsalUploadForm = ({ onClose }) => {
                   name="availability_end_time"
                   value={futsalData.availability_end_time}
                   onChange={handleInputChange}
-                  className="px-4 py-2 rounded-lg border focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                  className="px-4 py-2 rounded-lg border focus:border-blue-500 bg-white focus:ring-2 focus:ring-blue-200"
                   required
                 />
               </div>
