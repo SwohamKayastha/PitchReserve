@@ -1,86 +1,85 @@
-  import React from 'react';
-  import {useState} from 'react';
-  import subscriptionImage from '../assets/subscriptions.jpg';
-  import mapOfNepal from '../assets/mapOfNepal.png';
-  import searchicon from '../assets/searchIcon.png';
-  import bookicon from '../assets/bookIcon.png';
-  import playicon from '../assets/playIcon.png';
-  import heroimage from '../assets/bg.jpg';
-  import logo from '../assets/logo.png';
-  import profileIcon from '../assets/profileIcon.png';
-  
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { X, Menu, Facebook, Instagram, Mail, Search, Book, Play } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-  import { X, Menu } from 'lucide-react';
-  import { Facebook, Instagram, Mail } from 'lucide-react';
-  import { Link } from 'react-router-dom'; 
+// Import your images
+import subscriptionImage from '../assets/subscriptions.jpg';
+import mapOfNepal from '../assets/mapOfNepal.png';
+import searchicon from '../assets/searchIcon.png';
+import bookicon from '../assets/bookIcon.png';
+import playicon from '../assets/playIcon.png';
+import heroimage from '../assets/bg.jpg';
+import logo from '../assets/logo.png';
+import profileIcon from '../assets/profileIcon.png';
 
+const TitleBar = () => {
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-
-  const TitleBar = () => {
-    const [isMenuOpen, setMenuOpen] = useState(false);
-  
-    const toggleMenu = () => {
-      setMenuOpen(!isMenuOpen);
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
     };
-  
-    return (
-      <div className="fixed top-0 left-0 w-full flex justify-between items-center p-1 z-50">
-        <div className="flex items-center">
-          <button className="felx items-center bg-transparent hover:bg-gray-00">
-            <div className="relative h-10 w-auto p-0">
-              {/* <a href ="/player/profile"> */}
-              <a href ="/login">
-                <img 
-                  src={profileIcon} 
-                  alt="profile" 
-                  className="h-10 w-auto"
-                  style={{
-                    filter: 'brightness(1) contrast(1)',
-                    backgroundColor: 'transparent'
-                  }}
-                />``
-              </a>  
-            </div>
-          </button>
-        </div>
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
+  return (
+    <motion.div
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        scrolled ? 'bg-white shadow-lg' : 'bg-transparent'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="flex items-center"
+        >
+          <Link to="/login" className="relative">
+            <img 
+              src={profileIcon}
+              alt="profile"
+              className="h-12 w-auto transition-transform duration-200 hover:brightness-110"
+            />
+          </Link>
+        </motion.div>
 
-        <div className="flex items-center">
-          <button className="felx items-right bg-transparent hover:bg-gray-00">
-            <div className="relative h-10 w-auto p-0">
-              <img 
-                src={logo} 
-                alt="Logo" 
-                className="h-10 w-auto"
-                style={{
-                  filter: 'brightness(1) contrast(1)',
-                  backgroundColor: 'transparent'
-                }}
-              />
-            </div>
-          </button>
-        </div>
-        
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="flex items-center"
+        >
+          <img 
+            src={logo}
+            alt="Logo"
+            className="h-12 w-auto"
+          />
+        </motion.div>
+
         <div className="relative">
-          <button
-            className="p-2 text-black bg-transparent hover:bg-gray-400 rounded-lg transition-colors duration-200 focus:outline-none"
-            onClick={toggleMenu}
-            aria-label="Toggle menu"
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className={`p-2 rounded-lg transition-colors duration-200 ${
+              scrolled ? 'text-black hover:bg-gray-100' : 'text-white hover:bg-white/10'
+            }`}
+            onClick={() => setMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-  
-          {/* Sliding Menu */}
-          <div 
-            className={`fixed right-0 top-0 w-64 h-full bg-gray-900 shadow-lg transform transition-transform duration-300 ease-in-out ${
-              isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-            } z-50`}
+          </motion.button>
+
+          <motion.div 
+            initial={{ x: '100%' }}
+            animate={{ x: isMenuOpen ? 0 : '100%' }}
+            transition={{ type: 'tween', duration: 0.3 }}
+            className="fixed right-0 top-0 w-72 h-full bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl"
           >
             <div className="flex flex-col p-4">
               <button 
-                onClick={toggleMenu}
-                className="self-end p-2 text-white hover:bg-gray-800 rounded-lg transition-colors duration-200"
-                aria-label="Close menu"
+                onClick={() => setMenuOpen(false)}
+                className="self-end p-2 text-white hover:bg-gray-800 rounded-lg"
               >
                 <X size={24} />
               </button>
@@ -89,262 +88,263 @@
                 <ul className="space-y-4">
                   {[
                     { name: 'Home', path: '/' },
-                    { name: 'About Us', path: '/about' },
+                    { name: 'About Us', path: '/aboutUs' },
                     { name: 'Book Venue', path: '/book' },
                     { name: 'Login/ Partnership', path: '/Partnership' },
-                    { name: 'Subscriptions', path: '/subscriptions' },
-                    { name: 'Blogs', path: '/blogs' }
+                    { name: 'Subscriptions', path: '/error' },
+                    { name: 'Blogs', path: '/newFeatures' }
                   ].map((item) => (
-                    <li key={item.name}>
+                    <motion.li 
+                      key={item.name}
+                      whileHover={{ x: 10 }}
+                    >
                       <Link
                         to={item.path}
-                        className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                        className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
                       >
                         {item.name}
                       </Link>
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               </nav>
             </div>
-          </div>
+          </motion.div>
         </div>
-        
-        {/* Overlay when menu is open */}
-        {isMenuOpen && (
-          <div 
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
-            onClick={toggleMenu}
-          />
-        )}
-
-                {isMenuOpen && (
-          <div 
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
-            onClick={toggleMenu}
-          />
-        )}
       </div>
-    );
-  };
- 
-  
+    </motion.div>
+  );
+};
 
+const HeroSection = () => {
+  return (
+    <div className="relative h-screen bg-black overflow-hidden">
+      <motion.img
+        initial={{ scale: 1.2 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 1.5 }}
+        src={heroimage}
+        alt="lander"
+        className="absolute inset-0 w-full h-full object-cover opacity-60"
+      />
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+        className="absolute inset-0 flex flex-col justify-center items-center text-white"
+      >
+        <h1 className="text-6xl font-bold text-center mb-4 leading-tight">
+          YOUR NEAREST SPORTS COMMUNITY
+        </h1>
+        <p className="text-2xl mb-8">IS JUST A TAP AWAY</p>
+        <div className="flex gap-4">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-green-500 px-8 py-3 rounded-full text-lg font-semibold hover:bg-green-600 transition-colors"
+          >
+            Book Now
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-white text-black px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors"
+          >
+            List Your Venue
+          </motion.button>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
 
-
-//featureTiles
+const MapSection = () => {
+  return (
+    <motion.div 
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      className="flex"
+    >
+      <div className="w-1/2 bg-green-500 p-8">
+        <motion.div 
+          initial={{ x: -50 }}
+          whileInView={{ x: 0 }}
+          className="w-3/4 p-8 flex flex-col"
+        >
+          <h2 className="text-7xl font-bold text-black">PitchReserve.</h2>
+          <h2 className="text-white mt-4">AVAILABLE IN MAJOR CITIES OF NEPAL</h2>
+        </motion.div>
+        <div className="w-1/4 p-12">
+          <h6 className="text-black">JOIN THE COMMUNITY & GUIDE YOUR WAY THROUGH THE PITCH</h6>
+        </div>
+      </div>
+      <motion.div 
+        initial={{ x: 50 }}
+        whileInView={{ x: 0 }}
+        className="w-1/2 bg-green-950 p-8"
+      >
+        <img src={mapOfNepal} alt="Map of Nepal" className="w-full h-full object-cover" />
+      </motion.div>
+    </motion.div>
+  );
+};
 
 const FeaturesSection = () => {
+  const features = [
+    {
+      icon: searchicon,
+      title: "Search",
+      description: "Explore the network of sports facilities throughout Nepal."
+    },
+    {
+      icon: bookicon,
+      title: "Book",
+      description: "Make online bookings & secure payments with ease."
+    },
+    {
+      icon: playicon,
+      title: "Play",
+      description: "You're all set for your epic match!"
+    }
+  ];
+
   return (
-    <div className="bg-green-900 py-16">
-      <div className="text-center mb-8">
-        <h2 className="text-4xl font-bold">STREAMLINE, MANAGE AND GROW</h2>
-        <br></br>
-        <h4 className="text-white">All With PitchReserve</h4>
-      </div>
-
-      <div className="max-w-6xl mx-auto grid grid-cols-4 gap-6 px-4">
-        <div className="text-center">
-          <div className="bg-teal-800 p-14 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-            <img src={logo} alt="logo" className="mx-auto mb-4 w-15 h-auto" />
-            <p className="text-white">Venue Booking</p>
-          </div>
-        </div>
-
-        <div className="text-center">
-          <div className="bg-teal-700 p-14 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-            <img src={logo} alt="Venue Management" className="mx-auto mb-4 w-15 h-auto" />
-            <p className="text-white">Venue Management</p>
-          </div>
-        </div>
-
-        <div className="text-center">
-          <div className="bg-emerald-700 p-14 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-            <img src={logo} alt="PS" className="mx-auto mb-4 w-15 h-auto" />
-            <p className="text-white">Membership </p>
-          </div>
-        </div>
-
-        <div className="text-center">
-          <div className="bg-emerald-600 p-14 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-            <img src={logo} alt="M-Pay" className="mx-auto mb-4 w-15 h-auto" />
-            <p className="text-white">New Features</p>
-          </div>
+    <motion.div 
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      className="py-16 bg-white"
+    >
+      <div className="max-w-6xl mx-auto px-4 w-screen">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              initial={{ y: 50 }}
+              whileInView={{ y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.2 }}
+              className="text-center p-6"
+            >
+              <img 
+                src={feature.icon} 
+                alt={feature.title} 
+                className="mx-auto w-16 h-16 mb-4"
+              />
+              <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+              <p className="text-gray-600">{feature.description}</p>
+            </motion.div>
+          ))}
         </div>
       </div>
-    </div>
+    </motion.div>
+  );
+};
+
+const SubscriptionSection = () => {
+  return (
+    <motion.div 
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      className="flex bg-pink-100"
+    >
+      <motion.div 
+        initial={{ x: -50 }}
+        whileInView={{ x: 0 }}
+        className="w-1/2 p-8 flex items-center justify-center"
+      >
+        <img src={subscriptionImage} alt="Subscription" className="max-w-md rounded-lg shadow-xl" />
+      </motion.div>
+      <motion.div 
+        initial={{ x: 50 }}
+        whileInView={{ x: 0 }}
+        className="w-1/2 p-8 flex flex-col justify-center items-end"
+      >
+        <h2 className="text-5xl font-bold text-black mb-4">SUBSCRIPTIONS</h2>
+        <p className="text-xl mb-6">PLAY REGULAR, PAY LESS</p>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="bg-green-500 text-white px-8 py-3 rounded-full hover:bg-green-600 transition-colors"
+        >
+          View Subscriptions
+        </motion.button>
+      </motion.div>
+    </motion.div>
   );
 };
 
 const Footer = () => {
   return (
-    <div className="bg-[#0a0d14] text-white py-8 justify-center items-center" >
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 relative">
+    <footer className="bg-[#0a0d14] text-white py-12">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div className="flex items-center space-x-4">
+            <img src={logo} alt="Logo" className="w-40" />
+            <p className="text-sm">Nepal's Only<br/>Futsal Venue<br/>Booking System</p>
+          </div>
           
-          {/* Logo and Tagline Section */}
-          <div className="flex flex-row mx-auto my-10 w-1/16 h-auto relative">
-            <div>
-              <img src={logo} alt="Logo" className="w-40 h -20768"/>
-            </div>
-            <div className="mb-4 text-start">
-              <p>Nepal's Only<br></br> Futsal Venue<br></br> Booking System</p>
-            </div>
-            {/* Vertical Divider */}
-            <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-px h-40 bg-gray-600" />
-          </div>
-
-          {/* Navigation Links Column */}
-          <div className="col-span-1 text-center relative">
+          <nav className="space-y-4">
             <ul className="space-y-2">
-              <li><a href="#" className="hover:text-gray-300">Home</a></li>
-              <li><a href="/aboutUs" className="hover:text-gray-300">About us</a></li>
-              <li><a href="/Partnership" className="hover:text-gray-300">Partner With Us</a></li>
-              <li><a href="#" className="hover:text-gray-300">Membership/Subscriptions</a></li>
-              <li><a href="#" className="hover:text-gray-300">Book Now</a></li>
-              <li><a href="#" className="hover:text-gray-300">Updates</a></li>
-              <li><a href="#" className="hover:text-gray-300">Blogs</a></li>
+              {['Home', 'About Us', 'Partner With Us', 'Membership', 'Book Now', 'Updates', 'Blogs'].map((item) => (
+                <motion.li 
+                  key={item}
+                  whileHover={{ x: 5 }}
+                >
+                  <Link to="/" className="hover:text-green-500 transition-colors">
+                    {item}
+                  </Link>
+                </motion.li>
+              ))}
             </ul>
-            {/* Vertical Divider */}
-            <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-px h-40 bg-gray-600" />
-          </div>
-
-          {/* Contact Info Column */}
-          <div className="col-span-1 text-center">
+          </nav>
+          
+          <div className="space-y-4">
+            <h3 className="font-bold text-lg">Contact Us</h3>
             <ul className="space-y-2">
               <li>Pitch Reserve</li>
-              <li>CS</li>
               <li>Kathmandu University</li>
               <li>+977 9741740551</li>
               <li>info@pitchreserve.com.np</li>
-              {/* Social Media Links */}
-              <li className="pt-4">
-                <div className="flex justify-center space-x-4">
-                  <a 
-                    href="https://facebook.com/pitchreserve" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="p-2 hover:bg-blue-600 rounded-full transition-colors duration-300"
-                  >
-                    <Facebook size={24} />
-                  </a>
-                  <a 
-                    href="https://instagram.com/pitchreserve" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="p-2 hover:bg-pink-600 rounded-full transition-colors duration-300"
-                  >
-                    <Instagram size={24} />
-                  </a>
-                  <a 
-                    href="mailto:aayush7723@student.ku.edu.np"
-                    className="p-2 hover:bg-red-600 rounded-full transition-colors duration-300"
-                  >
-                    <Mail size={24} />
-                  </a>
-                </div>
-              </li>
             </ul>
+            <div className="flex space-x-4 mt-4">
+              {[
+                { Icon: Facebook, href: 'https://facebook.com/pitchreserve' },
+                { Icon: Instagram, href: 'https://instagram.com/pitchreserve' },
+                { Icon: Mail, href: 'mailto:info@pitchreserve.com.np' }
+              ].map(({ Icon, href }) => (
+                <motion.a
+                  key={href}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.2 }}
+                  className="hover:text-green-500 transition-colors"
+                >
+                  <Icon size={24} />
+                </motion.a>
+              ))}
+            </div>
           </div>
-
         </div>
       </div>
+    </footer>
+  );
+};
+
+const Landing = () => {
+  return (
+    <div className="w-full">
+      <TitleBar />
+      <HeroSection />
+      <MapSection />
+      <FeaturesSection />
+      <SubscriptionSection />
+      <Footer />
     </div>
   );
 };
 
-
-
-
-
-  const Landing = () => {
-    return (
-      <div className="w-full pt-16">
-        <TitleBar />
-        {/* Main landing Section */}
-        <div className="relative h-[600px] bg-black">
-          <img
-            src={heroimage}
-            alt="lander"
-            className="absolute inset-0 w-full h-full object-cover opacity-50"
-          />
-          <div className="absolute inset-0 flex flex-col justify-center items-center text-white">
-            <h1 className="text-4xl font-bold">YOUR NEAREST SPORTS COMMUNITY</h1>
-            <p className="text-xl">IS JUST A TAP AWAY</p>
-            <div className="mt-4">
-              <button className="bg-green-500 px-4 py-2 rounded-full mr-2">To Book</button>
-              <button className="bg-black-900 px-4 py-2 rounded-full">To Get Listed</button>
-            </div>
-          </div>
-        </div>
-
-        {/* Map Section */}
-        <div className="flex">
-        <div className="w-1/2 bg-green-500 p-8  flex align-left">
-          <div className="w-3/4 bg-green-500 p-8 justify-center items-center flex flex-col align-left">
-            <h2 className="text-7xl font-bold text-black">PitchReserve.</h2>
-            <h2 className="text-white">AVAILABLE IN MAJOR CITIES OF NEPAL</h2>
-          </div>
-          <div className="w-1/4 bg-green-500 p-12  flex items-center justify-center">
-            <h6 className="text-black text-start">JOIN THE COMMUNITY & GUIDE YOUR WAY THROUGH THE PITCH</h6>
-          </div>
-        </div>
-
-        <div className="w-1/2 bg-green-950 p-8">
-          <img src={mapOfNepal} alt="Map of Nepal" className="w-full h-full object-cover" />
-        </div>
-        </div>
-        
-
-        {/* Features Section */}
-        <div className="flex justify-around py-16 bg-white">
-          <div className="text-center">
-            
-            <img src={searchicon} alt="search" className="mx-auto my-1 w-1/4 h-auto" />
-              <h3 className="text-xl font-bold">Search</h3>
-              <p>Are you looking to play after work, organize your Sunday Five's football match?
-              Explore the network of sports facilities whole over the Nepal.</p>
-            
-          </div>
-          <div className="text-center">
-           
-            <img src={bookicon} alt="book" className="mx-auto my-1 w-1/4 h-auto" />
-              <h3 className="text-xl font-bold">Book</h3>
-              <p>Once you’ve found the perfect futsal turf, Connect with the venue
-              through the Book Now Button to make online booking & easy, secure payment</p>
-          
-          </div>
-          <div className="text-center">
-            <img src={playicon} alt="Play" className="mx-auto my-3 w-1/4 h-auto" />
-              <h3 className="text-xl font-bold">Play</h3>
-              <p>You’re the hero, you’ve found a stunning turf, booked with ease and now
-              its time to play. The scene is set for your epic match.</p>
-            </div>
-        </div>
-
-        {/* Subscription Section */}
-  <div className="flex bg-pink-100">
-    <div className="w-1/2 p-8 flex flex-col items-center justify-center">
-      <img src={subscriptionImage} alt="Subscription" className="mx-auto my-4" />
-    </div>
-    <div className="w-1/2 p-8 flex flex-col items-end justify-center">
-      <h2 className="text-5xl  font-bold text-black">SUBSCRIPTIONS</h2>
-      <p className="text-xl mt-2">PLAY REGULAR, PAY LESS</p>
-      <button className="bg-transparent py-2 px-4 rounded-full hover:bg-green-600 mt-4">
-          View Subscriptions
-        </button>
-    </div>
-  </div>
-  <FeaturesSection/>
-  <Footer/>
-
-        </div>
-    )
-  };
-
-
-
 export default Landing;
-
-
-

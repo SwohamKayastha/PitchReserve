@@ -95,7 +95,7 @@ const FutsalUploadForm = ({ onClose }) => {
                   name="name"
                   value={futsalData.name}
                   onChange={handleInputChange}
-                  className="px-4 py-2 rounded-lg border focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                  className="px-4 py-2 rounded-lg border focus:border-blue-500 bg-white focus:ring-2 focus:ring-blue-200"
                   placeholder="Facility Name *"
                   required
                 />
@@ -104,7 +104,7 @@ const FutsalUploadForm = ({ onClose }) => {
                   name="location"
                   value={futsalData.location}
                   onChange={handleInputChange}
-                  className="px-4 py-2 rounded-lg border focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                  className="px-4 py-2 rounded-lg border focus:border-blue-500 bg-white focus:ring-2 focus:ring-blue-200"
                   placeholder="Location *"
                   required
                 />
@@ -114,7 +114,7 @@ const FutsalUploadForm = ({ onClose }) => {
                   value={futsalData.pitchCount}
                   onChange={handleInputChange}
                   min="1"
-                  className="px-4 py-2 rounded-lg border focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                  className="px-4 py-2 rounded-lg border focus:border-blue-500 bg-white focus:ring-2 focus:ring-blue-200"
                   placeholder="Number of Pitches *"
                   required
                 />
@@ -124,7 +124,7 @@ const FutsalUploadForm = ({ onClose }) => {
                   value={futsalData.pricePerHour}
                   onChange={handleInputChange}
                   min="0"
-                  className="px-4 py-2 rounded-lg border focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                  className="px-4 py-2 rounded-lg border focus:border-blue-500 focus:ring-2 bg-white focus:ring-blue-200"
                   placeholder="Price per Hour (Rs) *"
                   required
                 />
@@ -133,7 +133,7 @@ const FutsalUploadForm = ({ onClose }) => {
                   name="openingTime"
                   value={futsalData.openingTime}
                   onChange={handleInputChange}
-                  className="px-4 py-2 rounded-lg border focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                  className="px-4 py-2 rounded-lg border focus:border-blue-500 bg-white focus:ring-2 focus:ring-blue-200"
                   required
                 />
                 <input
@@ -141,7 +141,7 @@ const FutsalUploadForm = ({ onClose }) => {
                   name="closingTime"
                   value={futsalData.closingTime}
                   onChange={handleInputChange}
-                  className="px-4 py-2 rounded-lg border focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                  className="px-4 py-2 rounded-lg border focus:border-blue-500 bg-white focus:ring-2 focus:ring-blue-200"
                   required
                 />
               </div>
