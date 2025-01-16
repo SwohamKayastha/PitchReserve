@@ -8,7 +8,7 @@ import PlayerProfile from './pages/playerProfile';
 import AboutUs from './pages/aboutUs';
 import FutsalUploadForm from './pages/futsalFacilitiesForm';
 import Error from './pages/error';
-import NewFeatures from './pages/newFeatures';
+import FeaturesAndBlog from './pages/newFeatures';
 
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
           <Route path="/aboutUs" element={<AboutUs />} />
           <Route path="/futsalFacilitiesForm" element={<FutsalUploadForm />} />
           <Route path="/error" element={<Error />} />
-          <Route path="/newFeatures" element={<NewFeatures />} />
+          <Route path="/newFeatures" element={<FeaturesAndBlog />} />
 
         </Routes>
       </div>

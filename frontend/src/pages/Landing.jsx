@@ -166,7 +166,7 @@ const MapSection = () => {
       viewport={{ once: true }}
       className="flex"
     >
-      <div className="w-1/2 bg-green-500 p-8">
+      <div className="w-1/2 bg-green-500 p-8 flex flex-row">
         <motion.div 
           initial={{ x: -50 }}
           whileInView={{ x: 0 }}
@@ -175,7 +175,7 @@ const MapSection = () => {
           <h2 className="text-7xl font-bold text-black">PitchReserve.</h2>
           <h2 className="text-white mt-4">AVAILABLE IN MAJOR CITIES OF NEPAL</h2>
         </motion.div>
-        <div className="w-1/4 p-12">
+        <div className="w-1/4 p-12 flex flex-row">
           <h6 className="text-black">JOIN THE COMMUNITY & GUIDE YOUR WAY THROUGH THE PITCH</h6>
         </div>
       </div>
