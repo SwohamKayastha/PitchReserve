@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import status
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from .models import Owner
@@ -95,7 +96,7 @@ class OwnerFormView(APIView):
 
         # Upload image to Supabase storage using HTTP requests
         if image:
-            file_name = f"field_image/{owner.user.username}_{image.name}"
+            file_name = f"owner_profile/{owner.user.username}_{image.name}"
             url = f"{settings.SUPABASE_URL}/storage/v1/object/{file_name}"
             mime_type, _ = mimetypes.guess_type(image.name)
             headers = {
@@ -142,7 +143,7 @@ class OwnerProfileView(APIView):
         
         # Generate signed URL for the image
         if owner.image_url:
-            bucket_name = "field_image"
+            bucket_name = "owner_profile"
             file_path = owner.image_url.split('/')[-1]  # Extract file path from URL
             signed_url_response = supabase.storage.from_(bucket_name).create_signed_url(file_path, expires_in=3600)  # URL expires in 1 hour
             signed_url = signed_url_response.get('signedURL')
@@ -159,3 +160,35 @@ class OwnerProfileView(APIView):
             "access_token": access_token,
             "owner": owner_data
         }, status=200)
+    
+
+class OwnerProfileUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request):
+        owner = Owner.objects.get(user=request.user)
+        data = request.data.copy()
+        new_image = request.FILES.get('image_url')
+
+        if new_image:
+            file_name = f"owner_profile/{owner.user.username}_{new_image.name}"
+            url = f"{settings.SUPABASE_URL}/storage/v1/object/{file_name}"
+            mime_type, _ = mimetypes.guess_type(new_image.name)
+            headers = {
+                "apikey": settings.SUPABASE_KEY,
+                "Authorization": f"Bearer {settings.SUPABASE_KEY}",
+                "Content-Type": mime_type or "application/octet-stream"
+            }
+            response = requests.post(url, headers=headers, data=new_image.read())
+            if response.status_code == 200:
+                data['image_url'] = f"{settings.SUPABASE_URL}/storage/v1/object/public/{file_name}"
+            else:
+                return Response({'error': f'Failed to upload: {response.text}'}, status=response.status_code)
+        else:
+            data['image_url'] = owner.image_url
+
+        serializer = OwnerSerializer(owner, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
