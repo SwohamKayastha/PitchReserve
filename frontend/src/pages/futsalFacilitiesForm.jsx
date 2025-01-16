@@ -2,20 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { X, Upload, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { createOrUpdateFacility } from '../api/facilities';
+import { convertTo24HourFormat } from '../components/utils/formatTime';
 
 const FutsalUploadForm = ({ onClose }) => {
   const [futsalData, setFutsalData] = useState({
     name: '',
     location: '',
-    pitchCount: '',
-    openingTime: '',
-    closingTime: '',
-    pricePerHour: '',
+    number_of_pitches: '',
+    availability_start_time: '',
+    availability_end_time: '',
+    price_per_hour: '',
     facilities: {
       water: false,
-      changingRoom: false,
-      parking: false,
-      floodlights: false,
+      has_changing_room: false,
+      parking_facilities: false,
+      lights: false,
       cafeteria: false,
       equipment: false
     }
@@ -58,10 +60,32 @@ const FutsalUploadForm = ({ onClose }) => {
     setPreviewUrls(prevUrls => prevUrls.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Futsal Data:', futsalData);
-    console.log('Images:', images);
+    const formDataToSend = new FormData();
+    Object.keys(futsalData).forEach((key) => {
+      if (key === 'facilities') {
+        Object.keys(futsalData.facilities).forEach((facility) => {
+          formDataToSend.append(facility, futsalData.facilities[facility]);
+        });
+      } else if (key === 'availability_start_time' || key === 'availability_end_time') {
+        formDataToSend.append(key, convertTo24HourFormat(futsalData[key]));
+      } else {
+        formDataToSend.append(key, futsalData[key]);
+      }
+    });
+    images.forEach((image, index) => {
+      formDataToSend.append(`image_${index}`, image);
+    });
+
+    try {
+      console.log('Submitting form data:', Object.fromEntries(formDataToSend.entries()));
+      const response = await createOrUpdateFacility(formDataToSend);
+      console.log('Facility created/updated successfully:', response);
+      onClose();
+    } catch (err) {
+      console.error('Error submitting form:', err);
+    }
   };
 
   useEffect(() => {
@@ -110,36 +134,36 @@ const FutsalUploadForm = ({ onClose }) => {
                 />
                 <input
                   type="number"
-                  name="pitchCount"
-                  value={futsalData.pitchCount}
+                  name="number_of_pitches"
+                  value={futsalData.number_of_pitches}
                   onChange={handleInputChange}
                   min="1"
-                  className="px-4 py-2 rounded-lg border focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                  className="px-4 py-2 rounded-lg border"
                   placeholder="Number of Pitches *"
                   required
                 />
                 <input
                   type="number"
-                  name="pricePerHour"
-                  value={futsalData.pricePerHour}
+                  name="price_per_hour"
+                  value={futsalData.price_per_hour}
                   onChange={handleInputChange}
                   min="0"
-                  className="px-4 py-2 rounded-lg border focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                  className="px-4 py-2 rounded-lg border"
                   placeholder="Price per Hour (Rs) *"
                   required
                 />
                 <input
                   type="time"
-                  name="openingTime"
-                  value={futsalData.openingTime}
+                  name="availability_start_time"
+                  value={futsalData.availability_start_time}
                   onChange={handleInputChange}
                   className="px-4 py-2 rounded-lg border focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                   required
                 />
                 <input
                   type="time"
-                  name="closingTime"
-                  value={futsalData.closingTime}
+                  name="availability_end_time"
+                  value={futsalData.availability_end_time}
                   onChange={handleInputChange}
                   className="px-4 py-2 rounded-lg border focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                   required
@@ -151,9 +175,9 @@ const FutsalUploadForm = ({ onClose }) => {
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {Object.entries({
                     water: '💧 Water',
-                    changingRoom: '🚿 Changing Room',
-                    parking: '🅿️ Parking',
-                    floodlights: '💡 Lights',
+                    has_changing_room: '🚿 Changing Room',
+                    parking_facilities: '🅿️ Parking',
+                    lights: '💡 Lights',
                     cafeteria: '☕ Cafeteria',
                     equipment: '⚽ Equipment'
                   }).map(([key, label]) => (
