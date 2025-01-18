@@ -17,3 +17,18 @@ export const createOrUpdateFacility = async (formData) => {
     throw error;
   }
 };
+
+export const getFutsalFields = async () => {
+  const token = localStorage.getItem('access_token');
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  try {
+    const response = await axios.get(`${API_URL}/list/`, { headers });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching futsal fields:', error);
+    throw error;
+  }
+};
