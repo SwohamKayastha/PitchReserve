@@ -91,7 +91,7 @@ const TitleBar = () => {
                     { name: 'About Us', path: '/aboutUs' },
                     { name: 'Book Venue', path: '/book' },
                     { name: 'Login/ Partnership', path: '/Partnership' },
-                    { name: 'Subscriptions', path: '/error' },
+                    { name: 'Subscriptions', path: '/afterVenueSelection' },
                     { name: 'Blogs', path: '/newFeatures' }
                   ].map((item) => (
                     <motion.li 

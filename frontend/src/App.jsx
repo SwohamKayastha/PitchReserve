@@ -9,31 +9,30 @@ import AboutUs from './pages/aboutUs';
 import FutsalUploadForm from './pages/futsalFacilitiesForm';
 import Error from './pages/error';
 import FeaturesAndBlog from './pages/newFeatures';
+import FutsalDetail from './pages/afterVenueSelection';
 
-
+// Main App component
 function App() {
   return (
     <BrowserRouter>
-      <div>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/partnership" element={<Partnership />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/ownerProfile" element={<Profile />} />
-          <Route path="/playerProfile" element={<PlayerProfile />} />
-          <Route path="/aboutUs" element={<AboutUs />} />
-          <Route path="/futsalFacilitiesForm" element={<FutsalUploadForm />} />
-          <Route path="/error" element={<Error />} />
-          <Route path="/newFeatures" element={<FeaturesAndBlog />} />
-
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/partnership" element={<Partnership />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/ownerProfile" element={<Profile />} />
+        <Route path="/playerProfile" element={<PlayerProfile />} />
+        <Route path="/aboutUs" element={<AboutUs />} />
+        <Route path="/futsalFacilitiesForm" element={<FutsalUploadForm />} />
+        <Route path="/error" element={<Error />} />
+        <Route path="/newFeatures" element={<FeaturesAndBlog />} />
+        <Route path="/afterVenueSelection" element={<FutsalDetail />} />
+        {/* <Route path="*" element={<Navigate to="/error" replace />} /> */}
+      </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
-
 
 // for individual page testing
 
