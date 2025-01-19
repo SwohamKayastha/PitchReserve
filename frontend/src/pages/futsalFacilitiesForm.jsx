@@ -138,11 +138,9 @@ const FutsalUploadForm = ({ onClose }) => {
                   value={futsalData.number_of_pitches}
                   onChange={handleInputChange}
                   min="1"
-<<<<<<< HEAD
+
                   className="px-4 py-2 rounded-lg border"
-=======
-                  className="px-4 py-2 rounded-lg border focus:border-blue-500 bg-white focus:ring-2 focus:ring-blue-200"
->>>>>>> f44c257191de2a9a617bb6244f698e6340672541
+
                   placeholder="Number of Pitches *"
                   required
                 />
@@ -152,11 +150,10 @@ const FutsalUploadForm = ({ onClose }) => {
                   value={futsalData.price_per_hour}
                   onChange={handleInputChange}
                   min="0"
-<<<<<<< HEAD
+
                   className="px-4 py-2 rounded-lg border"
-=======
-                  className="px-4 py-2 rounded-lg border focus:border-blue-500 focus:ring-2 bg-white focus:ring-blue-200"
->>>>>>> f44c257191de2a9a617bb6244f698e6340672541
+
+
                   placeholder="Price per Hour (Rs) *"
                   required
                 />

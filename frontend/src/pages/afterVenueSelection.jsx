@@ -1,16 +1,88 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { ArrowLeft, Clock, MapPin, Users, Ruler } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import logo from '../assets/logo.png';
+import profileIcon from '../assets/profileIcon.png';
+import { Link } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
+
+// Animation Variants
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+};
+
+const slideIn = {
+  hidden: { x: '-100%' },
+  visible: { x: 0 },
+};
+
+// Title Bar Component
+const TitleBar = ({ isMenuOpen, toggleMenu }) => {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        scrolled ? 'bg-white shadow-lg' : 'bg-transparent'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
+        <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
+          <Link to="/login" className="relative">
+            <img 
+              src={profileIcon}
+              alt="profile"
+              className="h-12 w-auto transition-transform duration-200 hover:brightness-110"
+            />
+          </Link>
+        </motion.div>
+
+        <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
+          <img 
+            src={logo}
+            alt="Logo"
+            className="h-12 w-auto"
+          />
+        </motion.div>
+
+        <div className="relative">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className={`p-2 rounded-lg transition-colors duration-200 ${
+              scrolled ? 'text-black hover:bg-gray-100' : 'text-white hover:bg-white/10'
+            }`}
+            onClick={toggleMenu}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </motion.button>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 
 const FutsalDetail = () => {
   const [date, setDate] = useState(new Date());
   const [showSlots, setShowSlots] = useState(false);
-  const [useSlider, setUseSlider] = useState(true);
   const [startTime, setStartTime] = useState(6); // Default start time
   const [endTime, setEndTime] = useState(7); // Default end time
-  const [selectedSlot, setSelectedSlot] = useState(null); // Track selected slot
+  const [selectedSlots, setSelectedSlots] = useState([]); // Track selected slots
+  const [bookingInfo, setBookingInfo] = useState(null); // Booking information
   const navigate = useNavigate();
 
   // Mock data - replace with your API data
@@ -20,7 +92,7 @@ const FutsalDetail = () => {
     image: "/api/placeholder/800/400",
     openingTime: "6:00 AM",
     closingTime: "9:00 PM",
-    pricePerHour: 1500,
+    pricePerHour: 1000,
     pitchCount: 2,
     dimensions: "30m x 15m",
     facilities: [
@@ -36,29 +108,55 @@ const FutsalDetail = () => {
     setShowSlots(true);
   };
 
-  const handleSubmit = () => {
-    alert(`Booking from ${startTime}:00 to ${endTime}:00 on ${date.toDateString()}`);
-    setShowSlots(false);
-    setSelectedSlot(null); // Reset selected slot after booking
+  const handleSlotToggle = (slot) => {
+    const updatedSlots = selectedSlots.includes(slot) 
+      ? selectedSlots.filter(s => s !== slot) 
+      : [...selectedSlots, slot];
+    setSelectedSlots(updatedSlots);
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 p-6">
-      <div className="max-w-7xl mx-auto flex flex-col items-center">
-        {/* Back Button */}
-        <button 
-          onClick={() => navigate(-1)} 
-          className="flex items-center gap-2 mb-6 text-gray-600 hover:text-gray-800 transition"
-          aria-label="Go back"
-        >
-          <ArrowLeft className="w-5 h-5" />
-          <span>Back</span>
-        </button>
+  const handleSubmit = () => {
+    const totalHours = selectedSlots.length;
+    const totalPrice = totalHours * futsalData.pricePerHour;
+    setBookingInfo({
+      date: date.toDateString(),
+      timeSlots: selectedSlots.join(', '),
+      futsalName: futsalData.name,
+      totalPrice,
+    });
+    setShowSlots(false);
+    setSelectedSlots([]); // Reset selected slots after booking
+  };
 
+  // Get current hour
+  const currentHour = new Date().getHours();
+
+  return (
+    <motion.div 
+      className="min-h-screen bg-gradient-to-r from-green-400 via-green-500 to-green-600 p-6"
+      initial="hidden"
+      animate="visible"
+      variants={fadeIn}
+    >
+      <TitleBar />
+      <div className="max-w-7xl mx-auto flex flex-col items-center">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
           {/* Main Info Section */}
-          <div className="lg:col-span-2">
+          <motion.div 
+            className="lg:col-span-2" 
+            initial={{ opacity: 0, y: 20 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.5 }}
+          >
             <div className="bg-white rounded-lg shadow-xl p-6">
+              <button 
+                onClick={() => navigate(-1)} 
+                className="flex items-center gap-2 mb-6 bg-transparent text-gray-800 hover:text-gray-900 transition"
+                aria-label="Go back"
+              >
+                <ArrowLeft className="w-5 h-5" />
+                <span></span>
+              </button>
               {/* Hero Image */}
               <div className="relative aspect-video w-full rounded-xl overflow-hidden mb-6">
                 <img
@@ -119,10 +217,15 @@ const FutsalDetail = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Calendar Section */}
-          <div className="flex items-center justify-center lg:col-span-1">
+          <motion.div 
+            className="flex items-center justify-center lg:col-span-1" 
+            initial={{ opacity: 0, y: 20 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.5 }}
+          >
             <div className="bg-white rounded-lg shadow-xl p-6">
               <h2 className="text-xl font-bold text-gray-800 mb-4">Select Date</h2>
               <div className="calendar-container">
@@ -144,98 +247,48 @@ const FutsalDetail = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Slots Popup */}
         {showSlots && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+          >
             <div className="bg-white rounded-lg p-6 w-80">
               <h3 className="text-lg font-bold text-gray-800 mb-4">{date.toDateString()}</h3>
-              
-              {/* Toggle Switch */}
-              <div className="flex items-center mb-4">
-                <label className="mr-2 text-sm font-medium text-gray-700">Use:</label>
-                <input 
-                  type="checkbox" 
-                  checked={useSlider} 
-                  onChange={() => setUseSlider(prev => !prev)}
-                  className="toggle-checkbox" 
-                />
-                <span className="ml-2 text-sm font-medium">{useSlider ? 'Slider' : 'Slots'}</span>
+
+              {/* Slot Selection */}
+              <div className="grid grid-cols-3 gap-2 mb-4">
+                {Array.from({ length: 15 }, (_, i) => {
+                  const slotStart = 6 + i; // Slots from 6 AM to 9 PM
+                  const slotEnd = slotStart + 1;
+                  const isSelected = selectedSlots.includes(`${slotStart}-${slotEnd}`);
+                  const isPastSlot = slotStart < currentHour; // Check if the slot is in the past
+
+                  return (
+                    <div 
+                      key={i} 
+                      className={`border border-gray-300 rounded-lg text-center py-3 cursor-pointer transition ${
+                        isSelected ? 'bg-blue-500 text-white' : 
+                        isPastSlot ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 
+                        'bg-gray-100 hover:bg-gray-300'
+                      }`}
+                      onClick={() => !isPastSlot && handleSlotToggle(`${slotStart}-${slotEnd}`)} // Prevent booking if the slot is in the past
+                    >
+                      {`${slotStart}-${slotEnd}`}
+                    </div>
+                  );
+                })}
               </div>
-
-              {useSlider ? (
-                <>
-                  {/* Slider for Start Time */}
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Start Time: {startTime}:00</label>
-                    <input 
-                      type="range" 
-                      min="6" 
-                      max={endTime - 1} // Ensure start time is less than end time
-                      step="1" 
-                      value={startTime} 
-                      onChange={(e) => {
-                        const newStartTime = Number(e.target.value);
-                        setStartTime(newStartTime);
-                        // Automatically adjust end time to maintain an hour interval
-                        if (newStartTime >= endTime) {
-                          setEndTime(newStartTime + 1);
-                        }
-                      }}
-                      className="w-full"
-                    />
-                  </div>
-
-                  {/* Slider for End Time */}
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">End Time: {endTime}:00</label>
-                    <input 
-                      type="range" 
-                      min={startTime + 1} // End time must be at least 1 hour after start time
-                      max="21" 
-                      step="1" 
-                      value={endTime} 
-                      onChange={(e) => {
-                        const newEndTime = Number(e.target.value);
-                        setEndTime(newEndTime);
-                        // If end time is moved, adjust start time accordingly
-                        if (newEndTime <= startTime) {
-                          setStartTime(newEndTime - 1);
-                        }
-                      }}
-                      className="w-full"
-                    />
-                  </div>
-                </>
-              ) : (
-                <div className="grid grid-cols-3 gap-2">
-                  {Array.from({ length: 15 }, (_, i) => {
-                    const slotStart = 6 + i;
-                    const slotEnd = slotStart + 1;
-                    const isSelected = selectedSlot === `${slotStart}-${slotEnd}`;
-                    return (
-                      <div 
-                        key={i} 
-                        className={`border border-gray-300 rounded-lg text-center py-3 cursor-pointer transition ${isSelected ? 'bg-blue-400 text-white' : 'bg-gray-100 hover:bg-gray-300'}`}
-                        onClick={() => {
-                          setSelectedSlot(`${slotStart}-${slotEnd}`);
-                          setStartTime(slotStart);
-                          setEndTime(slotEnd);
-                        }}
-                      >
-                        {`${slotStart}-${slotEnd}`}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
 
               {/* Submit Button */}
               <button 
                 onClick={handleSubmit} 
-                className="mt-4 w-full bg-gray-600 text-white py-2 rounded-lg transition hover:bg-gray-700"
+                className="mt-4 w-full bg-green-600 text-white py-2 rounded-lg transition hover:bg-green-700"
               >
                 Book Slot
               </button>
@@ -247,61 +300,54 @@ const FutsalDetail = () => {
                 Close
               </button>
             </div>
-          </div>
+          </motion.div>
+        )}
+
+        {/* Booking Information Modal */}
+        {bookingInfo && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+          >
+            <div className="bg-white rounded-lg p-6 w-80">
+              <h3 className="text-lg font-bold text-gray-800 mb-4">Booking Information</h3>
+              <div className="mb-4 p-4 bg-gray-100 rounded-lg shadow-md">
+                <p className="text-sm text-gray-600">Date:</p>
+                <p className="text-lg font-semibold text-gray-800">{bookingInfo.date}</p>
+              </div>
+              <div className="mb-4 p-4 bg-gray-100 rounded-lg shadow-md">
+                <p className="text-sm text-gray-600">Time Slots:</p>
+                <p className="text-lg font-semibold text-gray-800">{bookingInfo.timeSlots}</p>
+              </div>
+              <div className="mb-4 p-4 bg-gray-100 rounded-lg shadow-md">
+                <p className="text-sm text-gray-600">Futsal Name:</p>
+                <p className="text-lg font-semibold text-gray-800">{bookingInfo.futsalName}</p>
+              </div>
+              <div className="mb-6 p-4 bg-gray-100 rounded-lg shadow-md">
+                <p className="text-sm text-gray-600">Total Price:</p>
+                <p className="text-lg font-semibold text-gray-800">Rs. {bookingInfo.totalPrice}</p>
+              </div>
+
+              <button 
+                onClick={() => alert("Payment processing...")} 
+                className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg transition hover:bg-blue-700"
+              >
+                Pay
+              </button>
+              
+              <button 
+                onClick={() => setBookingInfo(null)} 
+                className="mt-2 w-full bg-red-600 text-white py-2 rounded-lg transition hover:bg-red-700"
+              >
+                Close
+              </button>
+            </div>
+          </motion.div>
         )}
       </div>
-
-      {/* Custom styles for the calendar and toggle */}
-      <style>{`
-        .calendar-container .react-calendar {
-          border: none;
-          background-color: transparent;
-          width: 100%;
-        }
-        .react-calendar__tile {
-          transition: background 0.2s ease;
-        }
-        .react-calendar__tile--active {
-          background: #ccc !important;
-        }
-        .react-calendar__tile--active:enabled:hover,
-        .react-calendar__tile--active:enabled:focus {
-          background: #bbb !important;
-        }
-        .react-calendar__tile:enabled:hover,
-        .react-calendar__tile:enabled:focus {
-          background-color: #e0e0e0;
-        }
-        .react-calendar__tile--now {
-          background: #d0d0d0 !important;
-        }
-        .toggle-checkbox {
-          width: 40px;
-          height: 20px;
-          cursor: pointer;
-          appearance: none;
-          background-color: #ccc;
-          border-radius: 20px;
-          position: relative;
-          outline: none;
-        }
-        .toggle-checkbox:checked {
-          background-color: #4CAF50;
-        }
-        .toggle-checkbox:checked::before {
-          left: 20px;
-        }
-        .toggle-checkbox::before {
-          content: '';
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          background: white;
-          position: absolute;
-          transition: left 0.2s;
-        }
-      `}</style>
-    </div>
+    </motion.div>
   );
 };
 
