@@ -16,20 +16,39 @@ logger = logging.getLogger(__name__)
 class FacilityListView(APIView):
     permission_classes = [AllowAny]
 
-    def get(self, request):
+    # def get(self, request):
+    #     facilities = FutsalFacility.objects.all()
+    #     serializer = FutsalFacilitySerializer(facilities, many=True)
+    #     data = serializer.data
+
+    #     for facility in data:
+    #         if facility['image_url']:
+    #             bucket_name = "field_image"
+    #             file_path = facility['image_url'].split('/')[-1]  # Extract file path from URL
+    #             signed_url_response = supabase.storage.from_(bucket_name).create_signed_url(file_path, expires_in=3600)  # URL expires in 1 hour
+    #             signed_url = signed_url_response.get('signedURL')
+    #             facility['image_url'] = signed_url
+
+    #     return Response(data)
+
+    def get(self, request, *args, **kwargs):
         facilities = FutsalFacility.objects.all()
         serializer = FutsalFacilitySerializer(facilities, many=True)
         data = serializer.data
 
         for facility in data:
-            if facility['image_url']:
+            images = FacilityImage.objects.filter(facility_id=facility['id'])
+            signed_urls = []
+            for image in images:
                 bucket_name = "field_image"
-                file_path = facility['image_url'].split('/')[-1]  # Extract file path from URL
+                file_path = image.image_url.split('/')[-1]  # Extract file path from URL
                 signed_url_response = supabase.storage.from_(bucket_name).create_signed_url(file_path, expires_in=3600)  # URL expires in 1 hour
                 signed_url = signed_url_response.get('signedURL')
-                facility['image_url'] = signed_url
+                signed_urls.append(signed_url)
+            facility['images'] = signed_urls
 
-        return Response(data)
+        return Response(data, status=status.HTTP_200_OK)
+
 
 
     def post(self, request, *args, **kwargs):
@@ -122,26 +141,48 @@ class FacilityDetailView(APIView):
         except FutsalFacility.DoesNotExist:
             return None
 
+    # def get(self, request, facility_id):
+    #     facility = self.get_object(facility_id)
+    #     if facility is None:
+    #         return Response({'error': 'Facility not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    #     if facility.image_url:
+    #         bucket_name = "field_image"
+    #         file_path = facility.image_url.split('/')[-1]  # Extract file path from URL
+    #         signed_url_response = supabase.storage.from_(bucket_name).create_signed_url(file_path, expires_in=3600)  # URL expires in 1 hour
+    #         signed_url = signed_url_response.get('signedURL')
+    #     else:
+    #         signed_url = None
+
+
+    #     facility_serializer = FutsalFacilitySerializer(facility)
+    #     facility_data = facility_serializer.data
+    #     facility_data['image_url'] = signed_url
+
+    #     return Response(facility_data)
+    
+
     def get(self, request, facility_id):
         facility = self.get_object(facility_id)
         if facility is None:
             return Response({'error': 'Facility not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        if facility.image_url:
+        images = FacilityImage.objects.filter(facility_id=facility_id)
+        signed_urls = []
+        for image in images:
             bucket_name = "field_image"
-            file_path = facility.image_url.split('/')[-1]  # Extract file path from URL
+            file_path = image.image_url.split('/')[-1]  # Extract file path from URL
             signed_url_response = supabase.storage.from_(bucket_name).create_signed_url(file_path, expires_in=3600)  # URL expires in 1 hour
             signed_url = signed_url_response.get('signedURL')
-        else:
-            signed_url = None
-
+            signed_urls.append(signed_url)
 
         facility_serializer = FutsalFacilitySerializer(facility)
         facility_data = facility_serializer.data
-        facility_data['image_url'] = signed_url
+        facility_data['images'] = signed_urls
 
         return Response(facility_data)
-    
+
+
     def put(self, request, facility_id):
         facility = self.get_object(facility_id)
         if facility is None:
@@ -191,7 +232,54 @@ class FacilityDetailView(APIView):
 
         facility.delete()
         return Response({'message': 'Facility deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
-    
+
+
+class OwnerFacilityView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, facility_id, owner):
+        try:
+            return FutsalFacility.objects.get(id=facility_id, owner=owner)
+        except FutsalFacility.DoesNotExist:
+            return None
+
+    def get(self, request, facility_id=None):
+        owner = request.user.owner_profile
+
+        if facility_id:
+            facility = self.get_object(facility_id, owner)
+            if facility is None:
+                return Response({'error': 'Facility not found'}, status=status.HTTP_404_NOT_FOUND)
+
+            images = FacilityImage.objects.filter(facility_id=facility_id)
+            signed_urls = []
+            for image in images:
+                bucket_name = "field_image"
+                file_path = image.image_url.split('/')[-1]  # Extract file path from URL
+                signed_url_response = supabase.storage.from_(bucket_name).create_signed_url(file_path, expires_in=3600)  # URL expires in 1 hour
+                signed_url = signed_url_response.get('signedURL')
+                signed_urls.append(signed_url)
+
+            facility_serializer = FutsalFacilitySerializer(facility)
+            facility_data = facility_serializer.data
+            facility_data['images'] = signed_urls
+
+            return Response(facility_data)
+        else:
+            facilities = FutsalFacility.objects.filter(owner=owner)
+            serializer = FutsalFacilitySerializer(facilities, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request, facility_id):
+        owner = request.user.owner_profile
+        facility = self.get_object(facility_id, owner)
+        if facility is None:
+            return Response({'error': 'Facility not found'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = FutsalFacilitySerializer(facility, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # from rest_framework.decorators import api_view
 # from rest_framework.response import Response
