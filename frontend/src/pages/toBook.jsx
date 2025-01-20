@@ -1,56 +1,162 @@
-import React from "react";
-import logo from "../assets/logo.png";
-import homeLocation from "../assets/homeLocation.jpg";
-import noLocationPng from "../assets/bg.jpg";
+import { useState } from "react";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { Card, CardContent, CardFooter } from "@/components/ui/card"; // Adjust import paths as necessary
+import { Button } from "@/components/ui/button";
+import { Search } from 'lucide-react'; // Import Lucide icon
 
-export const Background = () => {
+const dummyData = [
+  {
+    id: 1,
+    name: "Green Futsal Arena",
+    image: "/placeholder.svg",
+    distance: 2.5,
+    location: "123 Main St, City Center",
+    water: true,
+    parking: true,
+    changingRoom: true,
+  },
+  {
+    id: 2,
+    name: "Turf Champions",
+    image: "/placeholder.svg",
+    distance: 3.8,
+    location: "456 Park Ave, Suburb",
+    water: false,
+    parking: true,
+    changingRoom: false,
+  },
+  {
+    id: 3,
+    name: "Indoor Soccer Hub",
+    image: "/placeholder.svg",
+    distance: 1.2,
+    location: "789 Sports Blvd, Downtown",
+    water: true,
+    parking: false,
+    changingRoom: true,
+  },
+  {
+    id: 4,
+    name: "Futsal Pro Center",
+    image: "/placeholder.svg",
+    distance: 4.5,
+    location: "101 Goal St, Uptown",
+    water: true,
+    parking: true,
+    changingRoom: false,
+  },
+];
+
+const FutsalBookingPage = () => {
+  const [futsals, setFutsals] = useState(dummyData); // Use dummy data
+  const [searchTerm, setSearchTerm] = useState(""); // Search term state
+  const [filters, setFilters] = useState({
+    water: false,
+    parking: false,
+    changingRoom: false,
+    nearMe: false,
+  });
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleFilterChange = (filter) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [filter]: !prevFilters[filter],
+    }));
+  };
+
+  const filteredFutsals = futsals.filter(futsal => {
+    const matchesSearch = searchTerm === "" || futsal.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesWater = !filters.water || futsal.water;
+    const matchesParking = !filters.parking || futsal.parking;
+    const matchesChangingRoom = !filters.changingRoom || futsal.changingRoom;
+    const matchesNearMe = !filters.nearMe || futsal.distance <= 5; // Assuming 'near me' means within 5 km
+    return matchesSearch && matchesWater && matchesParking && matchesChangingRoom && matchesNearMe;
+  });
+
   return (
-    <div className="flex w-full h-screen bg-[#f2f2f2]">
-      {/* Left Section */}
-      <div className="flex flex-col justify-center items-center w-1/2 bg-white">
-        <div className="flex flex-col items-center text-center">
-          <div
-            className="w-[100px] h-[100px] bg-cover bg-center"
-            style={{ backgroundImage: `url(${noLocationPng})` }}
+    <div className="w-full mx-auto py-8 px-4">
+      <h1 className="text-4xl font-bold mb-6 text-green-800 text-center">Futsal Booking</h1>
+      
+      {/* Enhanced Search Bar */}
+      <div className="mb-6 flex justify-center">
+        <div className="relative w-3/4 md:w-1/2">
+          <input
+            type="text"
+            placeholder="Search Futsal..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="w-full border border-green-300 rounded-full p-4 shadow-lg focus:outline-none focus:ring-2 focus:ring-green-600 transition duration-200 ease-in-out"
           />
-          <p className="mt-5 text-[#494949] text-2xl">
-            Seems like you haven't picked a location yet.
-          </p>
-          <p className="mt-2 text-[#494949] text-sm">
-            Explore more venues by selecting a location
-          </p>
-          <button className="mt-5 px-6 py-2 rounded-md bg-gradient-to-b from-[#009f5c] to-[#00bb59] text-white">
-            Pick Your Location
-          </button>
+          <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+            <Search className="text-gray-400" />
+          </div>
         </div>
       </div>
 
-      {/* Right Section */}
-      <div className="flex flex-col justify-center w-1/2 bg-gradient-to-b from-[#01a15c] to-[#2dae60] text-white p-10">
-        <img className="mb-5 w-[200px]" alt="Logo" src={logo} />
-        <h1 className="text-2xl font-bold">
-          Nepal’s Only Futsal Venue Booking System
-        </h1>
-        <ul className="mt-10 space-y-6 text-lg">
-          <li>Search Futsals Nationwide</li>
-          <li>Book Venues at a Go</li>
-          <li>Review the Futsal Venues</li>
-          <li>Track Your Booking Records</li>
-          <li>Manage Subscriptions</li>
-        </ul>
+      {/* Filters Section */}
+      <div className="mb-4 flex justify-center space-x-2">
+        <Button 
+          className={`px-4 py-2 rounded-full ${filters.water ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'}`} 
+          onClick={() => handleFilterChange('water')}
+        >
+          Water
+        </Button>
+        <Button 
+          className={`px-4 py-2 rounded-full ${filters.parking ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'}`} 
+          onClick={() => handleFilterChange('parking')}
+        >
+          Parking
+        </Button>
+        <Button 
+          className={`px-4 py-2 rounded-full ${filters.changingRoom ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'}`} 
+          onClick={() => handleFilterChange('changingRoom')}
+        >
+          Changing Room
+        </Button>
+        <Button 
+          className={`px-4 py-2 rounded-full ${filters.nearMe ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'}`} 
+          onClick={() => handleFilterChange('nearMe')}
+        >
+          Near Me
+        </Button>
       </div>
 
-      {/* Top Header */}
-      <div className="absolute top-0 left-0 w-full bg-[#f9f9f9] shadow-md">
-        <div className="flex items-center p-3">
-          <img
-            className="w-6 h-6 mr-3"
-            alt="Home location"
-            src={homeLocation}
-          />
-          <p className="text-[#444444] text-sm">No location picked</p>
-        </div>
+      {/* Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredFutsals.map((futsal) => (
+          <div key={futsal.id} className="block">
+            <Card className="h-full transition-shadow hover:shadow-xl border border-green-200 rounded-lg cursor-pointer">
+              <CardContent className="p-0">
+                <div className="relative h-48 w-full">
+                  <img
+                    src={futsal.image || "/placeholder.svg"}
+                    alt={futsal.name}
+                    className="w-full h-full object-cover rounded-t-lg"
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="text-xl font-semibold text-green-800">{futsal.name}</h3>
+                  <p className="text-sm text-green-600">{futsal.distance} km away</p>
+                  <p className="text-sm text-gray-700">{futsal.location}</p>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Link to={`/venueSelection/${futsal.id}`} className="w-full">
+                  <Button className="w-full bg-green-600 hover:bg-green-700 text-white transition duration-200 ease-in-out">
+                    View Details
+                  </Button>
+                </Link>
+              </CardFooter>
+            </Card>
+          </div>
+        ))}
       </div>
     </div>
   );
 };
+
+export default FutsalBookingPage;

@@ -10,6 +10,7 @@ import FutsalUploadForm from './pages/futsalFacilitiesForm';
 import Error from './pages/error';
 import FeaturesAndBlog from './pages/newFeatures';
 import FutsalDetail from './pages/afterVenueSelection';
+import FutsalBookingPage from './pages/toBook';
 
 // Main App component
 function App() {
@@ -26,6 +27,7 @@ function App() {
         <Route path="/error" element={<Error />} />
         <Route path="/newFeatures" element={<FeaturesAndBlog />} />
         <Route path="/afterVenueSelection" element={<FutsalDetail />} />
+        <Route path="/toBook" element={<FutsalBookingPage />} />
         {/* <Route path="*" element={<Navigate to="/error" replace />} /> */}
       </Routes>
     </BrowserRouter>

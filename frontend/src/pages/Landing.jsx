@@ -89,7 +89,7 @@ const TitleBar = () => {
                   {[
                     { name: 'Home', path: '/' },
                     { name: 'About Us', path: '/aboutUs' },
-                    { name: 'Book Venue', path: '/book' },
+                    { name: 'Book Venue', path: '/toBook' },
                     { name: 'Login/ Partnership', path: '/Partnership' },
                     { name: 'Subscriptions', path: '/afterVenueSelection' },
                     { name: 'Blogs', path: '/newFeatures' }
