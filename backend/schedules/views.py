@@ -78,38 +78,131 @@ class SchedulesDetailView(APIView):
         schedule.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class GenerateTimeSlotsView(APIView):
     """
     Handles generating time slots for a specific facility on a specific date.
     """
     def post(self, request, facility_id, date):
-        # Convert date string to datetime.date object
         try:
             date_obj = datetime.strptime(date, '%Y-%m-%d').date()
         except ValueError:
             return Response({'error': 'Invalid date format. Use YYYY-MM-DD.'}, status=status.HTTP_400_BAD_REQUEST)
         
         facility = get_object_or_404(FutsalFacility, id=facility_id)
+        # start_time = datetime.combine(date_obj, facility.availability_start_time)
+        # end_time = datetime.combine(date_obj, facility.availability_end_time)
+        # time_slots = []
+
+        # while start_time < end_time:
+        #     slot_end_time = start_time + timedelta(hours=1)
+        #     if slot_end_time > end_time:
+        #         break
+        #     time_slot = Schedule(
+        #         date=date_obj,
+        #         start_time=start_time.time(),
+        #         end_time=slot_end_time.time(),
+        #         facility=facility
+        #     )
+        #     time_slot.save()
+        #     time_slots.append(time_slot)
+        #     start_time = slot_end_time
+
+        # serializer = SchedulesSerializer(time_slots, many=True)
+        # return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        self.generate_weekly_slots(facility_id)
+        return Response({"message": "Weekly slots generated"}, status=status.HTTP_201_CREATED)
+            
+
+    def generate_slots_for_date(self, facility, date_obj):
+        time_slots = []
         start_time = datetime.combine(date_obj, facility.availability_start_time)
         end_time = datetime.combine(date_obj, facility.availability_end_time)
-        time_slots = []
 
         while start_time < end_time:
             slot_end_time = start_time + timedelta(hours=1)
             if slot_end_time > end_time:
                 break
-            time_slot = Schedule(
+            time_slot = Schedule.objects.create(
                 date=date_obj,
                 start_time=start_time.time(),
                 end_time=slot_end_time.time(),
                 facility=facility
             )
-            time_slot.save()
             time_slots.append(time_slot)
             start_time = slot_end_time
+        
+        return time_slots
 
-        serializer = SchedulesSerializer(time_slots, many=True)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def generate_weekly_slots(self, facility_id):
+        facility = get_object_or_404(FutsalFacility, id=facility_id)
+        today = datetime.today().date()
+        all_slots = []
+        
+        for i in range(7):
+            date_obj = today + timedelta(days=i)
+            slots = self.generate_slots_for_date(facility, date_obj)
+            all_slots.extend(slots)
+            
+        return all_slots
+
+
+    # def generate_weekly_slots(self, facility_id):
+    #     facility = get_object_or_404(FutsalFacility, id=facility_id)
+    #     today = datetime.today().date()
+    #     for i in range(7):
+    #         date_obj = today + timedelta(days=i)
+    #         self.generate_slots_for_date(facility, date_obj)
+
+    # def generate_slots_for_date(self, facility, date_obj):
+    #     start_time = datetime.combine(date_obj, facility.availability_start_time)
+    #     end_time = datetime.combine(date_obj, facility.availability_end_time)
+    #     while start_time < end_time:
+    #         slot_end_time = start_time + timedelta(hours=1)
+    #         if slot_end_time > end_time:
+    #             break
+    #         Schedule.objects.create(
+    #             date=date_obj,
+    #             start_time=start_time.time(),
+    #             end_time=slot_end_time.time(),
+    #             facility=facility
+    #         )
+    #         start_time = slot_end_time
+
+
+# class GenerateTimeSlotsView(APIView):
+#     """
+#     Handles generating time slots for a specific facility on a specific date.
+#     """
+#     def post(self, request, facility_id, date):
+#         # Convert date string to datetime.date object
+#         try:
+#             date_obj = datetime.strptime(date, '%Y-%m-%d').date()
+#         except ValueError:
+#             return Response({'error': 'Invalid date format. Use YYYY-MM-DD.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+#         facility = get_object_or_404(FutsalFacility, id=facility_id)
+#         start_time = datetime.combine(date_obj, facility.availability_start_time)
+#         end_time = datetime.combine(date_obj, facility.availability_end_time)
+#         time_slots = []
+
+#         while start_time < end_time:
+#             slot_end_time = start_time + timedelta(hours=1)
+#             if slot_end_time > end_time:
+#                 break
+#             time_slot = Schedule(
+#                 date=date_obj,
+#                 start_time=start_time.time(),
+#                 end_time=slot_end_time.time(),
+#                 facility=facility
+#             )
+#             time_slot.save()
+#             time_slots.append(time_slot)
+#             start_time = slot_end_time
+
+#         serializer = SchedulesSerializer(time_slots, many=True)
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 # from rest_framework.views import APIView
 # from rest_framework.response import Response
