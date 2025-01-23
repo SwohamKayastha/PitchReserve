@@ -5,7 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { fetchPlayerProfile } from '@/api/auth';
-
+import { fetchUserBookings } from '@/api/user-booking';
 import logo from '../assets/logo.png';
 import { Building2, Menu } from 'lucide-react';
 
@@ -99,6 +99,8 @@ const PlayerProfile = () => {
     upcomingBookings: [],
     recentFutsals: [],
   });
+  // const [playerData, setPlayerData] = useState({});
+  const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -120,6 +122,31 @@ const PlayerProfile = () => {
 
     getPlayerProfile();
   }, []);
+
+  // useEffect(() => {
+  //   const loadData = async () => {
+  //     try {
+  //       const data = await fetchPlayerProfile();
+
+  //       const bookings = await fetchUserBookings();
+
+  //       setPlayerData((prevData) => ({
+  //         ...prevData,
+  //         username: data.username,
+  //         email: data.email,
+  //         upcomingBookings: bookings,
+  //       }));
+
+  //       const userBookings = await fetchUserBookings();
+  //       setBookings(userBookings);
+  //     } catch (err) {
+  //       setError(err.message);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   loadData();
+  // }, []);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -196,6 +223,40 @@ const PlayerProfile = () => {
 
           {/* Main Content */}
           <div className="lg:col-span-6 space-y-8">
+
+          {/* Upcoming Bookings */}
+          {/* <Card>
+                  <CardHeader className="p-6">
+                    <CardTitle>Upcoming Bookings</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-6 pt-0">
+                    <div className="space-y-4">
+                      {playerData.upcomingBookings.length === 0 ? (
+                        <p>No upcoming bookings.</p>
+                      ) : (
+                        playerData.upcomingBookings.map((booking) => (
+                          <div key={booking.booking_id} className="bg-blue-50 p-4 rounded-xl">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <div className="font-medium text-gray-800">
+                                  {booking.futsal_name || 'Unknown Futsal'}
+                                </div>
+                                <div className="text-sm text-gray-600">
+                                  {booking.scheduled_time}
+                                </div>
+                              </div>
+                              <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                                {booking.payment_status}
+                              </span>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </CardContent>
+                </Card> */}
+
+
             {/* Upcoming Bookings */}
             <Card>
               <CardHeader className="p-6">
@@ -210,7 +271,7 @@ const PlayerProfile = () => {
                     <div key={booking.id} className="bg-blue-50 p-4 rounded-xl">
                       <div className="flex items-center justify-between">
                         <div>
-                          <div className="font-medium text-gray-800">{booking.futsalName}</div>
+                          <div className="font-medium text-gray-800">{booking.futsal_name}</div>
                           <div className="text-sm text-gray-600">
                             {new Date(booking.date).toLocaleDateString()} • {booking.time}
                           </div>

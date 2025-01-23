@@ -80,3 +80,19 @@ export const fetchOwnerProfile = async () => {
     throw new Error(err.response?.data?.error || err.message);
   }
 };
+
+export const updateOwnerProfile = async (profileData) => {
+  const token = localStorage.getItem('access_token');
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  };
+
+  try {
+    const response = await axios.put(`${API_URL}/owner/form/`, profileData, { headers });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating owner profile:', error);
+    throw error;
+  }
+};

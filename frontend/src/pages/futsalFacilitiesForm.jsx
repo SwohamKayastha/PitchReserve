@@ -174,7 +174,7 @@ const FutsalUploadForm = ({ onClose }) => {
                 <h3 className="text-lg font-medium text-gray-900">Amenities</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {Object.entries({
-                    water: '💧 Water',
+                    water_availability: '💧 Water',
                     has_changing_room: '🚿 Changing Room',
                     parking_facilities: '🅿️ Parking',
                     lights: '💡 Lights',
