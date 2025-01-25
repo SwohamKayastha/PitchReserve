@@ -8,6 +8,7 @@ import logo from '../assets/logo.png';
 import profileIcon from '../assets/profileIcon.png';
 import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import {Facebook, Instagram, Mail} from 'lucide-react';
 
 // Animation Variants
 const fadeIn = {
@@ -20,8 +21,8 @@ const slideIn = {
   visible: { x: 0 },
 };
 
-// Title Bar Component
-const TitleBar = ({ isMenuOpen, toggleMenu }) => {
+const TitleBar = () => {
+  const [isMenuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -41,7 +42,10 @@ const TitleBar = ({ isMenuOpen, toggleMenu }) => {
       }`}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
-        <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="flex items-center"
+        >
           <Link to="/login" className="relative">
             <img 
               src={profileIcon}
@@ -51,13 +55,18 @@ const TitleBar = ({ isMenuOpen, toggleMenu }) => {
           </Link>
         </motion.div>
 
-        <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
-          <img 
-            src={logo}
-            alt="Logo"
-            className="h-12 w-auto"
-          />
-        </motion.div>
+        <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="flex items-center"
+                >
+                  <button onClick={() => window.location.href = '/'} className="relative">
+                  <img 
+                    src={logo}
+                    alt="Logo"
+                    className="h-12 w-auto"
+                  />
+                  </button>
+                </motion.div>
 
         <div className="relative">
           <motion.button
@@ -66,13 +75,114 @@ const TitleBar = ({ isMenuOpen, toggleMenu }) => {
             className={`p-2 rounded-lg transition-colors duration-200 ${
               scrolled ? 'text-black hover:bg-gray-100' : 'text-white hover:bg-white/10'
             }`}
-            onClick={toggleMenu}
+            onClick={() => setMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </motion.button>
+
+          <motion.div 
+            initial={{ x: '100%' }}
+            animate={{ x: isMenuOpen ? 0 : '100%' }}
+            transition={{ type: 'tween', duration: 0.3 }}
+            className="fixed right-0 top-0 w-72 h-full bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl"
+          >
+            <div className="flex flex-col p-4">
+              <button 
+                onClick={() => setMenuOpen(false)}
+                className="self-end p-2 text-white hover:bg-gray-800 rounded-lg"
+              >
+                <X size={24} />
+              </button>
+
+              <nav className="mt-8">
+                <ul className="space-y-4">
+                  {[
+                    { name: 'Home', path: '/' },
+                    { name: 'About Us', path: '/aboutUs' },
+                    { name: 'Book Venue', path: '/toBook' },
+                    { name: 'Login/ Partnership', path: '/Partnership' },
+                    { name: 'Subscriptions', path: '/subscriptions' },
+                    { name: 'Blogs', path: '/newFeatures' }
+                  ].map((item) => (
+                    <motion.li 
+                      key={item.name}
+                      whileHover={{ x: 10 }}
+                    >
+                      <Link
+                        to={item.path}
+                        className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
+                      >
+                        {item.name}
+                      </Link>
+                    </motion.li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
+          </motion.div>
         </div>
       </div>
     </motion.div>
+  );
+};
+
+
+
+const Footer = () => {
+  return (
+    <footer className="bg-[#0a0d14] text-white py-12 flex">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div className="flex items-center space-x-4">
+            <img src={logo} alt="Logo" className="w-40" />
+            <p className="text-sm">Nepal's Only<br/>Futsal Venue<br/>Booking System</p>
+          </div>
+          
+          <nav className="space-y-4">
+            <ul className="space-y-2">
+              {['Home', 'About Us', 'Partner With Us', 'Membership', 'Book Now', 'Updates', 'Blogs'].map((item) => (
+                <motion.li 
+                  key={item}
+                  whileHover={{ x: 5 }}
+                >
+                  <Link to="/" className="hover:text-green-500 transition-colors">
+                    {item}
+                  </Link>
+                </motion.li>
+              ))}
+            </ul>
+          </nav>
+          
+          <div className="space-y-4">
+            <h3 className="font-bold text-lg">Contact Us</h3>
+            <ul className="space-y-2">
+              <li>Pitch Reserve</li>
+              <li>Kathmandu University</li>
+              <li>+977 9741740551</li>
+              <li>info@pitchreserve.com.np</li>
+            </ul>
+            <div className="flex space-x-4 mt-4">
+              {[
+                { Icon: Facebook, href: 'https://facebook.com/pitchreserve' },
+                { Icon: Instagram, href: 'https://instagram.com/pitchreserve' },
+                { Icon: Mail, href: 'mailto:info@pitchreserve.com.np' }
+              ].map(({ Icon, href }) => (
+                <motion.a
+                  key={href}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.2 }}
+                  className="hover:text-green-500 transition-colors"
+                >
+                  <Icon size={24} />
+                </motion.a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 };
 
@@ -346,6 +456,7 @@ const FutsalDetail = () => {
             </div>
           </motion.div>
         )}
+        <Footer />
       </div>
     </motion.div>
   );

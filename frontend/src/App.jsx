@@ -11,6 +11,7 @@ import Error from './pages/error';
 import FeaturesAndBlog from './pages/newFeatures';
 import FutsalDetail from './pages/afterVenueSelection';
 import FutsalBookingPage from './pages/toBook';
+import Subscriptions from './pages/subscriptions';
 
 // Main App component
 function App() {
@@ -28,7 +29,7 @@ function App() {
         <Route path="/newFeatures" element={<FeaturesAndBlog />} />
         <Route path="/afterVenueSelection" element={<FutsalDetail />} />
         <Route path="/toBook" element={<FutsalBookingPage />} />
-        {/* <Route path="*" element={<Navigate to="/error" replace />} /> */}
+        <Route path="/subscriptions" element={<Subscriptions />} />
       </Routes>
     </BrowserRouter>
   );

@@ -4,6 +4,117 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"; // Adjust 
 import { Button } from "@/components/ui/button";
 import { Search } from 'lucide-react'; // Import Lucide icon
 
+
+import { motion } from "framer-motion";
+import profileIcon from "../assets/profileIcon.png";
+import logo from "../assets/logo.png";
+import { X , Menu } from "lucide-react";
+import { useEffect } from "react";
+
+const TitleBar = () => {
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        scrolled ? 'bg-white shadow-lg' : 'bg-transparent'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="flex items-center"
+        >
+          <Link to="/login" className="relative">
+            <img 
+              src={profileIcon}
+              alt="profile"
+              className="h-12 w-auto transition-transform duration-200 hover:brightness-110"
+            />
+          </Link>
+        </motion.div>
+
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="flex items-center"
+        >
+          <button onClick={() => window.location.href = '/'} className="relative">
+          <img 
+            src={logo}
+            alt="Logo"
+            className="h-12 w-auto"
+          />
+          </button>
+        </motion.div>
+
+        <div className="relative">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className={`p-2 rounded-lg transition-colors duration-200 ${
+              scrolled ? 'text-black hover:bg-gray-100' : 'text-white hover:bg-white/10'
+            }`}
+            onClick={() => setMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </motion.button>
+
+          <motion.div 
+            initial={{ x: '100%' }}
+            animate={{ x: isMenuOpen ? 0 : '100%' }}
+            transition={{ type: 'tween', duration: 0.3 }}
+            className="fixed right-0 top-0 w-72 h-full bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl"
+          >
+            <div className="flex flex-col p-4">
+              <button 
+                onClick={() => setMenuOpen(false)}
+                className="self-end p-2 text-white hover:bg-gray-800 rounded-lg"
+              >
+                <X size={24}  />
+              </button>
+
+              <nav className="mt-8">
+                <ul className="space-y-4">
+                  {[
+                    { name: 'Home', path: '/' },
+                    { name: 'About Us', path: '/aboutUs' },
+                    { name: 'Book Venue', path: '/toBook' },
+                    { name: 'Login/ Partnership', path: '/Partnership' },
+                    { name: 'Subscriptions', path: '/subscriptions' },
+                    { name: 'Blogs', path: '/newFeatures' }
+                  ].map((item) => (
+                    <motion.li 
+                      key={item.name}
+                      whileHover={{ x: 10 }}
+                    >
+                      <Link
+                        to={item.path}
+                        className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
+                      >
+                        {item.name}
+                      </Link>
+                    </motion.li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 const dummyData = [
   {
     id: 1,
@@ -73,13 +184,14 @@ const FutsalBookingPage = () => {
     const matchesWater = !filters.water || futsal.water;
     const matchesParking = !filters.parking || futsal.parking;
     const matchesChangingRoom = !filters.changingRoom || futsal.changingRoom;
-    const matchesNearMe = !filters.nearMe || futsal.distance <= 5; // Assuming 'near me' means within 5 km
+    const matchesNearMe = !filters.nearMe || futsal.distance <= 2;
     return matchesSearch && matchesWater && matchesParking && matchesChangingRoom && matchesNearMe;
   });
 
   return (
-    <div className="w-full mx-auto py-8 px-4">
-      <h1 className="text-4xl font-bold mb-6 text-green-800 text-center">Futsal Booking</h1>
+    <div className="w-auto mx-auto py-8 px-4">
+      <TitleBar />
+      <h1 className="text-4xl font-bold mt-10 mb-6 text-green-800 text-center">Book your favourite Futsal</h1>
       
       {/* Enhanced Search Bar */}
       <div className="mb-6 flex justify-center">

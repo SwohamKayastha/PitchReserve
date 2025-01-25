@@ -12,81 +12,106 @@ import LoginOwnerForm from "../components/LoginPage/Owner/LoginOwnerForm";
 
 const TitleBar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  const toggleMenu = () => setMenuOpen(!isMenuOpen);
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <div className="w-full flex justify-between items-center p-1  bg-white shadow-md">
-      <div className="flex items-center">
-        <button className="flex items-center bg-transparent hover:bg-gray-100 rounded-lg">
-          <div className="relative h-10 w-auto p-0">
-            <a href="/">
-              <img
-                src={logo}
-                alt="Logo"
-                className="h-10 w-auto"
-                style={{
-                  filter: "brightness(1) contrast(1)",
-                  backgroundColor: "transparent",
-                }}
-              />
-            </a>
-          </div>
-        </button>
-      </div>
-      <div className="relative">
-        <button
-          className="p-2 text-black bg-transparent hover:bg-gray-100 rounded-lg transition-colors duration-200 focus:outline-none"
-          onClick={toggleMenu}
-          aria-label="Toggle menu"
+    <motion.div
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        scrolled ? 'bg-white shadow-lg' : 'bg-transparent'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="flex items-center"
         >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+          <Link to="/login" className="relative">
+            <img 
+              src={profileIcon}
+              alt="profile"
+              className="h-12 w-auto transition-transform duration-200 hover:brightness-110"
+            />
+          </Link>
+        </motion.div>
 
-        <div
-          className={`fixed right-0 top-0 w-64 h-full bg-gray-900 shadow-lg transform transition-transform duration-300 ease-in-out ${
-            isMenuOpen ? "translate-x-0" : "translate-x-full"
-          } z-50`}
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="flex items-center"
         >
-          <div className="flex flex-col p-4">
-            <button
-              onClick={toggleMenu}
-              className="self-end p-2 text-white hover:bg-gray-800 rounded-lg transition-colors duration-200"
-              aria-label="Close menu"
-            >
-              <X size={24} />
-            </button>
-            <nav className="mt-8">
-              <ul className="space-y-4">
-                {[
-                  { name: "Home", path: "/" },
-                  { name: "About Us", path: "/aboutUs" },
-                  { name: "Book Venue", path: "/book" },
-                  { name: "Login/ Partnership", path: "/Partnership" },
-                  { name: "Subscriptions", path: "/subscriptions" },
-                  { name: "Blogs", path: "/blogs" },
-                ].map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      to={item.path}
-                      className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg transition-colors duration-200"
+          <button onClick={() => window.location.href = '/'} className="relative">
+          <img 
+            src={logo}
+            alt="Logo"
+            className="h-12 w-auto"
+          />
+          </button>
+        </motion.div>
+
+        <div className="relative">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className={`p-2 rounded-lg transition-colors duration-200 ${
+              scrolled ? 'text-black hover:bg-gray-100' : 'text-white hover:bg-white/10'
+            }`}
+            onClick={() => setMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </motion.button>
+
+          <motion.div 
+            initial={{ x: '100%' }}
+            animate={{ x: isMenuOpen ? 0 : '100%' }}
+            transition={{ type: 'tween', duration: 0.3 }}
+            className="fixed right-0 top-0 w-72 h-full bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl"
+          >
+            <div className="flex flex-col p-4">
+              <button 
+                onClick={() => setMenuOpen(false)}
+                className="self-end p-2 text-white hover:bg-gray-800 rounded-lg"
+              >
+                <X size={24} />
+              </button>
+
+              <nav className="mt-8">
+                <ul className="space-y-4">
+                  {[
+                    { name: 'Home', path: '/' },
+                    { name: 'About Us', path: '/aboutUs' },
+                    { name: 'Book Venue', path: '/toBook' },
+                    { name: 'Login/ Partnership', path: '/Partnership' },
+                    { name: 'Subscriptions', path: '/subscriptions' },
+                    { name: 'Blogs', path: '/newFeatures' }
+                  ].map((item) => (
+                    <motion.li 
+                      key={item.name}
+                      whileHover={{ x: 10 }}
                     >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
+                      <Link
+                        to={item.path}
+                        className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
+                      >
+                        {item.name}
+                      </Link>
+                    </motion.li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
+          </motion.div>
         </div>
       </div>
-      {isMenuOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
-          onClick={toggleMenu}
-        />
-      )}
-    </div>
+    </motion.div>
   );
 };
 

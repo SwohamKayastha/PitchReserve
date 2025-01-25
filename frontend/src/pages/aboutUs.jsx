@@ -7,6 +7,7 @@ import aayush from '../assets/aayush.jpg';
 import parichit from '../assets/parichit.jpg';
 import logo from '../assets/logo.png';
 import profileIcon from '../assets/profileIcon.png';
+import {Facebook, Instagram, Mail } from 'lucide-react';
 
 // Animation variants
 const fadeInUp = {
@@ -28,7 +29,6 @@ const scaleIn = {
   animate: { scale: 1, opacity: 1 },
   transition: { duration: 0.5 }
 };
-
 const TitleBar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -67,11 +67,13 @@ const TitleBar = () => {
           whileHover={{ scale: 1.05 }}
           className="flex items-center"
         >
+          <button onClick={() => window.location.href = '/'} className="relative">
           <img 
             src={logo}
             alt="Logo"
             className="h-12 w-auto"
           />
+          </button>
         </motion.div>
 
         <div className="relative">
@@ -105,9 +107,9 @@ const TitleBar = () => {
                   {[
                     { name: 'Home', path: '/' },
                     { name: 'About Us', path: '/aboutUs' },
-                    { name: 'Book Venue', path: '/book' },
+                    { name: 'Book Venue', path: '/toBook' },
                     { name: 'Login/ Partnership', path: '/Partnership' },
-                    { name: 'Subscriptions', path: '/error' },
+                    { name: 'Subscriptions', path: '/subscriptions' },
                     { name: 'Blogs', path: '/newFeatures' }
                   ].map((item) => (
                     <motion.li 
@@ -131,6 +133,66 @@ const TitleBar = () => {
     </motion.div>
   );
 };
+
+
+const Footer = () => {
+  return (
+    <footer className="bg-[#0a0d14] text-white py-12 flex">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div className="flex items-center space-x-4">
+            <img src={logo} alt="Logo" className="w-40" />
+            <p className="text-sm">Nepal's Only<br/>Futsal Venue<br/>Booking System</p>
+          </div>
+          
+          <nav className="space-y-4">
+            <ul className="space-y-2">
+              {['Home', 'About Us', 'Partner With Us', 'Membership', 'Book Now', 'Updates', 'Blogs'].map((item) => (
+                <motion.li 
+                  key={item}
+                  whileHover={{ x: 5 }}
+                >
+                  <Link to="/" className="hover:text-green-500 transition-colors">
+                    {item}
+                  </Link>
+                </motion.li>
+              ))}
+            </ul>
+          </nav>
+          
+          <div className="space-y-4">
+            <h3 className="font-bold text-lg">Contact Us</h3>
+            <ul className="space-y-2">
+              <li>Pitch Reserve</li>
+              <li>Kathmandu University</li>
+              <li>+977 9741740551</li>
+              <li>info@pitchreserve.com.np</li>
+            </ul>
+            <div className="flex space-x-4 mt-4">
+              {[
+                { Icon: Facebook, href: 'https://facebook.com/pitchreserve' },
+                { Icon: Instagram, href: 'https://instagram.com/pitchreserve' },
+                { Icon: Mail, href: 'mailto:info@pitchreserve.com.np' }
+              ].map(({ Icon, href }) => (
+                <motion.a
+                  key={href}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.2 }}
+                  className="hover:text-green-500 transition-colors"
+                >
+                  <Icon size={24} />
+                </motion.a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
 
 const AboutUs = () => {
   const stats = [
@@ -414,6 +476,7 @@ const AboutUs = () => {
           </div>
         </motion.div>
       </main>
+      <Footer />
     </div>
   );
 };

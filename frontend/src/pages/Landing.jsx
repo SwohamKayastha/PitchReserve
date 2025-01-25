@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { X, Menu, Facebook, Instagram, Mail, Search, Book, Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-// Import your images
+//images
 import subscriptionImage from '../assets/subscriptions.jpg';
 import mapOfNepal from '../assets/mapOfNepal.png';
 import searchicon from '../assets/searchIcon.png';
@@ -91,7 +91,7 @@ const TitleBar = () => {
                     { name: 'About Us', path: '/aboutUs' },
                     { name: 'Book Venue', path: '/toBook' },
                     { name: 'Login/ Partnership', path: '/Partnership' },
-                    { name: 'Subscriptions', path: '/afterVenueSelection' },
+                    { name: 'Subscriptions', path: '/subscriptions' },
                     { name: 'Blogs', path: '/newFeatures' }
                   ].map((item) => (
                     <motion.li 
@@ -115,7 +115,6 @@ const TitleBar = () => {
     </motion.div>
   );
 };
-
 const HeroSection = () => {
   return (
     <div className="relative h-screen bg-black overflow-hidden">
@@ -138,20 +137,24 @@ const HeroSection = () => {
         </h1>
         <p className="text-2xl mb-8">IS JUST A TAP AWAY</p>
         <div className="flex gap-4">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-green-500 px-8 py-3 rounded-full text-lg font-semibold hover:bg-green-600 transition-colors"
-          >
-            Book Now
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-white text-black px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors"
-          >
-            List Your Venue
-          </motion.button>
+          <Link to="/toBook">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-green-500 px-8 py-3 rounded-full text-lg font-semibold hover:bg-green-600 transition-colors"
+            >
+              Book Now
+            </motion.button>
+          </Link>
+          <Link to="/ownerProfile">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-white text-black px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors"
+            >
+              List Your Venue
+            </motion.button>
+          </Link>
         </div>
       </motion.div>
     </div>
@@ -278,28 +281,44 @@ const SubscriptionSection = () => {
 
 const Footer = () => {
   return (
-    <footer className="bg-[#0a0d14] text-white py-12">
+    <footer className="bg-[#0a0d14] text-white py-12 flex">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div className="flex items-center space-x-4">
-            <img src={logo} alt="Logo" className="w-40" />
-            <p className="text-sm">Nepal's Only<br/>Futsal Venue<br/>Booking System</p>
+          <Link to="/login" className="relative">
+            <img 
+              src={logo}
+              alt="logo"
+              className="h-100 w-auto transition-transform duration-200 hover:brightness-110"
+            />
+          </Link>
+            <p className="text-m">Nepal's Only<br/>Futsal Venue<br/>Booking System</p>
           </div>
           
-          <nav className="space-y-4">
-            <ul className="space-y-2">
-              {['Home', 'About Us', 'Partner With Us', 'Membership', 'Book Now', 'Updates', 'Blogs'].map((item) => (
-                <motion.li 
-                  key={item}
-                  whileHover={{ x: 5 }}
-                >
-                  <Link to="/" className="hover:text-green-500 transition-colors">
-                    {item}
-                  </Link>
-                </motion.li>
-              ))}
-            </ul>
-          </nav>
+          <nav className="">
+                <ul className="space-y-0">
+                  {[
+                    { name: 'Home', path: '/' },
+                    { name: 'About Us', path: '/aboutUs' },
+                    { name: 'Book Venue', path: '/toBook' },
+                    { name: 'Login/ Partnership', path: '/Partnership' },
+                    { name: 'Subscriptions', path: '/subscriptions' },
+                    { name: 'Blogs', path: '/newFeatures' }
+                  ].map((item) => (
+                    <motion.li 
+                      key={item.name}
+                      whileHover={{ x: 10 }}
+                    >
+                      <Link
+                        to={item.path}
+                        className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
+                      >
+                        {item.name}
+                      </Link>
+                    </motion.li>
+                  ))}
+                </ul>
+              </nav>
           
           <div className="space-y-4">
             <h3 className="font-bold text-lg">Contact Us</h3>
