@@ -3,7 +3,7 @@ import axios from "axios"; // Make sure axios is installed
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Search } from 'lucide-react';
+import { LogOut, Search } from 'lucide-react';
 import { motion } from "framer-motion";
 import logo from "../assets/logo.png";
 import profileIcon from "../assets/profileIcon.png";
@@ -30,13 +30,10 @@ const TitleBar = () => {
         scrolled ? 'bg-white shadow-lg' : 'bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="flex items-center"
-        >
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center p-4">
+        <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
           <Link to="/login" className="relative">
-            <img 
+            <img
               src={profileIcon}
               alt="profile"
               className="h-12 w-auto transition-transform duration-200 hover:brightness-110"
@@ -44,17 +41,14 @@ const TitleBar = () => {
           </Link>
         </motion.div>
 
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="flex items-center"
-        >
-          <button onClick={() => window.location.href = '/'} className="relative">
-            <img 
+        <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
+          <Link to="/" className="relative">
+            <img
               src={logo}
-              alt="Logo"
+              alt="logo"
               className="h-12 w-auto"
             />
-          </button>
+          </Link>
         </motion.div>
 
         <div className="relative">
@@ -69,14 +63,14 @@ const TitleBar = () => {
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </motion.button>
 
-          <motion.div 
+          <motion.div
             initial={{ x: '100%' }}
             animate={{ x: isMenuOpen ? 0 : '100%' }}
             transition={{ type: 'tween', duration: 0.3 }}
             className="fixed right-0 top-0 w-72 h-full bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl"
           >
             <div className="flex flex-col p-4">
-              <button 
+              <button
                 onClick={() => setMenuOpen(false)}
                 className="self-end p-2 text-white hover:bg-gray-800 rounded-lg"
               >
@@ -93,10 +87,7 @@ const TitleBar = () => {
                     { name: 'Subscriptions', path: '/subscriptions' },
                     { name: 'Blogs', path: '/newFeatures' }
                   ].map((item) => (
-                    <motion.li 
-                      key={item.name}
-                      whileHover={{ x: 10 }}
-                    >
+                    <motion.li key={item.name} whileHover={{ x: 10 }}>
                       <Link
                         to={item.path}
                         className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
@@ -140,10 +131,12 @@ const FutsalBookingPage = () => {
     fetchFutsals();
   }, []);
 
+  // Handle search input change
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
+  // Handle filter change
   const handleFilterChange = (filter) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -151,12 +144,13 @@ const FutsalBookingPage = () => {
     }));
   };
 
+  // Filter futsals based on search and filters
   const filteredFutsals = futsals.filter(futsal => {
     const matchesSearch = searchTerm === "" || futsal.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesWater = !filters.water || futsal.water_availability;
+    const matchesWater = !filters.water || futsal.has_changing_room;
     const matchesParking = !filters.parking || futsal.parking_facilities;
     const matchesChangingRoom = !filters.changingRoom || futsal.has_changing_room;
-    const matchesNearMe = !filters.nearMe || futsal.distance <= 2; // Adjust distance condition as necessary
+    const matchesNearMe = !filters.nearMe; // Adjust distance condition as necessary
     return matchesSearch && matchesWater && matchesParking && matchesChangingRoom && matchesNearMe;
   });
 
@@ -165,7 +159,7 @@ const FutsalBookingPage = () => {
       <TitleBar />
       <h1 className="text-4xl font-bold mt-10 mb-6 text-green-800 text-center">Book Your Favourite Futsal</h1>
 
-      {/* Enhanced Search Bar */}
+      {/* Search Bar */}
       <div className="mb-6 flex justify-center">
         <div className="relative w-3/4 md:w-1/2">
           <input
@@ -208,27 +202,21 @@ const FutsalBookingPage = () => {
               whileHover={{ scale: 1.05, boxShadow: "0 4px 20px rgba(0,0,0,0.2)" }}
               className="h-full transition-shadow border border-green-200 rounded-lg cursor-pointer"
             >
-              <CardContent className="p-0">
-                <div className="relative h-48 w-full">
-                  <img
-                    src={futsal.images.length > 0 ? futsal.images[0] : "/placeholder.svg"}
-                    alt={futsal.name}
-                    className="w-full h-full object-cover rounded-t-lg"
-                  />
-                </div>
-                <div className="p-4">
-                  <h3 className="text-xl font-semibold text-green-800">{futsal.name}</h3>
-                  <p className="text-sm text-green-600">{futsal.location}</p>
-                  <p className="text-sm text-gray-700">Price: ${futsal.price_per_hour}/hr</p>
-                </div>
-              </CardContent>
-              <CardFooter>
+              <div className="p-4">
+                <h3 className="text-xl font-semibold text-green-800">{futsal.name}</h3>
+                <p className="text-sm text-green-600">{futsal.location}</p>
+                <p className="text-sm text-gray-700">Price: ${futsal.price_per_hour}/hr</p>
+                <p className="text-sm text-gray-700">Pitches: {futsal.number_of_pitches}</p>
+                <p className="text-sm text-gray-700">Dimensions: {futsal.pitch_dimensions}</p>
+                <p className="text-sm text-gray-700">Availability: {futsal.availability_start_time} - {futsal.availability_end_time}</p>
+              </div>
+              <div className="p-4">
                 <Link to={`/venueSelection/${futsal.id}`} className="w-full">
                   <Button className="w-full bg-green-600 hover:bg-green-700 text-white transition duration-200 ease-in-out">
                     View Details
                   </Button>
                 </Link>
-              </CardFooter>
+              </div>
             </motion.div>
           </motion.div>
         ))}

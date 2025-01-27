@@ -37,10 +37,7 @@ const TitleBar = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="flex items-center"
-        >
+        <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
           <Link to="/login" className="relative">
             <img 
               src={profileIcon}
@@ -50,10 +47,7 @@ const TitleBar = () => {
           </Link>
         </motion.div>
 
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="flex items-center"
-        >
+        <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
           <button onClick={() => window.location.href = '/'} className="relative">
             <img 
               src={logo}
@@ -123,29 +117,42 @@ const TitleBar = () => {
 
 const Footer = () => {
   return (
-    <footer className="bg-[#0a0d14] text-white py-12 w-full ">
+    <footer className="bg-[#0a0d14] text-white py-12 flex w-screen justify-bottom">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div className="flex items-center space-x-4">
-            <img src={logo} alt="Logo" className="w-40" />
-            <p className="text-sm">Nepal's Only<br/>Futsal Venue<br/>Booking System</p>
+            <Link to="/" className="relative">
+              <img
+                src={logo}
+                alt="logo"
+                className="h-20 w-auto transition-transform duration-200 hover:brightness-110"
+              />
+            </Link>
+            <p className="text-m">Nepal's Only<br />Futsal Venue<br />Booking System</p>
           </div>
-          
-          <nav className="space-y-4">
-            <ul className="space-y-2">
-              {['Home', 'About Us', 'Partner With Us', 'Membership', 'Book Now', 'Updates', 'Blogs'].map((item) => (
-                <motion.li 
-                  key={item}
-                  whileHover={{ x: 5 }}
-                >
-                  <Link to="/" className="hover:text-green-500 transition-colors">
-                    {item}
+
+          <nav className="">
+            <ul className="space-y-0">
+              {[
+                { name: 'Home', path: '/' },
+                { name: 'About Us', path: '/aboutUs' },
+                { name: 'Book Venue', path: '/toBook' },
+                { name: 'Login/ Partnership', path: '/Partnership' },
+                { name: 'Subscriptions', path: '/subscriptions' },
+                { name: 'Blogs', path: '/newFeatures' }
+              ].map((item) => (
+                <motion.li key={item.name} whileHover={{ x: 10 }}>
+                  <Link
+                    to={item.path}
+                    className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
+                  >
+                    {item.name}
                   </Link>
                 </motion.li>
               ))}
             </ul>
           </nav>
-          
+
           <div className="space-y-4">
             <h3 className="font-bold text-lg">Contact Us</h3>
             <ul className="space-y-2">
@@ -232,13 +239,13 @@ const FutsalDetail = () => {
 
   return (
     <motion.div 
-      className="min-h-screen bg-gradient-to-r from-green-400 via-green-500 to-green-600 p-6"
+      className="min-h-screen bg-gradient-to-r from-blue-600 to-blue-800 p-6" // Changed the gradient
       initial="hidden"
       animate="visible"
       variants={fadeIn}
     >
       <TitleBar />
-      <div className="max-w-7xl mx-auto flex flex-col items-center">
+      <div className="max-w-7xl mx-auto flex flex-col items-center mt-12"> {/* Added margin-top */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
           <motion.div 
             className="lg:col-span-2 bg-white rounded-lg shadow-lg p-6"
@@ -252,7 +259,7 @@ const FutsalDetail = () => {
               aria-label="Go back"
             >
               <ArrowLeft className="w-5 h-5" />
-              <span></span>
+              <span>Back</span>
             </button>
 
             <div className="relative aspect-video w-full rounded-xl overflow-hidden mb-6">
@@ -434,6 +441,7 @@ const FutsalDetail = () => {
             </div>
           </motion.div>
         )}
+        
         <Footer />
       </div>
     </motion.div>

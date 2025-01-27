@@ -33,7 +33,7 @@ const TitleBar = () => {
         scrolled ? 'bg-white shadow-lg' : 'bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center p-4">
+      <div className="max-w-7xl mx-auto flex flex-row justify-between items-center p-4">
         <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
           <Link to="/login" className="relative">
             <img
@@ -48,7 +48,7 @@ const TitleBar = () => {
           <img src={logo} alt="Logo" className="h-12 w-auto" />
         </motion.div>
 
-        <div className="relative">
+        <div className="relative flex items-center">
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
@@ -102,6 +102,7 @@ const TitleBar = () => {
     </motion.div>
   );
 };
+
 
 const HeroSection = () => {
   return (
@@ -273,7 +274,7 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div className="flex items-center space-x-4">
-            <Link to="/login" className="relative">
+            <Link to="/" className="relative">
               <img
                 src={logo}
                 alt="logo"
@@ -340,7 +341,7 @@ const Footer = () => {
 
 const Landing = () => {
   return (
-    <div className="w-full">
+    <div className="w-full overflow-x-hidden">
       <TitleBar />
       <HeroSection />
       <MapSection />
