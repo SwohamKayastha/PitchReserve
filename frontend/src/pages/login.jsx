@@ -5,13 +5,11 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Building2, X, Menu } from "lucide-react";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.png"
 import RegisterUserForm from "../components/LoginPage/User/RegisterForm";
 import LoginUserForm from "../components/LoginPage/User/LoginUserForm";
 import RegisterOwnerForm from "../components/LoginPage/Owner/RegisterOwnerForm";
 import LoginOwnerForm from "../components/LoginPage/Owner/LoginOwnerForm";
-import profileIcon from '../assets/profileIcon.png';
-
 
 const TitleBar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -34,7 +32,7 @@ const TitleBar = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
-        <motion.div
+        {/* <motion.div
           whileHover={{ scale: 1.05 }}
           className="flex items-center"
         >
@@ -45,7 +43,7 @@ const TitleBar = () => {
               className="h-12 w-auto transition-transform duration-200 hover:brightness-110"
             />
           </Link>
-        </motion.div>
+        </motion.div> */}
 
         <motion.div
           whileHover={{ scale: 1.05 }}
@@ -132,7 +130,7 @@ const LoginPage = () => {
   return (
     <div className="flex flex-col  bg-gradient-to-b from-green-50/80 to-green-100/80 ">
       <TitleBar />
-      <div className="inset-0 flex items-center justify-center">
+      <div className="inset-0 flex items-center justify-center scroll mt-20 w-full min-h-screen">
         <div className="w-full max-w-md px-0">
           <Card className="shadow-xl bg-green-50/80 backdrop-blur-sm">
             <CardHeader className="text-center space-y-4 pb-8">
@@ -150,7 +148,7 @@ const LoginPage = () => {
                     !isOwner ? "text-green-900" : "text-gray-500"
                   }`}
                 >
-                  Customer
+                  <b>Customer</b>
                 </span>
                 <Switch
                   id="user-type"
@@ -163,7 +161,7 @@ const LoginPage = () => {
                     isOwner ? "text-green-900" : "text-gray-500"
                   }`}
                 >
-                  Venue Owner
+                  <b>Venue Owner</b>
                 </span>
                 <Building2
                   className={`h-5 w-5 ${

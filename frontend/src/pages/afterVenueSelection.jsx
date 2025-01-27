@@ -8,17 +8,12 @@ import logo from '../assets/logo.png';
 import profileIcon from '../assets/profileIcon.png';
 import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import {Facebook, Instagram, Mail} from 'lucide-react';
+import { Facebook, Instagram, Mail } from 'lucide-react';
 
 // Animation Variants
 const fadeIn = {
   hidden: { opacity: 0 },
   visible: { opacity: 1 },
-};
-
-const slideIn = {
-  hidden: { x: '-100%' },
-  visible: { x: 0 },
 };
 
 const TitleBar = () => {
@@ -42,10 +37,7 @@ const TitleBar = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="flex items-center"
-        >
+        <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
           <Link to="/login" className="relative">
             <img 
               src={profileIcon}
@@ -55,18 +47,15 @@ const TitleBar = () => {
           </Link>
         </motion.div>
 
-        <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className="flex items-center"
-                >
-                  <button onClick={() => window.location.href = '/'} className="relative">
-                  <img 
-                    src={logo}
-                    alt="Logo"
-                    className="h-12 w-auto"
-                  />
-                  </button>
-                </motion.div>
+        <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
+          <button onClick={() => window.location.href = '/'} className="relative">
+            <img 
+              src={logo}
+              alt="Logo"
+              className="h-12 w-auto"
+            />
+          </button>
+        </motion.div>
 
         <div className="relative">
           <motion.button
@@ -126,33 +115,44 @@ const TitleBar = () => {
   );
 };
 
-
-
 const Footer = () => {
   return (
-    <footer className="bg-[#0a0d14] text-white py-12 flex">
+    <footer className="bg-[#0a0d14] text-white py-12 flex w-screen justify-bottom">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div className="flex items-center space-x-4">
-            <img src={logo} alt="Logo" className="w-40" />
-            <p className="text-sm">Nepal's Only<br/>Futsal Venue<br/>Booking System</p>
+            <Link to="/" className="relative">
+              <img
+                src={logo}
+                alt="logo"
+                className="h-20 w-auto transition-transform duration-200 hover:brightness-110"
+              />
+            </Link>
+            <p className="text-m">Nepal's Only<br />Futsal Venue<br />Booking System</p>
           </div>
-          
-          <nav className="space-y-4">
-            <ul className="space-y-2">
-              {['Home', 'About Us', 'Partner With Us', 'Membership', 'Book Now', 'Updates', 'Blogs'].map((item) => (
-                <motion.li 
-                  key={item}
-                  whileHover={{ x: 5 }}
-                >
-                  <Link to="/" className="hover:text-green-500 transition-colors">
-                    {item}
+
+          <nav className="">
+            <ul className="space-y-0">
+              {[
+                { name: 'Home', path: '/' },
+                { name: 'About Us', path: '/aboutUs' },
+                { name: 'Book Venue', path: '/toBook' },
+                { name: 'Login/ Partnership', path: '/Partnership' },
+                { name: 'Subscriptions', path: '/subscriptions' },
+                { name: 'Blogs', path: '/newFeatures' }
+              ].map((item) => (
+                <motion.li key={item.name} whileHover={{ x: 10 }}>
+                  <Link
+                    to={item.path}
+                    className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
+                  >
+                    {item.name}
                   </Link>
                 </motion.li>
               ))}
             </ul>
           </nav>
-          
+
           <div className="space-y-4">
             <h3 className="font-bold text-lg">Contact Us</h3>
             <ul className="space-y-2">
@@ -189,13 +189,10 @@ const Footer = () => {
 const FutsalDetail = () => {
   const [date, setDate] = useState(new Date());
   const [showSlots, setShowSlots] = useState(false);
-  const [startTime, setStartTime] = useState(6); // Default start time
-  const [endTime, setEndTime] = useState(7); // Default end time
-  const [selectedSlots, setSelectedSlots] = useState([]); // Track selected slots
-  const [bookingInfo, setBookingInfo] = useState(null); // Booking information
+  const [selectedSlots, setSelectedSlots] = useState([]);
+  const [bookingInfo, setBookingInfo] = useState(null);
   const navigate = useNavigate();
 
-  // Mock data - replace with your API data
   const futsalData = {
     name: "Green Field Futsal",
     location: "Kathmandu, Nepal",
@@ -235,108 +232,100 @@ const FutsalDetail = () => {
       totalPrice,
     });
     setShowSlots(false);
-    setSelectedSlots([]); // Reset selected slots after booking
+    setSelectedSlots([]);
   };
 
-  // Get current hour
   const currentHour = new Date().getHours();
 
   return (
     <motion.div 
-      className="min-h-screen bg-gradient-to-r from-green-400 via-green-500 to-green-600 p-6"
+      className="min-h-screen bg-gradient-to-r from-blue-600 to-blue-800 p-6" // Changed the gradient
       initial="hidden"
       animate="visible"
       variants={fadeIn}
     >
       <TitleBar />
-      <div className="max-w-7xl mx-auto flex flex-col items-center">
+      <div className="max-w-7xl mx-auto flex flex-col items-center mt-12"> {/* Added margin-top */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
-          {/* Main Info Section */}
           <motion.div 
-            className="lg:col-span-2" 
+            className="lg:col-span-2 bg-white rounded-lg shadow-lg p-6"
             initial={{ opacity: 0, y: 20 }} 
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.5 }}
           >
-            <div className="bg-white rounded-lg shadow-xl p-6">
-              <button 
-                onClick={() => navigate(-1)} 
-                className="flex items-center gap-2 mb-6 bg-transparent text-gray-800 hover:text-gray-900 transition"
-                aria-label="Go back"
-              >
-                <ArrowLeft className="w-5 h-5" />
-                <span></span>
-              </button>
-              {/* Hero Image */}
-              <div className="relative aspect-video w-full rounded-xl overflow-hidden mb-6">
-                <img
-                  src={futsalData.image}
-                  alt={futsalData.name}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-              </div>
+            <button 
+              onClick={() => navigate(-1)} 
+              className="flex items-center gap-2 mb-6 bg-transparent text-gray-800 hover:text-gray-900 transition"
+              aria-label="Go back"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              <span>Back</span>
+            </button>
 
-              {/* Futsal Name and Location */}
-              <div className="mb-6">
-                <h1 className="text-3xl font-bold text-gray-800">{futsalData.name}</h1>
-                <div className="flex items-center gap-2 text-gray-600 mt-2">
-                  <MapPin className="w-4 h-4" />
-                  <span>{futsalData.location}</span>
-                </div>
-              </div>
+            <div className="relative aspect-video w-full rounded-xl overflow-hidden mb-6">
+              <img
+                src={futsalData.image}
+                alt={futsalData.name}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+            </div>
 
-              {/* Key Information Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                <div className="bg-gray-50 p-4 rounded-xl">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Clock className="w-4 h-4 text-gray-600" />
-                    <span className="text-sm font-medium text-gray-600">Operating Hours</span>
-                  </div>
-                  <div className="text-gray-800">
-                    {futsalData.openingTime} - {futsalData.closingTime}
-                  </div>
+            <div className="mb-6">
+              <h1 className="text-3xl font-bold text-gray-800">{futsalData.name}</h1>
+              <div className="flex items-center gap-2 text-gray-600 mt-2">
+                <MapPin className="w-4 h-4" />
+                <span>{futsalData.location}</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+              <div className="bg-gray-50 p-4 rounded-xl shadow-md">
+                <div className="flex items-center gap-2 mb-2">
+                  <Clock className="w-4 h-4 text-gray-600" />
+                  <span className="text-sm font-medium text-gray-600">Operating Hours</span>
                 </div>
-                <div className="bg-gray-50 p-4 rounded-xl">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Users className="w-4 h-4 text-gray-600" />
-                    <span className="text-sm font-medium text-gray-600">Available Pitches</span>
-                  </div>
-                  <div className="text-gray-800">{futsalData.pitchCount} Pitches</div>
-                </div>
-                <div className="bg-gray-50 p-4 rounded-xl">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Ruler className="w-4 h-4 text-gray-600" />
-                    <span className="text-sm font-medium text-gray-600">Pitch Size</span>
-                  </div>
-                  <div className="text-gray-800">{futsalData.dimensions}</div>
+                <div className="text-gray-800">
+                  {futsalData.openingTime} - {futsalData.closingTime}
                 </div>
               </div>
-
-              {/* Facilities */}
-              <div className="bg-gray-50 p-4 rounded-xl mb-6">
-                <h3 className="text-lg font-bold text-gray-800 mb-4">Available Facilities</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  {futsalData.facilities.map((facility, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <div className={`w-3 h-3 rounded-full ${facility.available ? 'bg-green-500' : 'bg-red-500'}`} />
-                      <span className="text-gray-700">{facility.name}</span>
-                    </div>
-                  ))}
+              <div className="bg-gray-50 p-4 rounded-xl shadow-md">
+                <div className="flex items-center gap-2 mb-2">
+                  <Users className="w-4 h-4 text-gray-600" />
+                  <span className="text-sm font-medium text-gray-600">Available Pitches</span>
                 </div>
+                <div className="text-gray-800">{futsalData.pitchCount} Pitches</div>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-xl shadow-md">
+                <div className="flex items-center gap-2 mb-2">
+                  <Ruler className="w-4 h-4 text-gray-600" />
+                  <span className="text-sm font-medium text-gray-600">Pitch Size</span>
+                </div>
+                <div className="text-gray-800">{futsalData.dimensions}</div>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 p-4 rounded-xl mb-6 shadow-md">
+              <h3 className="text-lg font-bold text-gray-800 mb-4">Available Facilities</h3>
+              <div className="grid grid-cols-2 gap-4">
+                {futsalData.facilities.map((facility, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <div className={`w-3 h-3 rounded-full ${facility.available ? 'bg-green-500' : 'bg-red-500'}`} />
+                    <span className="text-gray-700">{facility.name}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </motion.div>
 
-          {/* Calendar Section */}
           <motion.div 
             className="flex items-center justify-center lg:col-span-1" 
             initial={{ opacity: 0, y: 20 }} 
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.5 }}
           >
-            <div className="bg-white rounded-lg shadow-xl p-6">
+            <div className="bg-white rounded-lg shadow-lg p-6">
               <h2 className="text-xl font-bold text-gray-800 mb-4">Select Date</h2>
               <div className="calendar-container">
                 <Calendar
@@ -360,7 +349,6 @@ const FutsalDetail = () => {
           </motion.div>
         </div>
 
-        {/* Slots Popup */}
         {showSlots && (
           <motion.div 
             initial={{ opacity: 0 }} 
@@ -371,13 +359,12 @@ const FutsalDetail = () => {
             <div className="bg-white rounded-lg p-6 w-80">
               <h3 className="text-lg font-bold text-gray-800 mb-4">{date.toDateString()}</h3>
 
-              {/* Slot Selection */}
               <div className="grid grid-cols-3 gap-2 mb-4">
                 {Array.from({ length: 15 }, (_, i) => {
                   const slotStart = 6 + i; // Slots from 6 AM to 9 PM
                   const slotEnd = slotStart + 1;
                   const isSelected = selectedSlots.includes(`${slotStart}-${slotEnd}`);
-                  const isPastSlot = slotStart < currentHour; // Check if the slot is in the past
+                  const isPastSlot = slotStart < currentHour;
 
                   return (
                     <div 
@@ -387,7 +374,7 @@ const FutsalDetail = () => {
                         isPastSlot ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 
                         'bg-gray-100 hover:bg-gray-300'
                       }`}
-                      onClick={() => !isPastSlot && handleSlotToggle(`${slotStart}-${slotEnd}`)} // Prevent booking if the slot is in the past
+                      onClick={() => !isPastSlot && handleSlotToggle(`${slotStart}-${slotEnd}`)}
                     >
                       {`${slotStart}-${slotEnd}`}
                     </div>
@@ -395,7 +382,6 @@ const FutsalDetail = () => {
                 })}
               </div>
 
-              {/* Submit Button */}
               <button 
                 onClick={handleSubmit} 
                 className="mt-4 w-full bg-green-600 text-white py-2 rounded-lg transition hover:bg-green-700"
@@ -413,7 +399,6 @@ const FutsalDetail = () => {
           </motion.div>
         )}
 
-        {/* Booking Information Modal */}
         {bookingInfo && (
           <motion.div 
             initial={{ opacity: 0 }} 
@@ -456,6 +441,7 @@ const FutsalDetail = () => {
             </div>
           </motion.div>
         )}
+        
         <Footer />
       </div>
     </motion.div>

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { X, Menu, Facebook, Instagram, Mail, Search, Book, Play } from 'lucide-react';
+import { X, Menu, Facebook, Instagram, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-//images
+// Images
 import subscriptionImage from '../assets/subscriptions.jpg';
 import mapOfNepal from '../assets/mapOfNepal.png';
 import searchicon from '../assets/searchIcon.png';
@@ -33,13 +33,10 @@ const TitleBar = () => {
         scrolled ? 'bg-white shadow-lg' : 'bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="flex items-center"
-        >
+      <div className="max-w-7xl mx-auto flex flex-row justify-between items-center p-4">
+        <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
           <Link to="/login" className="relative">
-            <img 
+            <img
               src={profileIcon}
               alt="profile"
               className="h-12 w-auto transition-transform duration-200 hover:brightness-110"
@@ -47,18 +44,11 @@ const TitleBar = () => {
           </Link>
         </motion.div>
 
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="flex items-center"
-        >
-          <img 
-            src={logo}
-            alt="Logo"
-            className="h-12 w-auto"
-          />
+        <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
+          <img src={logo} alt="Logo" className="h-12 w-auto" />
         </motion.div>
 
-        <div className="relative">
+        <div className="relative flex items-center">
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
@@ -70,14 +60,14 @@ const TitleBar = () => {
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </motion.button>
 
-          <motion.div 
+          <motion.div
             initial={{ x: '100%' }}
             animate={{ x: isMenuOpen ? 0 : '100%' }}
             transition={{ type: 'tween', duration: 0.3 }}
             className="fixed right-0 top-0 w-72 h-full bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl"
           >
             <div className="flex flex-col p-4">
-              <button 
+              <button
                 onClick={() => setMenuOpen(false)}
                 className="self-end p-2 text-white hover:bg-gray-800 rounded-lg"
               >
@@ -94,10 +84,7 @@ const TitleBar = () => {
                     { name: 'Subscriptions', path: '/subscriptions' },
                     { name: 'Blogs', path: '/newFeatures' }
                   ].map((item) => (
-                    <motion.li 
-                      key={item.name}
-                      whileHover={{ x: 10 }}
-                    >
+                    <motion.li key={item.name} whileHover={{ x: 10 }}>
                       <Link
                         to={item.path}
                         className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
@@ -115,6 +102,8 @@ const TitleBar = () => {
     </motion.div>
   );
 };
+
+
 const HeroSection = () => {
   return (
     <div className="relative h-screen bg-black overflow-hidden">
@@ -132,11 +121,11 @@ const HeroSection = () => {
         transition={{ delay: 0.5 }}
         className="absolute inset-0 flex flex-col justify-center items-center text-white"
       >
-        <h1 className="text-6xl font-bold text-center mb-4 leading-tight">
+        <h1 className="text-4xl md:text-6xl font-bold text-center mb-4 leading-tight">
           YOUR NEAREST SPORTS COMMUNITY
         </h1>
-        <p className="text-2xl mb-8">IS JUST A TAP AWAY</p>
-        <div className="flex gap-4">
+        <p className="text-lg md:text-2xl mb-8">IS JUST A TAP AWAY</p>
+        <div className="flex flex-col md:flex-row gap-4">
           <Link to="/toBook">
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -163,29 +152,29 @@ const HeroSection = () => {
 
 const MapSection = () => {
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
-      className="flex"
+      className="flex flex-col md:flex-row"
     >
-      <div className="w-1/2 bg-green-500 p-8 flex flex-row">
-        <motion.div 
+      <div className="w-full md:w-1/2 bg-green-500 p-8 flex flex-col">
+        <motion.div
           initial={{ x: -50 }}
           whileInView={{ x: 0 }}
-          className="w-3/4 p-8 flex flex-col"
+          className="flex flex-col"
         >
-          <h2 className="text-7xl font-bold text-black">PitchReserve.</h2>
+          <h2 className="text-5xl md:text-7xl font-bold text-black">PitchReserve.</h2>
           <h2 className="text-white mt-4">AVAILABLE IN MAJOR CITIES OF NEPAL</h2>
         </motion.div>
-        <div className="w-1/4 p-12 flex flex-row">
+        <div className="mt-4">
           <h6 className="text-black">JOIN THE COMMUNITY & GUIDE YOUR WAY THROUGH THE PITCH</h6>
         </div>
       </div>
-      <motion.div 
+      <motion.div
         initial={{ x: 50 }}
         whileInView={{ x: 0 }}
-        className="w-1/2 bg-green-950 p-8"
+        className="w-full md:w-1/2 bg-green-950 p-8"
       >
         <img src={mapOfNepal} alt="Map of Nepal" className="w-full h-full object-cover" />
       </motion.div>
@@ -213,7 +202,7 @@ const FeaturesSection = () => {
   ];
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
@@ -230,9 +219,9 @@ const FeaturesSection = () => {
               transition={{ delay: index * 0.2 }}
               className="text-center p-6"
             >
-              <img 
-                src={feature.icon} 
-                alt={feature.title} 
+              <img
+                src={feature.icon}
+                alt={feature.title}
                 className="mx-auto w-16 h-16 mb-4"
               />
               <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
@@ -247,26 +236,26 @@ const FeaturesSection = () => {
 
 const SubscriptionSection = () => {
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
-      className="flex bg-pink-100"
+      className="flex flex-col md:flex-row bg-pink-100"
     >
-      <motion.div 
+      <motion.div
         initial={{ x: -50 }}
         whileInView={{ x: 0 }}
-        className="w-1/2 p-8 flex items-center justify-center"
+        className="w-full md:w-1/2 p-8 flex items-center justify-center"
       >
         <img src={subscriptionImage} alt="Subscription" className="max-w-md rounded-lg shadow-xl" />
       </motion.div>
-      <motion.div 
+      <motion.div
         initial={{ x: 50 }}
         whileInView={{ x: 0 }}
-        className="w-1/2 p-8 flex flex-col justify-center items-end"
+        className="w-full md:w-1/2 p-8 flex flex-col justify-center items-end"
       >
-        <h2 className="text-5xl font-bold text-black mb-4">SUBSCRIPTIONS</h2>
-        <p className="text-xl mb-6">PLAY REGULAR, PAY LESS</p>
+        <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">SUBSCRIPTIONS</h2>
+        <p className="text-lg md:text-xl mb-6">PLAY REGULAR, PAY LESS</p>
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -281,45 +270,42 @@ const SubscriptionSection = () => {
 
 const Footer = () => {
   return (
-    <footer className="bg-[#0a0d14] text-white py-12 flex">
+    <footer className="bg-[#0a0d14] text-white py-12 flex w-full">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div className="flex items-center space-x-4">
-          <Link to="/login" className="relative">
-            <img 
-              src={logo}
-              alt="logo"
-              className="h-100 w-auto transition-transform duration-200 hover:brightness-110"
-            />
-          </Link>
-            <p className="text-m">Nepal's Only<br/>Futsal Venue<br/>Booking System</p>
+            <Link to="/" className="relative">
+              <img
+                src={logo}
+                alt="logo"
+                className="h-20 w-auto transition-transform duration-200 hover:brightness-110"
+              />
+            </Link>
+            <p className="text-m">Nepal's Only<br />Futsal Venue<br />Booking System</p>
           </div>
-          
+
           <nav className="">
-                <ul className="space-y-0">
-                  {[
-                    { name: 'Home', path: '/' },
-                    { name: 'About Us', path: '/aboutUs' },
-                    { name: 'Book Venue', path: '/toBook' },
-                    { name: 'Login/ Partnership', path: '/Partnership' },
-                    { name: 'Subscriptions', path: '/subscriptions' },
-                    { name: 'Blogs', path: '/newFeatures' }
-                  ].map((item) => (
-                    <motion.li 
-                      key={item.name}
-                      whileHover={{ x: 10 }}
-                    >
-                      <Link
-                        to={item.path}
-                        className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
-                      >
-                        {item.name}
-                      </Link>
-                    </motion.li>
-                  ))}
-                </ul>
-              </nav>
-          
+            <ul className="space-y-0">
+              {[
+                { name: 'Home', path: '/' },
+                { name: 'About Us', path: '/aboutUs' },
+                { name: 'Book Venue', path: '/toBook' },
+                { name: 'Login/ Partnership', path: '/Partnership' },
+                { name: 'Subscriptions', path: '/subscriptions' },
+                { name: 'Blogs', path: '/newFeatures' }
+              ].map((item) => (
+                <motion.li key={item.name} whileHover={{ x: 10 }}>
+                  <Link
+                    to={item.path}
+                    className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
+                  >
+                    {item.name}
+                  </Link>
+                </motion.li>
+              ))}
+            </ul>
+          </nav>
+
           <div className="space-y-4">
             <h3 className="font-bold text-lg">Contact Us</h3>
             <ul className="space-y-2">
@@ -355,7 +341,7 @@ const Footer = () => {
 
 const Landing = () => {
   return (
-    <div className="w-full">
+    <div className="w-full overflow-x-hidden">
       <TitleBar />
       <HeroSection />
       <MapSection />
