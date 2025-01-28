@@ -23,8 +23,8 @@ A web application for managing futsal court bookings, featuring a Django backend
 ### Backend Setup (Django)
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/futsalbookingsystem.git
-   cd futsalbookingsystem/backend
+   git clone https://github.com/SwohamKayastha/PitchReserve.git
+   cd PitchReserve/backend
 
 2. Create and activate virtual environment
 
