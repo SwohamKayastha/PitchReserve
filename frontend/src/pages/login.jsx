@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { motion } from 'framer-motion';
 import { Link, useLocation } from "react-router-dom";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,8 +10,6 @@ import RegisterUserForm from "../components/LoginPage/User/RegisterForm";
 import LoginUserForm from "../components/LoginPage/User/LoginUserForm";
 import RegisterOwnerForm from "../components/LoginPage/Owner/RegisterOwnerForm";
 import LoginOwnerForm from "../components/LoginPage/Owner/LoginOwnerForm";
-import { motion } from "framer-motion";
-import { useEffect } from "react";
 
 const TitleBar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);

@@ -10,6 +10,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
 class CourtBookingSerializer(serializers.ModelSerializer):
     futsal_name = serializers.SerializerMethodField()
     scheduled_time = serializers.SerializerMethodField()
+    scheduled_date = serializers.SerializerMethodField()
 
     def get_futsal_name(self, obj):
         return obj.schedule.facility.name
@@ -18,6 +19,9 @@ class CourtBookingSerializer(serializers.ModelSerializer):
         start = obj.schedule.start_time.strftime("%H:%M")
         end = obj.schedule.end_time.strftime("%H:%M")
         return f"{start}-{end}"
+    
+    def get_scheduled_date(self, obj):
+        return obj.schedule.date.strftime("%Y-%m-%d")
 
 
     class Meta:
