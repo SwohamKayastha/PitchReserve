@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios"; // Make sure axios is installed
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,10 @@ import { motion } from "framer-motion";
 import logo from "../assets/logo.png";
 import profileIcon from "../assets/profileIcon.png";
 import { Menu, X } from 'lucide-react';
-
+import { Slider } from '@/components/ui/slider';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import Loading from './loading';
 
 const TitleBar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -106,120 +109,238 @@ const TitleBar = () => {
   );
 };
 
-
 const FutsalBookingPage = () => {
   const [futsals, setFutsals] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
-    water: false,
-    parking: false,
-    changingRoom: false,
-    nearMe: false,
+    facilities: {
+      water: false,
+      parking: false,
+      changingRoom: false,
+      bathroom: false,
+      cafeteria: false,
+      floodlights: false,
+    },
+    pitches: 'any',
+    location: 'all',
+    priceRange: [0, 2000]
   });
+  const [loading, setLoading] = useState(true); // Loading state
 
-  // Fetch data from API
   useEffect(() => {
     const fetchFutsals = async () => {
+      setLoading(true); // Set loading to true before fetching
       try {
-        const response = await axios.get('http://localhost:8000/api/list/');
+        const response = await axios.get('http://localhost:8000/futsal-facilities/list/');
         setFutsals(response.data);
       } catch (error) {
         console.error("Error fetching futsals:", error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching
       }
     };
 
     fetchFutsals();
   }, []);
 
-  // Handle search input change
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  // Handle filter change
-  const handleFilterChange = (filter) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [filter]: !prevFilters[filter],
+  const handleFacilityChange = (facility) => {
+    setFilters(prev => ({
+      ...prev,
+      facilities: {
+        ...prev.facilities,
+        [facility]: !prev.facilities[facility]
+      }
     }));
   };
 
-  // Filter futsals based on search and filters
+  const handlePitchesChange = (value) => {
+    setFilters(prev => ({ ...prev, pitches: value }));
+  };
+
+  const handleLocationChange = (value) => {
+    setFilters(prev => ({ ...prev, location: value }));
+  };
+
+  const handlePriceRangeChange = (value) => {
+    setFilters(prev => ({ ...prev, priceRange: value }));
+  };
+
   const filteredFutsals = futsals.filter(futsal => {
-    const matchesSearch = searchTerm === "" || futsal.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesWater = !filters.water || futsal.has_changing_room;
-    const matchesParking = !filters.parking || futsal.parking_facilities;
-    const matchesChangingRoom = !filters.changingRoom || futsal.has_changing_room;
-    const matchesNearMe = !filters.nearMe; // Adjust distance condition as necessary
-    return matchesSearch && matchesWater && matchesParking && matchesChangingRoom && matchesNearMe;
+    const matchesSearch = searchTerm === "" || 
+      futsal.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFacilities = Object.entries(filters.facilities)
+      .every(([key, value]) => !value || futsal[key]);
+    const matchesPitches = filters.pitches === 'any' || 
+      futsal.number_of_pitches.toString() === filters.pitches;
+    const matchesLocation = filters.location === 'all' || 
+      futsal.location === filters.location;
+    const matchesPrice = futsal.price_per_hour >= filters.priceRange[0] && 
+      futsal.price_per_hour <= filters.priceRange[1];
+    
+    return matchesSearch && matchesFacilities && matchesPitches && 
+      matchesLocation && matchesPrice;
   });
 
-  return (
-    <div className="w-auto mx-auto py-8 px-4">
-      <TitleBar />
-      <h1 className="text-4xl font-bold mt-10 mb-6 text-green-800 text-center">Book Your Favourite Futsal</h1>
+  if (loading) {
+    return <Loading />; // Show loading component while data is being fetched
+  }
 
-      {/* Search Bar */}
-      <div className="mb-6 flex justify-center">
-        <div className="relative w-3/4 md:w-1/2">
-          <input
-            type="text"
-            placeholder="Search Futsal..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className="w-full border border-green-300 rounded-full p-4 shadow-lg focus:outline-none focus:ring-2 focus:ring-green-600 transition duration-200 ease-in-out"
-          />
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-            <Search className="text-gray-400" />
+  return (
+    <div className="w-full min-h-screen bg-gray-50 mt-20">
+      <TitleBar />
+      <div className="container mx-auto py-8">
+        <h1 className="text-4xl font-bold mb-8 text-green-800 text-center">
+          Book Your Favourite Futsal
+        </h1>
+
+        <div className="flex gap-8">
+          {/* Sidebar Filters */}
+          <div className="w-64 flex-shrink-0 bg-white p-6 rounded-lg shadow-md space-y-6">
+            {/* Search Bar */}
+            <div className="mb-6">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search Futsal..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full border border-green-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+                />
+                <Search className="absolute right-2 top-2.5 text-gray-400" size={20} />
+              </div>
+            </div>
+
+            {/* Facilities Section */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold mb-3 text-green-800">Facilities</h3>
+              <div className="space-y-2">
+                {Object.keys(filters.facilities).map((facility) => (
+                  <div key={facility} className="flex items-center">
+                    <Checkbox
+                      id={facility}
+                      checked={filters.facilities[facility]}
+                      onCheckedChange={() => handleFacilityChange(facility)}
+                      className="border-green-500"
+                    />
+                    <label htmlFor={facility} className="ml-2 text-sm capitalize">
+                      {facility.replace(/([A-Z])/g, ' $1').trim()}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Number of Pitches */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold mb-3 text-green-800">Number of Pitches</h3>
+              <Select value={filters.pitches} onValueChange={handlePitchesChange}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select number of pitches" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="any">Any</SelectItem>
+                  <SelectItem value="1">1 Pitch</SelectItem>
+                  <SelectItem value="2">2 Pitches</SelectItem>
+                  <SelectItem value="3">3+ Pitches</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Location */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold mb-3 text-green-800">Location</h3>
+              <Select value={filters.location} onValueChange={handleLocationChange}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select location" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Locations</SelectItem>
+                  {/* Add your locations dynamically */}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Price Range */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold mb-3 text-green-800">Price Range</h3>
+              <div className="px-2">
+                <Slider
+                  min={0}
+                  max={2000}
+                  step={100}
+                  value={filters.priceRange}
+                  onValueChange={handlePriceRangeChange}
+                  className="mb-2"
+                />
+                <div className="flex justify-between text-sm text-gray-600">
+                  <span>Rs {filters.priceRange[0]}</span>
+                  <span>Rs {filters.priceRange[1]}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="flex-1 space-y-6 rounded-lg">
+            {filteredFutsals.map((futsal, index) => (
+              <motion.div
+                key={futsal.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  className="bg-white rounded-lg shadow-md overflow-hidden border border-green-200"
+                >
+                  <div className="flex flex-col md:flex-row h-full">
+                    <div className="md:w-1/3 h-64 md:h-auto">
+                      <img
+                        src={futsal.image_url}
+                        alt={futsal.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="md:w-2/3 p-6">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="text-2xl font-semibold text-green-800 mb-2">{futsal.name}</h3>
+                          <p className="text-green-600 mb-4">{futsal.location}</p>
+                        </div>
+                        <div className="text-2xl font-bold text-green-700">
+                          Rs {futsal.price_per_hour}/hr
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4 mb-6">
+                        <div className="bg-gray-50 p-3 rounded-lg">
+                          <span className="block text-sm text-gray-600">Pitches</span>
+                          <span className="font-semibold">{futsal.number_of_pitches}</span>
+                        </div>
+                        <div className="bg-gray-50 p-3 rounded-lg">
+                          <span className="block text-sm text-gray-600">Dimensions</span>
+                          <span className="font-semibold">{futsal.pitch_dimensions}</span>
+                        </div>
+                        <div className="bg-gray-50 p-3 rounded-lg">
+                          <span className="block text-sm text-gray-600">Opening Time</span>
+                          <span className="font-semibold">{futsal.availability_start_time}</span>
+                        </div>
+                        <div className="bg-gray-50 p-3 rounded-lg">
+                          <span className="block text-sm text-gray-600">Closing Time</span>
+                          <span className="font-semibold">{futsal.availability_end_time}</span>
+                        </div>
+                      </div>
+                      <Link to={`/futsalDetail/${futsal.id}`}>
+                        <Button className="w-full bg-green-600 hover:bg-green-700 text-white transition duration-200 ease-in-out rounded-full h-12">
+                          View Details & Book
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </motion.div>
+              </motion.div>
+            ))}
           </div>
         </div>
-      </div>
-
-      {/* Filters Section */}
-      <div className="mb-4 flex justify-center space-x-2">
-        {['water', 'parking', 'changingRoom', 'nearMe'].map((filter) => (
-          <Button
-            key={filter}
-            className={`px-4 py-2 rounded-full ${filters[filter] ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'}`}
-            onClick={() => handleFilterChange(filter)}
-          >
-            {filter.charAt(0).toUpperCase() + filter.slice(1)}
-          </Button>
-        ))}
-      </div>
-
-      {/* Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredFutsals.map((futsal, index) => (
-          <motion.div
-            key={futsal.id}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: index * 0.1 }}
-            className="block"
-          >
-            <motion.div
-              whileHover={{ scale: 1.05, boxShadow: "0 4px 20px rgba(0,0,0,0.2)" }}
-              className="h-full transition-shadow border border-green-200 rounded-lg cursor-pointer"
-            >
-              <div className="p-4">
-                <h3 className="text-xl font-semibold text-green-800">{futsal.name}</h3>
-                <p className="text-sm text-green-600">{futsal.location}</p>
-                <p className="text-sm text-gray-700">Price: ${futsal.price_per_hour}/hr</p>
-                <p className="text-sm text-gray-700">Pitches: {futsal.number_of_pitches}</p>
-                <p className="text-sm text-gray-700">Dimensions: {futsal.pitch_dimensions}</p>
-                <p className="text-sm text-gray-700">Availability: {futsal.availability_start_time} - {futsal.availability_end_time}</p>
-              </div>
-              <div className="p-4">
-                <Link to={`/venueSelection/${futsal.id}`} className="w-full">
-                  <Button className="w-full bg-green-600 hover:bg-green-700 text-white transition duration-200 ease-in-out">
-                    View Details
-                  </Button>
-                </Link>
-              </div>
-            </motion.div>
-          </motion.div>
-        ))}
       </div>
     </div>
   );

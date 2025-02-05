@@ -12,6 +12,7 @@ import FeaturesAndBlog from './pages/newFeatures';
 import FutsalDetail from './pages/afterVenueSelection';
 import FutsalBookingPage from './pages/toBook';
 import Subscriptions from './pages/subscriptions';
+import Loading from './pages/loading';
 
 // Main App component
 function App() {
@@ -30,6 +31,7 @@ function App() {
         <Route path="/afterVenueSelection" element={<FutsalDetail />} />
         <Route path="/toBook" element={<FutsalBookingPage />} />
         <Route path="/subscriptions" element={<Subscriptions />} />
+        <Route path="/loading" element={<Loading />} />
       </Routes>
     </BrowserRouter>
   );

@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { ArrowLeft, Clock, MapPin, Users, Ruler } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import logo from '../assets/logo.png';
 import profileIcon from '../assets/profileIcon.png';
 import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Facebook, Instagram, Mail } from 'lucide-react';
+import Loading from './loading';
 
 // Animation Variants
 const fadeIn = {
@@ -185,30 +186,35 @@ const Footer = () => {
     </footer>
   );
 };
-
 const FutsalDetail = () => {
   const [date, setDate] = useState(new Date());
   const [showSlots, setShowSlots] = useState(false);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [bookingInfo, setBookingInfo] = useState(null);
+  const [futsalData, setFutsalData] = useState(null);
+  const [loading, setLoading] = useState(true); // Add loading state
   const navigate = useNavigate();
+  const { id } = useParams(); // Get futsal ID from URL
 
-  const futsalData = {
-    name: "Green Field Futsal",
-    location: "Kathmandu, Nepal",
-    image: "/api/placeholder/800/400",
-    openingTime: "6:00 AM",
-    closingTime: "9:00 PM",
-    pricePerHour: 1000,
-    pitchCount: 2,
-    dimensions: "30m x 15m",
-    facilities: [
-      { name: "Changing Room", available: true },
-      { name: "Water Supply", available: true },
-      { name: "Parking", available: true },
-      { name: "First Aid", available: true }
-    ]
-  };
+  useEffect(() => {
+    const fetchFutsalData = async () => {
+      setLoading(true); // Set loading to true before fetching
+      try {
+        const response = await fetch(`http://localhost:8000/futsal-facilities/${id}/`);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setFutsalData(data);
+      } catch (error) {
+        console.error("Error fetching futsal data:", error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching
+      }
+    };
+
+    fetchFutsalData();
+  }, [id]);
 
   const handleDateSelect = (selectedDate) => {
     setDate(selectedDate);
@@ -237,15 +243,24 @@ const FutsalDetail = () => {
 
   const currentHour = new Date().getHours();
 
+  if (loading) {
+    return <Loading />; // Show loading component while data is being fetched
+  }
+
+  if (!futsalData) {
+    return <div>No futsal data available.</div>; // Fallback if data is still null
+  }
+
+
   return (
     <motion.div 
-      className="min-h-screen bg-gradient-to-r from-blue-600 to-blue-800 p-6" // Changed the gradient
+      className="min-h-screen bg-white p-6" // Changed background to white
       initial="hidden"
       animate="visible"
       variants={fadeIn}
     >
       <TitleBar />
-      <div className="max-w-7xl mx-auto flex flex-col items-center mt-12"> {/* Added margin-top */}
+      <div className="max-w-7xl mx-auto flex flex-col items-center mt-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
           <motion.div 
             className="lg:col-span-2 bg-white rounded-lg shadow-lg p-6"
@@ -264,7 +279,7 @@ const FutsalDetail = () => {
 
             <div className="relative aspect-video w-full rounded-xl overflow-hidden mb-6">
               <img
-                src={futsalData.image}
+                src={futsalData.imageUrl} // Adjust according to your API response
                 alt={futsalData.name}
                 className="w-full h-full object-cover"
                 loading="lazy"
