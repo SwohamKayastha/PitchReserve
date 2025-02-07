@@ -200,11 +200,13 @@ const FutsalDetail = () => {
     const fetchFutsalData = async () => {
       setLoading(true); // Set loading to true before fetching
       try {
-        const response = await fetch(`http://localhost:8000/futsal-facilities/${id}/`);
+        const response = await fetch(`http://localhost:8000/futsal-facilities/facilities/${id}/`);
+        console.log(response)
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
+        console.log(data)
         setFutsalData(data);
       } catch (error) {
         console.error("Error fetching futsal data:", error);

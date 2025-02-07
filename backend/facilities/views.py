@@ -36,16 +36,21 @@ class FacilityListView(APIView):
         serializer = FutsalFacilitySerializer(facilities, many=True)
         data = serializer.data
 
+        # For each facility, fetch its images and generate signed URLs from Supabase storage.
         for facility in data:
             images = FacilityImage.objects.filter(facility_id=facility['id'])
             signed_urls = []
             for image in images:
                 bucket_name = "field_image"
-                file_path = image.image_url.split('/')[-1]  # Extract file path from URL
-                signed_url_response = supabase.storage.from_(bucket_name).create_signed_url(file_path, expires_in=3600)  # URL expires in 1 hour
+                file_path = image.image_url.split('/')[-1]  # Extract file name from URL
+                signed_url_response = supabase.storage.from_(bucket_name).create_signed_url(
+                    file_path, expires_in=3600
+                )  # URL expires in 1 hour
                 signed_url = signed_url_response.get('signedURL')
-                signed_urls.append(signed_url)
+                if signed_url:
+                    signed_urls.append(signed_url)
             facility['images'] = signed_urls
+
 
         return Response(data, status=status.HTTP_200_OK)
 

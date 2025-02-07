@@ -28,7 +28,8 @@ function App() {
         <Route path="/futsalFacilitiesForm" element={<FutsalUploadForm />} />
         <Route path="/error" element={<Error />} />
         <Route path="/newFeatures" element={<FeaturesAndBlog />} />
-        <Route path="/afterVenueSelection" element={<FutsalDetail />} />
+        {/* <Route path="/afterVenueSelection" element={<FutsalDetail />} /> */}
+        <Route path="/futsalDetail/:id" element={<FutsalDetail />} />
         <Route path="/toBook" element={<FutsalBookingPage />} />
         <Route path="/subscriptions" element={<Subscriptions />} />
         <Route path="/loading" element={<Loading />} />

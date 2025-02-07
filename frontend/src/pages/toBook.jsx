@@ -123,7 +123,8 @@ const FutsalBookingPage = () => {
     },
     pitches: 'any',
     location: 'all',
-    priceRange: [0, 2000]
+    priceRange: [0, 2000],
+    image_url: "",
   });
   const [loading, setLoading] = useState(true); // Loading state
 
@@ -132,6 +133,7 @@ const FutsalBookingPage = () => {
       setLoading(true); // Set loading to true before fetching
       try {
         const response = await axios.get('http://localhost:8000/futsal-facilities/list/');
+        console.log(response.data); 
         setFutsals(response.data);
       } catch (error) {
         console.error("Error fetching futsals:", error);
@@ -166,6 +168,7 @@ const FutsalBookingPage = () => {
   };
 
   const filteredFutsals = futsals.filter(futsal => {
+    console.log(futsal.images, futsal.name);
     const matchesSearch = searchTerm === "" || 
       futsal.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFacilities = Object.entries(filters.facilities)
@@ -296,8 +299,8 @@ const FutsalBookingPage = () => {
                   <div className="flex flex-col md:flex-row h-full">
                     <div className="md:w-1/3 h-64 md:h-auto">
                       <img
-                        src={futsal.image_url}
-                        alt={futsal.name}
+                        src={futsal.images || "/api/placeholder/800/400"}
+                        alt={futsal.name || "Futsal Facility"}
                         className="w-full h-full object-cover"
                       />
                     </div>
