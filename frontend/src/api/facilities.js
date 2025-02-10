@@ -44,7 +44,7 @@ export const getFutsalFieldById = async (id) => {
   };
 
   try {
-    const response = await axios.get(`${API_URL}/detail/${id}/`, { headers });
+    const response = await axios.get(`${API_URL}/facilities/${id}/`, { headers });
     return response.data;
   } catch (error) {
     console.error('Error fetching futsal field:', error);

@@ -44,7 +44,7 @@ const LoginUserForm = () => {
       transition={{ duration: 0.5 }}
       className="w-full max-w-md mx-auto"
     >
-      <Card className="shadow-xl bg-green-50/80 backdrop-blur-sm">
+      {/* <Card className="shadow-xl bg-green-50/80 backdrop-blur-sm">
         <CardHeader className="text-center space-y-4 pb-6">
           <CardTitle className="text-3xl font-bold text-gray-900">
             Customer Login
@@ -53,7 +53,7 @@ const LoginUserForm = () => {
             Book your favorite futsal venues
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent> */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-4">
               <div className="space-y-2">
@@ -109,8 +109,8 @@ const LoginUserForm = () => {
               </a>
             </div>
           </form>
-        </CardContent>
-      </Card>
+        {/* </CardContent>
+      </Card> */}
     </motion.div>
   );
 };

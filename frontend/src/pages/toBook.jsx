@@ -12,6 +12,8 @@ import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Loading from './loading';
+import { getFutsalFields, getFutsalFieldById } from "@/api/facilities";
+
 
 const TitleBar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -134,6 +136,7 @@ const FutsalBookingPage = () => {
       try {
         const response = await axios.get('http://localhost:8000/futsal-facilities/list/');
         console.log(response.data); 
+        // const response = await getFutsalFields();
         setFutsals(response.data);
       } catch (error) {
         console.error("Error fetching futsals:", error);

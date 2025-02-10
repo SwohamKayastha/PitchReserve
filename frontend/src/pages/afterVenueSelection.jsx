@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Facebook, Instagram, Mail } from 'lucide-react';
 import Loading from './loading';
+import { getFutsalFieldById } from "@/api/facilities";
 
 // Animation Variants
 const fadeIn = {
@@ -201,12 +202,8 @@ const FutsalDetail = () => {
       setLoading(true); // Set loading to true before fetching
       try {
         const response = await fetch(`http://localhost:8000/futsal-facilities/facilities/${id}/`);
-        console.log(response)
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
         const data = await response.json();
-        console.log(data)
+        // console.log(data)
         setFutsalData(data);
       } catch (error) {
         console.error("Error fetching futsal data:", error);
@@ -326,7 +323,13 @@ const FutsalDetail = () => {
             <div className="bg-gray-50 p-4 rounded-xl mb-6 shadow-md">
               <h3 className="text-lg font-bold text-gray-800 mb-4">Available Facilities</h3>
               <div className="grid grid-cols-2 gap-4">
-                {futsalData.facilities.map((facility, index) => (
+                {/* {futsalData.facilities.map((facility, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <div className={`w-3 h-3 rounded-full ${facility.available ? 'bg-green-500' : 'bg-red-500'}`} />
+                    <span className="text-gray-700">{facility.name}</span>
+                  </div>
+                ))} */}
+                {futsalData.facilities?.map((facility, index) => (
                   <div key={index} className="flex items-center gap-2">
                     <div className={`w-3 h-3 rounded-full ${facility.available ? 'bg-green-500' : 'bg-red-500'}`} />
                     <span className="text-gray-700">{facility.name}</span>
