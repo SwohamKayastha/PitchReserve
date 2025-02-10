@@ -372,7 +372,7 @@ const Profile = () => {
                   className="bg-blue-50 text-blue-900 border border-blue-300 rounded-md shadow-sm px-2 py-1"
                   onChange={handleFieldSelect}
                 >
-                  <option value="">Select Venue</option>
+                  <option value="">Select</option>
                   {fields.map((field) => (
                     <option key={field.id} value={field.id}>
                       {field.name}
