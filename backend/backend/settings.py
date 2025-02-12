@@ -170,8 +170,10 @@ SIMPLE_JWT = {
 }
 
 # CORS Settings (for all origins )
-CORS_ALLOW_ALL_ORIGINS = True 
-
+# CORS Settings (Optional: if using React on a separate domain)
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # React development server
+]
 
 # Logging (Optional)
 LOGGING = {
@@ -188,6 +190,11 @@ LOGGING = {
     },
 }
 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:5173",  # React Vite development server
-# ]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # React Vite development server
+]
+
+# CORS Settings (Optional: if using React on a separate domain)
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # React development server
+]
