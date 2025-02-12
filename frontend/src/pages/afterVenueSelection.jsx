@@ -119,7 +119,7 @@ const TitleBar = () => {
 
 const Footer = () => {
   return (
-    <footer className="bg-[#0a0d14] text-white py-12 flex w-screen justify-bottom">
+    <footer className="bg-[#0a0d14] text-white py-12 flex w-screen  justify-bottom">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div className="flex items-center space-x-4">
@@ -278,7 +278,7 @@ const FutsalDetail = () => {
 
             <div className="relative aspect-video w-full rounded-xl overflow-hidden mb-6">
               <img
-                src={futsalData.imageUrl} // Adjust according to your API response
+                src={futsalData.imageUrl} 
                 alt={futsalData.name}
                 className="w-full h-full object-cover"
                 loading="lazy"

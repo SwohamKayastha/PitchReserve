@@ -187,9 +187,9 @@ const FutsalBookingPage = () => {
       matchesLocation && matchesPrice;
   });
 
-  if (loading) {
-    return <Loading />; // Show loading component while data is being fetched
-  }
+    if (loading) {
+      return <Loading />; 
+    }
 
   return (
     <div className="w-full min-h-screen bg-gray-50 mt-20">
