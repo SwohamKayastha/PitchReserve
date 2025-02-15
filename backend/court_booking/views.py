@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
 from .models import CourtBooking, Schedule
 from .serializers import CourtBookingSerializer, ScheduleSerializer
-
+from datetime import datetime
 
 class CreateBookingView(APIView):
     permission_classes = [IsAuthenticated]
@@ -74,5 +74,23 @@ class ListSchedulesView(APIView):
 
     def get(self, request):
         schedules = Schedule.objects.all()
+        serializer = ScheduleSerializer(schedules, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+class FacilityScheduleByDateView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, facility_id, date_str, *args, **kwargs):
+        try:
+            # Convert the date_str (expected format YYYY-MM-DD) into a date object.
+            date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
+        except ValueError:
+            return Response(
+                {"error": "Invalid date format. Use YYYY-MM-DD."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Filter schedules for the given facility and date.
+        schedules = Schedule.objects.filter(facility_id=facility_id, date=date_obj)
         serializer = ScheduleSerializer(schedules, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
