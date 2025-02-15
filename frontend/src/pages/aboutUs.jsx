@@ -204,7 +204,7 @@ const AboutUs = () => {
   const teamMembers = [
     {
       name: "Ayush Dahal",
-      role: "Founder & CEO",
+      role: "Member",
       image: aayush,
       college: "Computer Science, KU",
       address: "Banepa, Nepal",
@@ -212,7 +212,7 @@ const AboutUs = () => {
     },
     {
       name: "Swoham Kayastha",
-      role: "Technical Lead",
+      role: "Member",
       image: "/api/placeholder/400/400",
       college: "Computer Science, KU",
       address: "Banepa, Nepal",
@@ -220,7 +220,7 @@ const AboutUs = () => {
     },
     {
       name: "Roshish Sainju",
-      role: "Lead Developer",
+      role: "Member",
       image: "/api/placeholder/400/400",
       college: "Computer Science, KU",
       address: "Bhaktapur, Nepal",
@@ -228,7 +228,7 @@ const AboutUs = () => {
     },
     {
       name: "Parichit Giri",
-      role: "Lead Engineer",
+      role: "Member",
       image: parichit,
       college: "Computer Science, KU",
       address: "Kathmandu, Nepal",
@@ -236,7 +236,7 @@ const AboutUs = () => {
     },
     {
       name: "Elvis Vaidhya",
-      role: "Lead Designer",
+      role: "Member",
       image: "/api/placeholder/400/400",
       college: "Computer Science, KU",
       address: "Banepa, Nepal",
@@ -418,7 +418,7 @@ const AboutUs = () => {
           <h2 className="text-xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-center text-green-800">
             Our Team
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 ">
             {teamMembers.map((member, index) => (
               <motion.div
                 key={index}
@@ -427,7 +427,7 @@ const AboutUs = () => {
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 <Card className="shadow-lg">
-                  <CardContent className="p-4 sm:p-6 text-center bg-gradient-to-br from-white to-emerald-50">
+                  <CardContent className="p-4 sm:p-6 text-center bg-gradient-to-br from-white to-emerald-50 ">
                     <motion.div 
                       className="mb-4 sm:mb-6"
                       whileHover={{ rotate: 360 }}
