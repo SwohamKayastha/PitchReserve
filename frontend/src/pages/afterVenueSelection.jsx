@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -11,6 +13,7 @@ import { Menu, X } from 'lucide-react';
 import { Facebook, Instagram, Mail } from 'lucide-react';
 import Loading from './loading';
 import { getFutsalFieldById } from "@/api/facilities";
+import { MessageSquarePlus, Star } from 'lucide-react';
 
 // Animation Variants
 const fadeIn = {
@@ -119,72 +122,84 @@ const TitleBar = () => {
 
 const Footer = () => {
   return (
-    <footer className="bg-[#0a0d14] text-white py-12 flex w-screen  justify-bottom">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          <div className="flex items-center space-x-4">
-            <Link to="/" className="relative">
-              <img
-                src={logo}
-                alt="logo"
-                className="h-20 w-auto transition-transform duration-200 hover:brightness-110"
-              />
-            </Link>
-            <p className="text-m">Nepal's Only<br />Futsal Venue<br />Booking System</p>
-          </div>
-
-          <nav className="">
-            <ul className="space-y-0">
-              {[
-                { name: 'Home', path: '/' },
-                { name: 'About Us', path: '/aboutUs' },
-                { name: 'Book Venue', path: '/toBook' },
-                { name: 'Login/ Partnership', path: '/Partnership' },
-                { name: 'Subscriptions', path: '/subscriptions' },
-                { name: 'Blogs', path: '/newFeatures' }
-              ].map((item) => (
-                <motion.li key={item.name} whileHover={{ x: 10 }}>
-                  <Link
-                    to={item.path}
-                    className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
+    <footer className="bg-[#0a0d14] text-white py-12 w-full mt-auto">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+              <div className="flex items-center space-x-4">
+                <Link to="/" className="relative">
+                  <img
+                    src={logo}
+                    alt="logo"
+                    className="h-20 w-auto transition-transform duration-200 hover:brightness-110"
+                  />
+                </Link>
+                <p className="text-m">Nepal's Only<br />Futsal Venue<br />Booking System</p>
+              </div>
+    
+              <nav>
+                <ul className="space-y-0">
+                  {[
+                    { name: 'Home', path: '/' },
+                    { name: 'About Us', path: '/aboutUs' },
+                    { name: 'Book Venue', path: '/toBook' },
+                    { name: 'Login/ Partnership', path: '/Partnership' },
+                    { name: 'Subscriptions', path: '/subscriptions' },
+                    { name: 'Blogs', path: '/newFeatures' }
+                  ].map((item) => (
+                    <motion.li key={item.name} whileHover={{ x: 10 }}>
+                      <Link
+                        to={item.path}
+                        className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
+                      >
+                        {item.name}
+                      </Link>
+                    </motion.li>
+                  ))}
+                </ul>
+              </nav>
+    
+              <div className="space-y-4">
+                <h3 className="font-bold text-lg">Contact Us</h3>
+                <ul className="space-y-2">
+                  <li>Pitch Reserve</li>
+                  <li>Kathmandu University</li>
+                  <li>+977 9741740551</li>
+                  <li>info@pitchreserve.com.np</li>
+                </ul>
+                <div className="flex space-x-4 mt-4">
+                  <a
+                    href="https://facebook.com/pitchreserve"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-green-500 transition-colors"
                   >
-                    {item.name}
-                  </Link>
-                </motion.li>
-              ))}
-            </ul>
-          </nav>
-
-          <div className="space-y-4">
-            <h3 className="font-bold text-lg">Contact Us</h3>
-            <ul className="space-y-2">
-              <li>Pitch Reserve</li>
-              <li>Kathmandu University</li>
-              <li>+977 9741740551</li>
-              <li>info@pitchreserve.com.np</li>
-            </ul>
-            <div className="flex space-x-4 mt-4">
-              {[
-                { Icon: Facebook, href: 'https://facebook.com/pitchreserve' },
-                { Icon: Instagram, href: 'https://instagram.com/pitchreserve' },
-                { Icon: Mail, href: 'mailto:info@pitchreserve.com.np' }
-              ].map(({ Icon, href }) => (
-                <motion.a
-                  key={href}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.2 }}
-                  className="hover:text-green-500 transition-colors"
-                >
-                  <Icon size={24} />
-                </motion.a>
-              ))}
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                    </svg>
+                  </a>
+                  <a
+                    href="https://instagram.com/pitchreserve"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-green-500 transition-colors"
+                  >
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                    </svg>
+                  </a>
+                  <a
+                    href="mailto:info@pitchreserve.com.np"
+                    className="hover:text-green-500 transition-colors"
+                  >
+                    <Mail size={24} />
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </footer>
+        </footer>
   );
 };
 const FutsalDetail = () => {
@@ -215,6 +230,9 @@ const FutsalDetail = () => {
     fetchFutsalData();
   }, [id]);
 
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [reviewText, setReviewText] = useState('');
   const handleDateSelect = (selectedDate) => {
     setDate(selectedDate);
     setShowSlots(true);
@@ -253,13 +271,13 @@ const FutsalDetail = () => {
 
   return (
     <motion.div 
-      className="min-h-screen bg-white p-6" // Changed background to white
+      className="min-h-screen bg-white flex flex-col"
       initial="hidden"
       animate="visible"
       variants={fadeIn}
     >
       <TitleBar />
-      <div className="max-w-7xl mx-auto flex flex-col items-center mt-12">
+      <div className="max-w-7xl mx-auto flex flex-col items-center mt-20 px-4 sm:px-6 lg:px-8 flex-grow">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
           <motion.div 
             className="lg:col-span-2 bg-white rounded-lg shadow-lg p-6"
@@ -338,23 +356,123 @@ const FutsalDetail = () => {
               </div>
             </div>
           </motion.div>
-
           <motion.div 
-            className="flex items-center justify-center lg:col-span-1" 
+            className="lg:col-span-2 bg-white rounded-lg shadow-lg p-6 mt-6"
             initial={{ opacity: 0, y: 20 }} 
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.5 }}
           >
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Select Date</h2>
-              <div className="calendar-container">
-                <Calendar
-                  onChange={handleDateSelect}
-                  value={date}
-                  minDate={new Date()}
-                  className="w-full rounded-lg border border-gray-200"
-                  tileClassName={({ date }) => {
-                    const today = new Date();
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-bold text-gray-800">Reviews</h3>
+              <button
+                onClick={() => setShowReviewModal(true)}
+                className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
+              >
+                <MessageSquarePlus className="w-5 h-5" />
+                <span>Write a Review</span>
+              </button>
+            </div>
+
+            {showReviewModal && (
+              <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+              >
+                <div className="bg-white rounded-lg p-6 w-96">
+                  <h4 className="text-xl font-bold mb-4">Write a Review</h4>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Rating</label>
+                      <div className="flex gap-2">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            className={`w-6 h-6 cursor-pointer ${
+                              rating >= star ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
+                            }`}
+                            onClick={() => setRating(star)}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Your Review</label>
+                      <textarea
+                        className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                        rows="4"
+                        placeholder="Share your experience..."
+                        value={reviewText}
+                        onChange={(e) => setReviewText(e.target.value)}
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+                        onClick={() => {
+                          // Handle review submission
+                          setShowReviewModal(false);
+                          setRating(0);
+                          setReviewText('');
+                        }}
+                      >
+                        Submit
+                      </button>
+                      <button
+                        className="flex-1 bg-gray-200 text-gray-800 py-2 rounded-lg hover:bg-gray-300"
+                        onClick={() => setShowReviewModal(false)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            <div className="space-y-4">
+              /* Sample reviews - replace with actual reviews data */
+                      {[
+                      { id: 1, author: "John Doe", rating: 5, date: "2024-01-15", text: "Great facilities and excellent service!" },
+                      { id: 2, author: "Jane Smith", rating: 4, date: "2024-01-10", text: "Good experience overall, but parking could be better." }
+                      ].map((review) => (
+                      <div key={review.id} className="border-b pb-4">
+                        <div className="flex items-center gap-2 mb-2">
+                        <div className="flex">
+                          {Array.from({ length: 5 }).map((_, index) => (
+                          <Star
+                            key={index}
+                            className={`w-4 h-4 ${
+                            index < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
+                            }`}
+                          />
+                          ))}
+                        </div>
+                        <span className="text-sm text-gray-600">
+                          by {review.author} • {new Date(review.date).toLocaleDateString()}
+                        </span>
+                        </div>
+                        <p className="text-gray-700">{review.text}</p>
+                      </div>
+                      ))}
+                    </div>
+                    </motion.div>
+
+                    <motion.div 
+                    className="fixed right-0 top-10 transform -translate-y-1/2 my-6 mr-6"
+                    initial={{ opacity: 0, x: 100 }} 
+                    animate={{ opacity: 1, x: 0 }} 
+                    transition={{ duration: 0.5 }}
+                    >
+                    <div className="bg-white rounded-lg shadow-lg p-6">
+                      <h2 className="text-xl font-bold text-gray-800 mb-4">Select Date</h2>
+                      <div className="calendar-container">
+                      <Calendar
+                        onChange={handleDateSelect}
+                        value={date}
+                        minDate={new Date()}
+                        className="rounded-lg border border-gray-200"
+                        tileClassName={({ date }) => {    const today = new Date();
                     return date.toDateString() === today.toDateString() ? 'bg-gray-300' : '';
                   }}
                 />
@@ -462,8 +580,9 @@ const FutsalDetail = () => {
           </motion.div>
         )}
         
-        <Footer />
+        
       </div>
+      <Footer />  
     </motion.div>
   );
 };
