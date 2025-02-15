@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { motion } from 'framer-motion'; // Import motion
+import { Link } from 'react-router-dom';
 import { Search, Clock, MapPin, Calendar, Trophy, AlertCircle, Settings, X, Upload } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -7,79 +8,111 @@ import { Button } from '@/components/ui/button';
 import { fetchPlayerProfile } from '@/api/auth';
 import { fetchUserBookings } from '@/api/user-booking';
 import logo from '../assets/logo.png';
+import profileIcon from '../assets/profileIcon.png';
 import { Building2, Menu } from 'lucide-react';
+
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+};
 
 const TitleBar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  const toggleMenu = () => setMenuOpen(!isMenuOpen);
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <div className="fixed top-0 left-0 w-full flex justify-between items-center p-1 z-50 bg-transparent shadow-md">
-      <div className="flex items-center">
-        <button className="flex items-center bg-transparent hover:bg-gray-100 rounded-lg">
-          <div className="relative h-10 w-auto p-0">
-            <a href="/">
-              <img
-                src={logo}
-                alt="Logo"
-                className="h-10 w-auto"
-                style={{
-                  filter: 'brightness(1) contrast(1)',
-                  backgroundColor: 'transparent',
-                }}
-              />
-            </a>
-          </div>
-        </button>
-      </div>
-      <div className="relative">
-        <button
-          className="p-2 text-black bg-transparent hover:bg-gray-100 rounded-lg transition-colors duration-200 focus:outline-none"
-          onClick={toggleMenu}
-          aria-label="Toggle menu"
-        >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+    <motion.div
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        scrolled ? 'bg-white shadow-lg' : 'bg-transparent'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
+        <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
+          <Link to="/login" className="relative">
+            <img 
+              src={profileIcon}
+              alt="profile"
+              className="h-12 w-auto transition-transform duration-200 hover:brightness-110"
+            />
+          </Link>
+        </motion.div>
 
-        <div
-          className={`fixed right-0 top-0 w-64 h-full bg-gray-900 shadow-lg transform transition-transform duration-300 ease-in-out ${
-            isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-          } z-50`}
-        >
-          <div className="flex flex-col p-4">
-            <button
-              onClick={toggleMenu}
-              className="self-end p-2 text-white hover:bg-gray-800 rounded-lg transition-colors duration-200"
-              aria-label="Close menu"
-            >
-              <X size={24} />
-            </button>
-            <nav className="mt-8">
-              <ul className="space-y-4">
-                {[
-                  { name: 'Home', path: '/' },
-                  { name: 'About Us', path: '/about' },
-                  { name: 'Book Venue', path: '/book' },
-                  { name: 'Login/ Partnership', path: '/Partnership' },
-                  { name: 'Subscriptions', path: '/subscriptions' },
-                  { name: 'Blogs', path: '/blogs' },
-                ].map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      to={item.path}
-                      className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg transition-colors duration-200"
+        <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
+          <button onClick={() => window.location.href = '/'} className="relative">
+            <img 
+              src={logo}
+              alt="Logo"
+              className="h-12 w-auto"
+            />
+          </button>
+        </motion.div>
+
+        <div className="relative">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className={`p-2 rounded-lg transition-colors duration-200 ${
+              scrolled ? 'text-black hover:bg-gray-100' : 'text-white hover:bg-white/10'
+            }`}
+            onClick={() => setMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </motion.button>
+
+          <motion.div 
+            initial={{ x: '100%' }}
+            animate={{ x: isMenuOpen ? 0 : '100%' }}
+            transition={{ type: 'tween', duration: 0.3 }}
+            className="fixed right-0 top-0 w-72 h-full bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl"
+          >
+            <div className="flex flex-col p-4">
+              <button 
+                onClick={() => setMenuOpen(false)}
+                className="self-end p-2 text-white hover:bg-gray-800 rounded-lg"
+              >
+                <X size={24} />
+              </button>
+
+              <nav className="mt-8">
+                <ul className="space-y-4">
+                  {[
+                    { name: 'Home', path: '/' },
+                    { name: 'About Us', path: '/aboutUs' },
+                    { name: 'Book Venue', path: '/toBook' },
+                    { name: 'Login/ Partnership', path: '/Partnership' },
+                    { name: 'Subscriptions', path: '/subscriptions' },
+                    { name: 'Blogs', path: '/newFeatures' }
+                  ].map((item) => (
+                    <motion.li 
+                      key={item.name}
+                      whileHover={{ x: 10 }}
                     >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
+                      <Link
+                        to={item.path}
+                        className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
+                      >
+                        {item.name}
+                      </Link>
+                    </motion.li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
+          </motion.div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -94,13 +127,13 @@ const PlayerProfile = () => {
     location: 'Loading...',
     stats: {
       totalMatches: 0,
-      winRate: 0,
+      cancellation: 0,
     },
     upcomingBookings: [],
     recentFutsals: [],
     playingHistory: [],
   });
-  // const [playerData, setPlayerData] = useState({});
+
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -109,10 +142,8 @@ const PlayerProfile = () => {
     const loadData = async () => {
       try {
         const data = await fetchPlayerProfile();
-
         const bookings = await fetchUserBookings();
 
-        // Code to check whether the booking is upcoming or not
         const now = new Date();
         const upcomingBookings = [];
         const playingHistory = [];
@@ -124,12 +155,11 @@ const PlayerProfile = () => {
 
           if (bookingDate > now) {
             upcomingBookings.push(booking);
-            console.log('Upcoming:', bookingDate);
           } else {
             playingHistory.push(booking);
-            console.log('History:', bookingDate);
           }
         });
+
         setPlayerData((prevData) => ({
           ...prevData,
           username: data.username,
@@ -157,8 +187,29 @@ const PlayerProfile = () => {
     return <div>Error: {error}</div>;
   }
 
+ const handleCancelBooking = async (bookingId) => {
+  try {
+    await cancelBookingAPI(bookingId);
+    setPlayerData((prevData) => ({
+      ...prevData,
+      stats: {
+        ...prevData.stats,
+        cancellation: prevData.stats.cancellation + 1, //cancellation count of the profile section
+      },
+      upcomingBookings: prevData.upcomingBookings.filter(booking => booking.booking_id !== bookingId),
+    }));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 p-12">
+    <motion.div 
+      className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 p-12 py-24" 
+      initial={{ opacity: 0 }} // Initial state
+      animate={{ opacity: 1 }} // Animate to this state
+      transition={{ duration: 0.5 }} // Animation duration
+    >
       <TitleBar />
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -175,12 +226,12 @@ const PlayerProfile = () => {
                         className="w-full h-full rounded-full object-cover"
                       />
                     </div>
-                    <button
+                    {/* <button
                       onClick={() => setShowSettings(true)}
                       className="absolute bottom-2 right-2 bg-blue-500 rounded-full p-3 shadow-lg hover:bg-blue-600 transition"
                     >
                       <Settings className="w-5 h-5 text-white" />
-                    </button>
+                    </button> */}
                   </div>
 
                   <h2 className="mt-6 text-3xl font-bold text-gray-800">{playerData.username}</h2>
@@ -188,74 +239,63 @@ const PlayerProfile = () => {
                     <span className="text-sm">{playerData.location}</span>
                   </div>
 
-                  <div className="flex gap-4 mt-8 w-full">
-                    <button
-                      onClick={() => setShowEditProfile(true)}
-                      className="flex-1 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition shadow-lg"
-                    >
-                      Edit Profile
-                    </button>
-                    <button
-                      onClick={() => setShowSettings(true)}
-                      className="flex-1 py-3 border-2 border-blue-600 text-blue-600 rounded-xl hover:bg-blue-50 transition"
-                    >
-                      Settings
-                    </button>
-                  </div>
-
                   <div className="flex justify-between w-full mt-8 p-6 bg-blue-50 rounded-xl shadow-inner">
-                    <div className="text-center">
+                    <div className="text-center border-l border-r border-blue-200">
                       <div className="text-3xl font-bold text-blue-800">{playerData.stats.totalMatches}</div>
                       <div className="text-sm font-medium text-blue-600">Total Matches</div>
                     </div>
-                    <div className="text-center">
-                      <div className="text-3xl font-bold text-blue-800">{playerData.stats.winRate}%</div>
-                      <div className="text-sm font-medium text-blue-600">Win Rate</div>
+                    <div className="text-center border-l border-r border-blue-200">
+                      <div className="text-3xl font-bold text-blue-800">{playerData.stats.cancellation}</div>
+                      <div className="text-sm font-medium text-blue-600">Cancellations</div>
                     </div>
                   </div>
 
                   <div className="mt-6 text-sm text-gray-500">
                     Member since {new Date(playerData.date_joined).toLocaleDateString()}
                   </div>
+                  </div>
+                  </CardContent>
+                  </Card>
+                  </div>
+
+                  {/* Main Content */}
+          <div className="lg:col-span-6 space-y-8">
+            {/* Upcoming Bookings */}
+            <Card>
+              <CardHeader className="p-6">
+                <CardTitle>Upcoming Bookings</CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 pt-0">
+                <div className="space-y-4">
+                  {playerData.upcomingBookings.length === 0 ? (
+                    <p>No upcoming bookings.</p>
+                  ) : (
+                    playerData.upcomingBookings.map((booking) => (
+                      <div key={booking.booking_id} className="bg-blue-50 p-4 rounded-xl flex justify-between items-center">
+                        <div>
+                          <div className="font-medium text-gray-800">
+                            {booking.futsal_name || 'Unknown Futsal'}
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            {booking.scheduled_time}
+                          </div>
+                        </div>
+                        <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                          {booking.payment_status}
+                        </span>
+                        <button
+                          onClick={() => handleCancelBooking(booking.booking_id)} // Replace with your cancellation logic
+                          className="ml-4 text-red-600 hover:text-red-800"
+                          aria-label="Cancel Booking"
+                        >
+                          <X size={20} />
+                        </button>
+                      </div>
+                    ))
+                  )}
                 </div>
               </CardContent>
             </Card>
-          </div>
-
-          {/* Main Content */}
-          <div className="lg:col-span-6 space-y-8">
-
-          {/* Upcoming Bookings */}
-            <Card>
-                <CardHeader className="p-6">
-                  <CardTitle>Upcoming Bookings</CardTitle>
-                </CardHeader>
-                <CardContent className="p-6 pt-0">
-                  <div className="space-y-4">
-                    {playerData.upcomingBookings.length === 0 ? (
-                      <p>No upcoming bookings.</p>
-                    ) : (
-                      playerData.upcomingBookings.map((booking) => (
-                        <div key={booking.booking_id} className="bg-blue-50 p-4 rounded-xl">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <div className="font-medium text-gray-800">
-                                {booking.futsal_name || 'Unknown Futsal'}
-                              </div>
-                              <div className="text-sm text-gray-600">
-                                {booking.scheduled_time}
-                              </div>
-                            </div>
-                            <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">
-                              {booking.payment_status}
-                            </span>
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
 
             {/* Recently Visited */}
             <Card>
@@ -306,25 +346,21 @@ const PlayerProfile = () => {
 
           {/* Quick Actions & History */}
           <div className="lg:col-span-3 space-y-6">
-            <Card>
-              <CardHeader className="p-6">
-                <CardTitle>Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="p-6 pt-0">
-                <div className="space-y-3">
-                  <button className="w-full py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition flex items-center justify-center gap-2">
-                    <Search className="w-4 h-4" />
-                    Find Futsal
-                  </button>
-                  <button className="w-full py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition flex items-center justify-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    Book Now
-                  </button>
+                    <Card>
+            <CardHeader className="p-6 h-16">
+              <CardTitle>Quick Action</CardTitle>
+            </CardHeader>
+            <CardContent className="p-6 pt-0">
+              <Link to="/toBook" className="w-full">
+                <div className="flex items-center justify-center w-full py-3 bg-gradient-to-b from-blue-600 to-green-600 text-white rounded-xl hover:from-blue-700 hover:to-green-700 transition">
+                  <Search className="w-4 h-4 mr-2" />
+                  <span>Find Futsal & Book Now</span>
                 </div>
-              </CardContent>
-            </Card>
+              </Link>
+            </CardContent>
+          </Card>
 
-             {/* Playing History */}
+            {/* Playing History */}
             <Card className="mt-8">
               <CardHeader className="p-6">
                 <CardTitle>Playing History</CardTitle>
@@ -358,7 +394,7 @@ const PlayerProfile = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
