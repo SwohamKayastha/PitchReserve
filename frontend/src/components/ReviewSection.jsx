@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { MessageSquarePlus } from 'lucide-react'; // Adjust as needed
+import { MessageSquarePlus, Trash2, AlertTriangle } from 'lucide-react'; // Add AlertTriangle icon
 import { FaStar, FaRegStar } from 'react-icons/fa'; // Import star icons
 import defaultProfileIcon from '../assets/defaultProfileIcon.png'; // Import default profile icon
 
@@ -14,18 +14,38 @@ const ReviewSection = ({ venueId }) => {
     comment: '',
     rating: 5, // Default rating
   });
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [reviewToDelete, setReviewToDelete] = useState(null);
+
+  const getCurrentUserId = () => {
+    const userId = localStorage.getItem('user_id');
+    console.log('Getting user ID from localStorage:', userId);
+    return userId ? parseInt(userId, 10) : null;
+  };
 
   useEffect(() => {
+    // Check user authentication status when component mounts
+    const userId = getCurrentUserId();
+    console.log('Current user ID on mount:', userId);
+    
     const fetchReviews = async () => {
       try {
         const token = localStorage.getItem('access_token');
+        if (!token) {
+          console.log('No access token found');
+          return;
+        }
+
         const response = await axios.get(`http://127.0.0.1:8000/api/court_reviews/?court_id=${venueId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setReviews(response.data.reviews || []); // Ensure the correct data is set and handle undefined
+        
+        console.log('Reviews response:', response.data); // Debug log
+        setReviews(response.data.reviews || []);
       } catch (err) {
+        console.error('Error fetching reviews:', err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -69,6 +89,30 @@ const ReviewSection = ({ venueId }) => {
     } catch (err) {
       console.error('Error submitting review:', err.response ? err.response.data : err.message); // Debugging line
       setError(err.message);
+    }
+  };
+
+  const handleDeleteClick = (reviewId) => {
+    setReviewToDelete(reviewId);
+    setShowDeleteConfirmation(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (reviewToDelete) {
+      try {
+        const token = localStorage.getItem('access_token');
+        await axios.delete(`http://127.0.0.1:8000/api/reviews/${reviewToDelete}/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setReviews(reviews.filter((review) => review.id !== reviewToDelete));
+        setShowDeleteConfirmation(false);
+        setReviewToDelete(null);
+      } catch (err) {
+        console.error('Error deleting review:', err);
+        setError(err.message);
+      }
     }
   };
 
@@ -148,28 +192,87 @@ const ReviewSection = ({ venueId }) => {
         </motion.div>
       )}
 
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirmation && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+        >
+          <div className="bg-white rounded-lg p-6 w-96">
+            <div className="flex items-center gap-3 mb-4">
+              <AlertTriangle className="w-6 h-6 text-yellow-500" />
+              <h4 className="text-xl font-bold">Confirm Delete</h4>
+            </div>
+            <p className="text-gray-600 mb-6">Are you sure you want to remove your review?</p>
+            <div className="flex gap-3">
+              <button
+                onClick={handleConfirmDelete}
+                className="flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700"
+              >
+                Yes, Delete
+              </button>
+              <button
+                onClick={() => {
+                  setShowDeleteConfirmation(false);
+                  setReviewToDelete(null);
+                }}
+                className="flex-1 bg-gray-200 text-gray-800 py-2 rounded-lg hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
       {/* Display Reviews */}
       <div className="space-y-4 mt-6">
         {reviews.length > 0 ? (
-          reviews.map((review) => (
-            <div key={review.id} className="review border-b pb-4 mb-4">
-              <div className="flex items-center gap-2">
-                <img
-                  src={review.user_profile_picture || defaultProfileIcon} // Use default profile icon if user_profile_picture is not available
-                  alt="Profile"
-                  className="w-8 h-8 rounded-full"
-                />
-                <p><strong style={{ fontFamily: 'Arial, sans-serif' }}>{review.user_name}</strong></p> {/* Display user_name instead of user */}
+          reviews.map((review) => {
+            const currentUserId = getCurrentUserId();
+            const isOwner = currentUserId === review.user_id;
+            
+            console.log('Review comparison:', {
+              reviewId: review.id,
+              reviewUserId: review.user_id,
+              currentUserId,
+              isOwner
+            });
+            
+            return (
+              <div key={review.id} className="review border-b pb-4 mb-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={review.user_profile_picture || defaultProfileIcon}
+                      alt="Profile"
+                      className="w-8 h-8 rounded-full"
+                    />
+                    <p><strong style={{ fontFamily: 'Arial, sans-serif' }}>{review.user_name}</strong></p>
+                  </div>
+                  {isOwner && (
+                    <button
+                      onClick={() => handleDeleteClick(review.id)}
+                      className="text-red-600 hover:text-red-800 p-2 rounded-full hover:bg-red-100"
+                      title="Delete review"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  )}
+                </div>
+                <p style={{ fontFamily: 'Arial, sans-serif' }} className="mt-2">{review.comment}</p>
+                <div className="flex items-center mt-2">
+                  {Array.from({ length: 5 }, (_, index) => (
+                    index < review.rating ? <FaStar key={index} className="text-yellow-500" /> : <FaRegStar key={index} className="text-yellow-500" />
+                  ))}
+                </div>
+                <p style={{ fontFamily: 'Arial, sans-serif' }} className="mt-2">
+                  <small>{new Date(review.created_at).toLocaleDateString()}</small>
+                </p>
               </div>
-              <p style={{ fontFamily: 'Arial, sans-serif' }}>{review.comment}</p>
-              <div className="flex items-center">
-                {Array.from({ length: 5 }, (_, index) => (
-                  index < review.rating ? <FaStar key={index} className="text-yellow-500" /> : <FaRegStar key={index} className="text-yellow-500" />
-                ))}
-              </div>
-              <p style={{ fontFamily: 'Arial, sans-serif' }}><small>{new Date(review.created_at).toLocaleDateString()}</small></p>
-            </div>
-          ))
+            );
+          })
         ) : (
           <p style={{ fontFamily: 'Arial, sans-serif' }}>No reviews yet. Be the first to review!</p>
         )}

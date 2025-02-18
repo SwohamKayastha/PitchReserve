@@ -5,11 +5,12 @@ from .models import Review, FutsalFacility  # Ensure Court model is imported
 class ReviewSerializer(serializers.ModelSerializer):
     court = serializers.IntegerField(write_only=True)  # Add court as a write-only field
     user_name = serializers.CharField(source='user.username', read_only=True)  # Add user_name field
+    user_id = serializers.IntegerField(source='user.id', read_only=True)  # Add user_id field
 
     class Meta:
         model = Review
-        fields = ['court', 'comment', 'rating', 'created_at', 'user', 'user_name']  # Include user_name in fields
-        read_only_fields = ['user', 'created_at', 'user_name']
+        fields = ['id', 'court', 'comment', 'rating', 'created_at', 'user_name', 'user_id']  # Include user_name and user_id in fields
+        read_only_fields = ['created_at', 'user_name', 'user_id']
 
     def validate_rating(self, value):
         if value < 1 or value > 5:

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { User, Lock, AlertCircle } from 'lucide-react';
-import { loginUser } from '../../../api/auth';
 import { motion } from 'framer-motion';
 
 const LoginUserForm = () => {
@@ -16,6 +16,7 @@ const LoginUserForm = () => {
     password: '',
   });
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -28,12 +29,35 @@ const LoginUserForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
-      await loginUser(formData);
-      alert('Login successful!');
+      const response = await axios.post('http://127.0.0.1:8000/api/auth/login/', {
+        username: formData.username,
+        password: formData.password,
+      });
+
+      console.log('Login response:', response.data); // Debug log
+
+      // Store tokens and user information
+      const { access, refresh, user_id, username } = response.data;
+      
+      localStorage.setItem('access_token', access);
+      localStorage.setItem('refresh_token', refresh);
+      localStorage.setItem('user_id', user_id.toString());
+      localStorage.setItem('username', username);
+      
+      console.log('Stored user_id in localStorage:', user_id); // Debug log
+      
+      // Verify the data was stored
+      const storedUserId = localStorage.getItem('user_id');
+      console.log('Retrieved user_id from localStorage:', storedUserId); // Debug log
+
       navigate('/playerProfile');
     } catch (error) {
-      setError(error.message || 'An error occurred');
+      console.error('Login error:', error.response?.data || error.message); // Debug log
+      setError('Invalid credentials');
+    } finally {
+      setIsLoading(false);
     }
   };
 
