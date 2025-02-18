@@ -11,6 +11,8 @@ import { Menu, X } from 'lucide-react';
 import { Facebook, Instagram, Mail } from 'lucide-react';
 import Loading from './loading';
 import { getFutsalFieldById } from "@/api/facilities";
+import ReviewSection from "../components/ReviewSection"; // Adjust the path as needed
+
 
 // Animation Variants
 const fadeIn = {
@@ -250,7 +252,6 @@ const FutsalDetail = () => {
     return <div>No futsal data available.</div>; // Fallback if data is still null
   }
 
-
   return (
     <motion.div 
       className="min-h-screen bg-white p-6" // Changed background to white
@@ -323,12 +324,6 @@ const FutsalDetail = () => {
             <div className="bg-gray-50 p-4 rounded-xl mb-6 shadow-md">
               <h3 className="text-lg font-bold text-gray-800 mb-4">Available Facilities</h3>
               <div className="grid grid-cols-2 gap-4">
-                {/* {futsalData.facilities.map((facility, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <div className={`w-3 h-3 rounded-full ${facility.available ? 'bg-green-500' : 'bg-red-500'}`} />
-                    <span className="text-gray-700">{facility.name}</span>
-                  </div>
-                ))} */}
                 {futsalData.facilities?.map((facility, index) => (
                   <div key={index} className="flex items-center gap-2">
                     <div className={`w-3 h-3 rounded-full ${facility.available ? 'bg-green-500' : 'bg-red-500'}`} />
@@ -337,6 +332,9 @@ const FutsalDetail = () => {
                 ))}
               </div>
             </div>
+
+            {/* Add the ReviewSection component here */}
+            <ReviewSection venueId={id} />
           </motion.div>
 
           <motion.div 

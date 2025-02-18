@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'facilities',
     'schedules',
     'court_booking',
+    'reviews'
 ]
 
 MIDDLEWARE = [
@@ -190,11 +191,3 @@ LOGGING = {
     },
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # React Vite development server
-]
-
-# CORS Settings (Optional: if using React on a separate domain)
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # React development server
-]

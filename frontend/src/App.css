@@ -40,3 +40,22 @@
 .read-the-docs {
   color: #888;
 }
+
+
+/* src/App.css */
+.review-section {
+  margin-top: 20px;
+  padding: 20px;
+  border-top: 1px solid #ccc;
+}
+
+.review {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+}
+
+.review p {
+  margin: 5px 0;
+}
