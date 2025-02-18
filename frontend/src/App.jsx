@@ -13,6 +13,7 @@ import FutsalDetail from './pages/afterVenueSelection';
 import FutsalBookingPage from './pages/toBook';
 import Subscriptions from './pages/subscriptions';
 import Loading from './pages/loading';
+import { PaymentSuccess, PaymentFailed } from './pages/PaymentStatus';
 
 // Main App component
 function App() {
@@ -33,6 +34,8 @@ function App() {
         <Route path="/toBook" element={<FutsalBookingPage />} />
         <Route path="/subscriptions" element={<Subscriptions />} />
         <Route path="/loading" element={<Loading />} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/payment-failed" element={<PaymentFailed />} />
       </Routes>
     </BrowserRouter>
   );

@@ -185,6 +185,17 @@ class FacilityDetailView(APIView):
         facility_data = facility_serializer.data
         facility_data['images'] = signed_urls
 
+        if facility.owner:
+            facility_data['owner'] = {
+                'id': facility.owner.id,
+                'phone_number': facility.owner.phone_number,
+                'first_name': facility.owner.user.first_name,
+                'last_name': facility.owner.user.last_name,
+                # Include any other owner fields as needed.
+            }
+        else:
+            facility_data['owner'] = None
+
         return Response(facility_data)
 
 
@@ -285,6 +296,19 @@ class OwnerFacilityView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, facility_id):
+        try:
+            facility = FutsalFacility.objects.get(pk=facility_id)
+        except FutsalFacility.DoesNotExist:
+            return Response({'error': 'Facility not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Only the owner of the facility can delete it.
+        if not hasattr(request.user, 'owner_profile') or facility.owner.user != request.user:
+            return Response({'error': 'You do not have permission to perform this action.'}, status=status.HTTP_403_FORBIDDEN)
+
+        facility.delete()
+        return Response({'message': 'Facility deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 # from rest_framework.decorators import api_view
 # from rest_framework.response import Response
