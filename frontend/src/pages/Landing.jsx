@@ -80,7 +80,7 @@ const TitleBar = () => {
                     { name: 'Home', path: '/' },
                     { name: 'About Us', path: '/aboutUs' },
                     { name: 'Book Venue', path: '/toBook' },
-                    { name: 'Login/ Partnership', path: '/Partnership' },
+                    { name: 'Login/ Partnership', path: '/login' }, // Updated path from '/Partnership' to '/login'dated path from '/Partnership' to '/login'
                     { name: 'Subscriptions', path: '/subscriptions' },
                     { name: 'Blogs', path: '/newFeatures' }
                   ].map((item) => (
@@ -291,7 +291,7 @@ const Footer = () => {
                 { name: 'Home', path: '/' },
                 { name: 'About Us', path: '/aboutUs' },
                 { name: 'Book Venue', path: '/toBook' },
-                { name: 'Login/ Partnership', path: '/Partnership' },
+                { name: 'Login/ Partnership', path: '/login' }, // Updated path from '/Partnership' to '/login'
                 { name: 'Subscriptions', path: '/subscriptions' },
                 { name: 'Blogs', path: '/newFeatures' }
               ].map((item) => (
