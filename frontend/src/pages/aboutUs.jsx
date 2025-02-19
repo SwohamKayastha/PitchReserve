@@ -426,7 +426,7 @@ const AboutUs = () => {
           <h2 className="text-xl sm:text-3xl font-semibold mb-6 sm:mb-8 text-center text-green-800">
             Our Team
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 ">
             {teamMembers.map((member, index) => (
               <motion.div
                 key={index}
@@ -435,7 +435,7 @@ const AboutUs = () => {
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 <Card className="shadow-lg">
-                  <CardContent className="p-4 sm:p-6 text-center bg-gradient-to-br from-white to-emerald-50">
+                  <CardContent className="p-4 sm:p-6 text-center bg-gradient-to-br from-white to-emerald-50 ">
                     <motion.div 
                       className="mb-4 sm:mb-6"
                       whileHover={{ rotate: 360 }}

@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'facilities',
     'schedules',
     'court_booking',
-    'payment',
+    'reviews',
+    'payment'
 ]
 
 MIDDLEWARE = [

@@ -259,6 +259,7 @@ const SubscriptionSection = () => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={() => window.location.href = '/subscriptions'}
           className="bg-green-500 text-white px-8 py-3 rounded-full hover:bg-green-600 transition-colors"
         >
           View Subscriptions
