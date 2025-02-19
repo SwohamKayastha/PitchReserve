@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Settings, Calendar, SortDesc, SortAsc, X, Menu, Upload, Plus, Trash2 } from "lucide-react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { fetchOwnerProfile, updateOwnerProfile } from "@/api/auth";
-import { getOwnerFutsalFields, getOwnerFutsalFieldById } from "@/api/facilities";
+import { getOwnerFutsalFields, getOwnerFutsalFieldById, deleteOwnerFutsalField } from "@/api/facilities";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import FutsalUploadForm from "./futsalFacilitiesForm";
@@ -201,9 +201,18 @@ const Profile = () => {
   };
 
   const handleDeleteField = async (fieldId) => {
-    // Add your delete logic here
-    console.log("Deleting field with ID:", fieldId);
-    // You would typically call an API to delete the field and refresh the list
+    // // Add your delete logic here
+    // console.log("Deleting field with ID:", fieldId);
+    // // You would typically call an API to delete the field and refresh the list
+    try {
+      await deleteOwnerFutsalField(fieldId);
+      // Remove the deleted field from state
+      setFields(fields.filter((field) => field.id !== fieldId));
+      console.log("Field deleted successfully");
+  } catch (error) {
+      console.error("Error deleting field:", error);
+      alert("Error deleting field: " + error.message);
+  }
   };
 
   const renderAllFutsals = () => (
@@ -573,7 +582,7 @@ const Profile = () => {
                             Event Capacity
                           </div>
                           <div className="text-xl font-bold text-gray-800">
-                            {selectedField.event_capacity}
+                            {selectedField.number_of_pitches}
                           </div>
                         </div>
                         <div className="bg-green-50 p-4 rounded-xl shadow-inner">

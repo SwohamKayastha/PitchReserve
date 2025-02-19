@@ -56,7 +56,7 @@ export const loginOwner = async (userData) => {
   try {
       const response = await axios.post(`${API_URL}/owner/login/`, userData);
       const { access_token } = response.data;
-      localStorage.setItem('access_token', access_token);
+      localStorage.setItem('owner_access_token', access_token);
       return response.data;
   } catch (error) {
     if (error.response && error.response.data) {
@@ -72,7 +72,7 @@ export const fetchOwnerProfile = async () => {
   try {
     const response = await axios.get(`${API_URL}/owner/profile/`,{
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        Authorization: `Bearer ${localStorage.getItem('owner_access_token')}`,
       },
     });
     return response.data.owner;
@@ -82,7 +82,7 @@ export const fetchOwnerProfile = async () => {
 };
 
 export const updateOwnerProfile = async (profileData) => {
-  const token = localStorage.getItem('access_token');
+  const token = localStorage.getItem('owner_access_token');
   const headers = {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${token}`,

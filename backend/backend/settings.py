@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'facilities',
     'schedules',
     'court_booking',
-    'reviews'
+    'reviews',
+    'payment'
 ]
 
 MIDDLEWARE = [
@@ -165,7 +166,7 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=2880),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
@@ -191,3 +192,14 @@ LOGGING = {
     },
 }
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # React Vite development server
+]
+
+# CORS Settings (Optional: if using React on a separate domain)
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # React development server
+]
+
+ESEWA_MERCHANT_ID = 'EPAYTEST'
+FRONTEND_URL = "http://localhost:5173" 

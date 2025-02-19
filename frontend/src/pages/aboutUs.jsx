@@ -203,8 +203,16 @@ const AboutUs = () => {
 
   const teamMembers = [
     {
+      name: "Manoj Shakya",
+      role: "Supervisor",
+      image: "/api/placeholder/400/400",
+      college: "Computer Science, KU",
+      address: "Nepal",
+      linkedin: "linkedin.com/in/manoj-shakya"
+    },
+    {
       name: "Ayush Dahal",
-      role: "Member",
+      role: "Team Member",
       image: aayush,
       college: "Computer Science, KU",
       address: "Banepa, Nepal",
@@ -212,7 +220,7 @@ const AboutUs = () => {
     },
     {
       name: "Swoham Kayastha",
-      role: "Member",
+      role: "Team Member",
       image: "/api/placeholder/400/400",
       college: "Computer Science, KU",
       address: "Banepa, Nepal",
@@ -220,7 +228,7 @@ const AboutUs = () => {
     },
     {
       name: "Roshish Sainju",
-      role: "Member",
+      role: "Team Member",
       image: "/api/placeholder/400/400",
       college: "Computer Science, KU",
       address: "Bhaktapur, Nepal",
@@ -228,7 +236,7 @@ const AboutUs = () => {
     },
     {
       name: "Parichit Giri",
-      role: "Member",
+      role: "Team Member",
       image: parichit,
       college: "Computer Science, KU",
       address: "Kathmandu, Nepal",
@@ -236,7 +244,7 @@ const AboutUs = () => {
     },
     {
       name: "Elvis Vaidhya",
-      role: "Member",
+      role: "Team Member",
       image: "/api/placeholder/400/400",
       college: "Computer Science, KU",
       address: "Banepa, Nepal",

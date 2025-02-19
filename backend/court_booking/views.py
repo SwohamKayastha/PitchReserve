@@ -7,27 +7,51 @@ from .models import CourtBooking, Schedule
 from .serializers import CourtBookingSerializer, ScheduleSerializer
 from datetime import datetime
 
+# class CreateBookingView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def post(self, request):
+#         user = request.user
+#         schedule_id = request.data.get('schedule_id')
+#         schedule = get_object_or_404(Schedule, schedule_id=schedule_id)
+
+#         if schedule.is_booked:
+#             return Response({'error': 'This time slot is already booked'}, status=status.HTTP_400_BAD_REQUEST)
+
+#         booking = CourtBooking.objects.create(
+#             user=user,
+#             schedule=schedule,
+#             payment_status='pending'
+#         )
+#         schedule.is_booked = True
+#         schedule.save()
+
+#         serializer = CourtBookingSerializer(booking)
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
 class CreateBookingView(APIView):
-    permission_classes = [IsAuthenticated]
-
     def post(self, request):
-        user = request.user
-        schedule_id = request.data.get('schedule_id')
+        schedule_id = request.data.get("schedule_id")
         schedule = get_object_or_404(Schedule, schedule_id=schedule_id)
-
-        if schedule.is_booked:
-            return Response({'error': 'This time slot is already booked'}, status=status.HTTP_400_BAD_REQUEST)
-
+        schedule.is_booked = False
+        schedule.save()
+        # Create a new booking. Make sure is_booked is False and payment_status is 'pending'
         booking = CourtBooking.objects.create(
-            user=user,
+            user=request.user,  # adjust as needed if not using token-based auth
             schedule=schedule,
             payment_status='pending'
         )
-        schedule.is_booked = True
-        schedule.save()
-
-        serializer = CourtBookingSerializer(booking)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # Return booking info - ensure bookingInfo.totalPrice & scheduled_date/time are provided
+        response_data = {
+            "booking_id": booking.booking_id,
+            "scheduled_date": schedule.date.strftime("%Y-%m-%d"),
+            "scheduled_time": "{}-{}".format(schedule.start_time, schedule.end_time),
+            "name": schedule.facility.name,
+            "totalPrice": schedule.facility.price_per_hour,  # update if you calculate based on duration
+            # Other details as needed...
+        }
+        return Response(response_data, status=status.HTTP_201_CREATED)
 
 
 class UserBookingsView(APIView):
@@ -35,7 +59,8 @@ class UserBookingsView(APIView):
 
     def get(self, request):
         user = request.user
-        bookings = CourtBooking.objects.filter(user=user)
+        bookings = CourtBooking.objects.filter(user=user, payment_status='completed')
+        # booked_schedules = bookings.filter(schedule__is_booked=True)
         serializer = CourtBookingSerializer(bookings, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

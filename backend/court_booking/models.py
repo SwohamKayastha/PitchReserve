@@ -2,6 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from schedules.models import Schedule
 
+class FutsalFacility(models.Model):
+    name = models.CharField(max_length=255)
+    # Add other fields as necessary
+
+    def __str__(self):
+        return self.name
+
 class CourtBooking(models.Model):
     PAYMENT_STATUS_CHOICES = [
         ('pending', 'Pending'),
@@ -26,6 +33,8 @@ class CourtBooking(models.Model):
         choices=PAYMENT_STATUS_CHOICES, 
         default='pending'
     )  # Payment status
+    transaction_id = models.CharField(max_length=100, blank=True, null=True)
+
 
     def __str__(self):
         return f"Booking by {self.user.username} for {self.schedule.facility.name} on {self.schedule.date} from {self.schedule.start_time} to {self.schedule.end_time}"

@@ -4,7 +4,7 @@ const API_URL = 'http://localhost:8000/futsal-facilities';
 const SCHEDULE_URL = 'http://localhost:8000/schedules';
 
 export const createOrUpdateFacility = async (formData) => {
-  const token = localStorage.getItem('access_token');
+  const token = localStorage.getItem('owner_access_token');
   const headers = {
     'Content-Type': 'multipart/form-data',
     Authorization: `Bearer ${token}`,
@@ -23,7 +23,7 @@ export const createOrUpdateFacility = async (formData) => {
 };
 
 export const getFutsalFields = async () => {
-  const token = localStorage.getItem('access_token');
+  const token = localStorage.getItem('owner_access_token');
   const headers = {
     Authorization: `Bearer ${token}`,
   };
@@ -38,7 +38,7 @@ export const getFutsalFields = async () => {
 };
 
 export const getFutsalFieldById = async (id) => {
-  const token = localStorage.getItem('access_token');
+  const token = localStorage.getItem('owner_access_token');
   const headers = {
     Authorization: `Bearer ${token}`,
   };
@@ -53,7 +53,7 @@ export const getFutsalFieldById = async (id) => {
 };
 
 export const getOwnerFutsalFields = async () => {
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("owner_access_token");
   const headers = { Authorization: `Bearer ${token}` };
 
   try {
@@ -66,7 +66,7 @@ export const getOwnerFutsalFields = async () => {
 };
 
 export const getOwnerFutsalFieldById = async (id) => {
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("owner_access_token");
   const headers = { Authorization: `Bearer ${token}` };
 
   try {
@@ -76,4 +76,20 @@ export const getOwnerFutsalFieldById = async (id) => {
     console.error("Error fetching field by ID:", error);
     throw error;
   }
+};
+
+export const deleteOwnerFutsalField = async (fieldId) => {
+  const token = localStorage.getItem("owner_access_token");
+  const response = await fetch(`${API_URL}/owner/facilities/delete/${fieldId}/`, {
+      method: "DELETE",
+      headers: {
+          "Authorization": `Bearer ${token}`,
+      },
+  });
+  
+  if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to delete field");
+  }
+  // return await response.json();
 };

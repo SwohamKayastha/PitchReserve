@@ -24,5 +24,6 @@ urlpatterns = [
     path('futsal-facilities/', include('facilities.urls')),
     path('booking/', include('court_booking.urls')),
     path('schedules/', include('schedules.urls')),
+    path('payment/', include('payment.urls')),
     path('api/', include('reviews.urls')),
 ]
