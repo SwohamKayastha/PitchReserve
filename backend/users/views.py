@@ -32,17 +32,17 @@ class LoginView(APIView):
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
-        email = request.data.get('email')
+
         user = authenticate(username=username, password=password)
-
-        if not user:
-            return Response({'error': 'Invalid credentials'}, status=400)
-
-        refresh = RefreshToken.for_user(user)
-        return Response({
-            'refresh_token': str(refresh),
-            'access_token': str(refresh.access_token),
-        })
+        if user:
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+                'user_id': user.id,  # Include the user ID in response
+                'username': user.username
+            })
+        return Response({'error': 'Invalid credentials'}, status=401)
 
     
 class ProfileView(APIView):
