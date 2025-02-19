@@ -14,3 +14,21 @@ export const fetchUserBookings = async () => {
     throw error;
   }
 };
+
+export const cancelBooking = async (bookingId) => {
+  try {
+    const response = await axios.patch(
+      `${API_URL}/${bookingId}/cancel/`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to cancel booking');
+  }
+};
+

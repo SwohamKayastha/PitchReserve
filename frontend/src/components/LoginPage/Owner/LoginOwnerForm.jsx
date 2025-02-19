@@ -30,7 +30,7 @@ const LoginOwnerForm = () => {
     e.preventDefault();
     try {
       await loginOwner(formData);
-      alert('Login successful!');
+      localStorage.setItem('user_type', 'owner');
       navigate('/ownerProfile');
     } catch (error) {
       setError(error.message || 'An error occurred');

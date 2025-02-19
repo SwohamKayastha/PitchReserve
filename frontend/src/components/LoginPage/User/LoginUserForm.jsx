@@ -45,6 +45,7 @@ const LoginUserForm = () => {
       localStorage.setItem('refresh_token', refresh);
       localStorage.setItem('user_id', user_id.toString());
       localStorage.setItem('username', username);
+      localStorage.setItem('user_type', 'user'); // Add this line
       
       console.log('Stored user_id in localStorage:', user_id); // Debug log
       

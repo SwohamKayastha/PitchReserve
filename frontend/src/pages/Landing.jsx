@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { X, Menu, Facebook, Instagram, Mail } from 'lucide-react';
-import { Link } from 'react-router-dom';
-
-// Images
+import { Link, useNavigate } from 'react-router-dom';
+import { handleProfileClick } from '../utils/auth';
 import subscriptionImage from '../assets/subscriptions.jpg';
 import mapOfNepal from '../assets/mapOfNepal.png';
 import searchicon from '../assets/searchIcon.png';
@@ -16,6 +15,7 @@ import profileIcon from '../assets/profileIcon.png';
 const TitleBar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,13 +35,16 @@ const TitleBar = () => {
     >
       <div className="max-w-7xl mx-auto flex flex-row justify-between items-center p-4">
         <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
-          <Link to="/login" className="relative">
+          <button 
+            onClick={() => handleProfileClick(navigate)}
+            className="relative"
+          >
             <img
               src={profileIcon}
               alt="profile"
               className="h-12 w-auto transition-transform duration-200 hover:brightness-110"
             />
-          </Link>
+          </button>
         </motion.div>
 
         <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
