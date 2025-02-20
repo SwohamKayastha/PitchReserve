@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Trophy, MapPin, Linkedin, GraduationCap, MapPinIcon, X, Menu } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import aayush from '../assets/aayush.jpg';
 import parichit from '../assets/parichit.jpg';
 import logo from '../assets/logo.png';
 import profileIcon from '../assets/profileIcon.png';
-import {Facebook, Instagram, Mail } from 'lucide-react';
+import { Facebook, Instagram, Mail } from 'lucide-react';
+import { handleProfileClick } from '../utils/auth';
 
 // Animation variants
 const fadeInUp = {
@@ -29,9 +30,11 @@ const scaleIn = {
   animate: { scale: 1, opacity: 1 },
   transition: { duration: 0.5 }
 };
+
 const TitleBar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,34 +52,25 @@ const TitleBar = () => {
         scrolled ? 'bg-white shadow-lg' : 'bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="flex items-center"
-        >
-          <Link to="/login" className="relative">
-            <img 
+      <div className="max-w-7xl mx-auto flex flex-row justify-between items-center p-4">
+        <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
+          <button 
+            onClick={() => handleProfileClick(navigate)}
+            className="relative"
+          >
+            <img
               src={profileIcon}
               alt="profile"
               className="h-12 w-auto transition-transform duration-200 hover:brightness-110"
             />
-          </Link>
-        </motion.div>
-
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="flex items-center"
-        >
-          <button onClick={() => window.location.href = '/'} className="relative">
-          <img 
-            src={logo}
-            alt="Logo"
-            className="h-12 w-auto"
-          />
           </button>
         </motion.div>
 
-        <div className="relative">
+        <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
+          <img src={logo} alt="Logo" className="h-12 w-auto" />
+        </motion.div>
+
+        <div className="relative flex items-center">
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
@@ -88,14 +82,14 @@ const TitleBar = () => {
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </motion.button>
 
-          <motion.div 
+          <motion.div
             initial={{ x: '100%' }}
             animate={{ x: isMenuOpen ? 0 : '100%' }}
             transition={{ type: 'tween', duration: 0.3 }}
             className="fixed right-0 top-0 w-72 h-full bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl"
           >
             <div className="flex flex-col p-4">
-              <button 
+              <button
                 onClick={() => setMenuOpen(false)}
                 className="self-end p-2 text-white hover:bg-gray-800 rounded-lg"
               >
@@ -108,14 +102,11 @@ const TitleBar = () => {
                     { name: 'Home', path: '/' },
                     { name: 'About Us', path: '/aboutUs' },
                     { name: 'Book Venue', path: '/toBook' },
-                    { name: 'Login/ Partnership', path: '/Partnership' },
+                    { name: 'Login/ Partnership', path: '/login' },
                     { name: 'Subscriptions', path: '/subscriptions' },
                     { name: 'Blogs', path: '/newFeatures' }
                   ].map((item) => (
-                    <motion.li 
-                      key={item.name}
-                      whileHover={{ x: 10 }}
-                    >
+                    <motion.li key={item.name} whileHover={{ x: 10 }}>
                       <Link
                         to={item.path}
                         className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
@@ -133,7 +124,6 @@ const TitleBar = () => {
     </motion.div>
   );
 };
-
 
 const Footer = () => {
   return (
@@ -192,7 +182,6 @@ const Footer = () => {
     </footer>
   );
 };
-
 
 const AboutUs = () => {
   const stats = [

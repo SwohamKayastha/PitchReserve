@@ -94,7 +94,7 @@ const TitleBar = () => {
                     { name: 'Home', path: '/' },
                     { name: 'About Us', path: '/aboutUs' },
                     { name: 'Book Venue', path: '/toBook' },
-                    { name: 'Login/ Partnership', path: '/Partnership' },
+                    { name: 'Login/ Partnership', path: '/login' },
                     { name: 'Subscriptions', path: '/subscriptions' },
                     { name: 'Blogs', path: '/newFeatures' }
                   ].map((item) => (
@@ -140,6 +140,8 @@ const Profile = () => {
   const [totalVenues, setTotalVenues] = useState(0);
   const [viewMode, setViewMode] = useState('individual'); // New state for view mode
   const [isViewingAll, setIsViewingAll] = useState(false); // State to toggle between views
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [fieldToDelete, setFieldToDelete] = useState(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -201,19 +203,17 @@ const Profile = () => {
     }
   };
 
-  const handleDeleteField = async (fieldId) => {
-    // // Add your delete logic here
-    // console.log("Deleting field with ID:", fieldId);
-    // // You would typically call an API to delete the field and refresh the list
+  const handleDeleteField = async () => {
+    if (!fieldToDelete) return;
     try {
-      await deleteOwnerFutsalField(fieldId);
-      // Remove the deleted field from state
-      setFields(fields.filter((field) => field.id !== fieldId));
-      console.log("Field deleted successfully");
-  } catch (error) {
+      await deleteOwnerFutsalField(fieldToDelete);
+      setFields(fields.filter((field) => field.id !== fieldToDelete));
+      setShowDeleteConfirmation(false);
+      setFieldToDelete(null);
+    } catch (error) {
       console.error("Error deleting field:", error);
       alert("Error deleting field: " + error.message);
-  }
+    }
   };
 
   const renderAllFutsals = () => (
@@ -224,7 +224,7 @@ const Profile = () => {
             <div className="font-medium text-gray-800">{field.name}</div>
             <div className="text-sm text-gray-600">{field.location}</div>
           </div>
-          <button onClick={(e) => { e.stopPropagation(); handleDeleteField(field.id); }} className="text-red-600 hover:text-red-800">
+          <button onClick={(e) => { e.stopPropagation(); setFieldToDelete(field.id); setShowDeleteConfirmation(true); }} className="text-red-600 hover:text-red-800">
             <Trash2 className="w-5 h-5" />
           </button>
         </div>
@@ -406,6 +406,49 @@ const Profile = () => {
             </Button>
           </div>
         </form>
+      </motion.div>
+    </motion.div>
+  );
+
+  const DeleteConfirmationModal = () => (
+    <motion.div 
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <motion.div 
+        className="bg-white rounded-2xl p-6 w-full max-w-md"
+        initial={{ scale: 0.9 }}
+        animate={{ scale: 1 }}
+        exit={{ scale: 0.9 }}
+        transition={{ duration: 0.2 }}
+      >
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-xl font-bold">Delete Confirmation</h3>
+          <button onClick={() => setShowDeleteConfirmation(false)} className="text-gray-500 hover:text-gray-700">
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+        <div className="mb-6">
+          <p>Are you sure you want to delete this field?</p>
+        </div>
+        <div className="flex gap-3 mt-6">
+          <Button
+            type="button"
+            onClick={handleDeleteField}
+            className="flex-1 bg-red-600 text-white hover:bg-red-700"
+          >
+            Delete
+          </Button>
+          <Button
+            type="button"
+            onClick={() => setShowDeleteConfirmation(false)}
+            className="flex-1 bg-gray-100 text-gray-700 hover:bg-gray-200"
+          >
+            Cancel
+          </Button>
+        </div>
       </motion.div>
     </motion.div>
   );
@@ -780,8 +823,10 @@ const Profile = () => {
           }}
         />
       )}
+      {showDeleteConfirmation && <DeleteConfirmationModal />}
     </motion.div>
   );
 };
 
 export default Profile;
+

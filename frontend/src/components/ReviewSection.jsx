@@ -16,6 +16,7 @@ const ReviewSection = ({ venueId }) => {
   });
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [reviewToDelete, setReviewToDelete] = useState(null);
+  const [hoverRating, setHoverRating] = useState(0); // Add hover rating state
 
   const getCurrentUserId = () => {
     const userId = localStorage.getItem('user_id');
@@ -57,6 +58,18 @@ const ReviewSection = ({ venueId }) => {
       ...newReview,
       [name]: value,
     });
+  };
+
+  const handleStarClick = (rating) => {
+    setNewReview({ ...newReview, rating });
+  };
+
+  const handleStarMouseEnter = (rating) => {
+    setHoverRating(rating);
+  };
+
+  const handleStarMouseLeave = () => {
+    setHoverRating(0);
   };
 
   const handleSubmit = async (e) => {
@@ -133,9 +146,23 @@ const ReviewSection = ({ venueId }) => {
           animate={{ opacity: 1 }}
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
         >
-          <div className="bg-white rounded-lg p-6 w-96">
+          <div className="bg-white rounded-xl p-6 w-96">
             <h4 className="text-xl font-bold mb-4" style={{ fontFamily: 'Arial, sans-serif' }}>Write a Review</h4>
             <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1" style={{ fontFamily: 'Arial, sans-serif' }}>Rating:</label>
+                <div className="flex items-center">
+                  {Array.from({ length: 5 }, (_, index) => (
+                    <FaStar
+                      key={index}
+                      className={`cursor-pointer ${index < (hoverRating || newReview.rating) ? 'text-yellow-500' : 'text-gray-300'}`}
+                      onClick={() => handleStarClick(index + 1)}
+                      onMouseEnter={() => handleStarMouseEnter(index + 1)}
+                      onMouseLeave={handleStarMouseLeave}
+                    />
+                  ))}
+                </div>
+              </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1" style={{ fontFamily: 'Arial, sans-serif' }}>Comment:</label>
                 <textarea
@@ -143,33 +170,16 @@ const ReviewSection = ({ venueId }) => {
                   value={newReview.comment}
                   onChange={handleInputChange}
                   required
-                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-2 border rounded-xl shadow-xl focus:ring-2 focus:ring-blue-500"
                   rows="4"
                   placeholder="Share your experience..."
                   style={{ fontFamily: 'Arial, sans-serif' }}
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1" style={{ fontFamily: 'Arial, sans-serif' }}>Rating:</label>
-                <select
-                  name="rating"
-                  value={newReview.rating}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                  style={{ fontFamily: 'Arial, sans-serif' }}
-                >
-                  <option value={5}>5 - Excellent</option>
-                  <option value={4}>4 - Good</option>
-                  <option value={3}>3 - Average</option>
-                  <option value={2}>2 - Poor</option>
-                  <option value={1}>1 - Terrible</option>
-                </select>
-              </div>
               <div className="flex gap-2">
                 <button
                   type="submit"
-                  className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+                  className="flex-1 bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700"
                   style={{ fontFamily: 'Arial, sans-serif' }}
                 >
                   Submit
@@ -177,7 +187,7 @@ const ReviewSection = ({ venueId }) => {
                 <button
                   type="button"
                   onClick={() => setShowReviewModal(false)}
-                  className="flex-1 bg-gray-200 text-gray-800 py-2 rounded-lg hover:bg-gray-300"
+                  className="flex-1 bg-gray-200 text-gray-800 py-2 rounded-xl hover:bg-gray-300"
                   style={{ fontFamily: 'Arial, sans-serif' }}
                 >
                   Cancel
@@ -195,7 +205,7 @@ const ReviewSection = ({ venueId }) => {
           animate={{ opacity: 1 }}
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
         >
-          <div className="bg-white rounded-lg p-6 w-96">
+          <div className="bg-white rounded-xl p-6 w-96">
             <div className="flex items-center gap-3 mb-4">
               <AlertTriangle className="w-6 h-6 text-yellow-500" />
               <h4 className="text-xl font-bold">Confirm Delete</h4>
@@ -204,7 +214,7 @@ const ReviewSection = ({ venueId }) => {
             <div className="flex gap-3">
               <button
                 onClick={handleConfirmDelete}
-                className="flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700"
+                className="flex-1 bg-red-600 text-white py-2 rounded-xl hover:bg-red-700"
               >
                 Yes, Delete
               </button>
@@ -213,7 +223,7 @@ const ReviewSection = ({ venueId }) => {
                   setShowDeleteConfirmation(false);
                   setReviewToDelete(null);
                 }}
-                className="flex-1 bg-gray-200 text-gray-800 py-2 rounded-lg hover:bg-gray-300"
+                className="flex-1 bg-gray-200 text-gray-800 py-2 rounded-xl hover:bg-gray-300"
               >
                 Cancel
               </button>

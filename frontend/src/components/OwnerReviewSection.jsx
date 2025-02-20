@@ -41,7 +41,7 @@ const OwnerReviewSection = ({ venueId }) => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="review-section bg-white rounded-lg shadow-lg p-6 mt-6 w-full">
+    <div className="review-section bg-white rounded-2xl shadow-lg p-6 mt-6 w-full">
       <h3 className="text-lg font-bold text-gray-800" style={{ fontFamily: 'Arial, sans-serif' }}>Customer Reviews</h3>
       
       {/* Display Reviews */}

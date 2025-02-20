@@ -94,7 +94,7 @@ const TitleBar = () => {
                     { name: 'Home', path: '/' },
                     { name: 'About Us', path: '/aboutUs' },
                     { name: 'Book Venue', path: '/toBook' },
-                    { name: 'Login/ Partnership', path: '/Partnership' },
+                    { name: 'Login/ Partnership', path: '/login' },
                     { name: 'Subscriptions', path: '/subscriptions' },
                     { name: 'Blogs', path: '/newFeatures' }
                   ].map((item) => (
@@ -417,7 +417,7 @@ const FutsalDetail = () => {
 
   return (
     <motion.div 
-      className="min-h-screen bg-white flex flex-col"
+      className="min-h-screen bg-white flex flex-col bg-gradient-to-b from-green-50 to-green-100"
       initial="hidden"
       animate="visible"
       variants={fadeIn}
@@ -558,7 +558,7 @@ const FutsalDetail = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                 >
-                <div className="bg-white rounded-xl shadow-lg p-6 w-full sticky top-24">
+                <div className="bg-gradient-to-b from-green-50 to-green-100 rounded-xl shadow-2xl p-6 w-full sticky top-24">
                   <motion.h2 
                     className="text-2xl font-bold text-gray-800 mb-6"
                     initial={{ opacity: 0, x: -20 }}
@@ -613,7 +613,7 @@ const FutsalDetail = () => {
 
             {/* Review Model Div */}
           <motion.div 
-            className="lg:col-span-2 bg-white rounded-lg shadow-lg p-6 mt-6"
+            className="lg:col-span-2 bg-white rounded-xl shadow-lg p-6 mt-6"
             initial={{ opacity: 0, y: 20 }} 
             animate={{ opacity: 1, y: 0 }} 
             transition={{ duration: 0.5 }}
