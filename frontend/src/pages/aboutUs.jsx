@@ -438,7 +438,7 @@ const AboutUs = () => {
                   <CardContent className="p-4 sm:p-6 text-center bg-gradient-to-br from-white to-emerald-50 ">
                     <motion.div 
                       className="mb-4 sm:mb-6"
-                      whileHover={{ rotate: 360 }}
+                      whileHover={{ rotate: 0 }}
                       transition={{ duration: 0.7 }}
                     >
                       <div className="w-24 h-24 sm:w-32 sm:h-32 mx-auto rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 p-1">

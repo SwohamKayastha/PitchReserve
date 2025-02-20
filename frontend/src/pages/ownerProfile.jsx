@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import FutsalUploadForm from "./futsalFacilitiesForm";
 import { Navigate } from 'react-router-dom';
 import Loading from './loading';
+import OwnerReviewSection from "../components/OwnerReviewSection";
 
 import logo from '../assets/logo.png';
 import profileIcon from '../assets/profileIcon.png';
@@ -692,6 +693,17 @@ const Profile = () => {
                 )}
               </CardContent>
             </Card>
+            {/* Add Review Section here */}
+            {selectedField && (
+              <motion.div 
+                className="mt-8"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <OwnerReviewSection venueId={selectedField.id} />
+              </motion.div>
+            )}
           </motion.div>
 
           {/* Bookings Section */}

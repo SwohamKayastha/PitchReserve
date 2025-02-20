@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { MessageSquarePlus, Trash2, AlertTriangle } from 'lucide-react'; // Add AlertTriangle icon
-import { FaStar, FaRegStar } from 'react-icons/fa'; // Import star icons
-import defaultProfileIcon from '../assets/defaultProfileIcon.png'; // Import default profile icon
+import { MessageSquarePlus, Trash2, AlertTriangle } from 'lucide-react';
+import { FaStar, FaRegStar } from 'react-icons/fa';
+import defaultProfileIcon from '../assets/defaultProfileIcon.png';
 
 const ReviewSection = ({ venueId }) => {
   const [reviews, setReviews] = useState([]);
@@ -24,10 +24,6 @@ const ReviewSection = ({ venueId }) => {
   };
 
   useEffect(() => {
-    // Check user authentication status when component mounts
-    const userId = getCurrentUserId();
-    console.log('Current user ID on mount:', userId);
-    
     const fetchReviews = async () => {
       try {
         const token = localStorage.getItem('access_token');
@@ -42,7 +38,7 @@ const ReviewSection = ({ venueId }) => {
           },
         });
         
-        console.log('Reviews response:', response.data); // Debug log
+        console.log('Reviews response:', response.data);
         setReviews(response.data.reviews || []);
       } catch (err) {
         console.error('Error fetching reviews:', err);
@@ -120,7 +116,7 @@ const ReviewSection = ({ venueId }) => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="review-section bg-white rounded-lg shadow-lg p-6 mt-6" style={{ textAlign: 'left' }}>
+    <div className="review-section bg-white rounded-lg shadow-lg p-6 mt-6 w-full" style={{ textAlign: 'left' }}>
       <h3 className="text-lg font-bold text-gray-800" style={{ fontFamily: 'Arial, sans-serif' }}>Reviews for this Futsal</h3>
       <button
         onClick={() => setShowReviewModal(true)}

@@ -192,14 +192,7 @@ LOGGING = {
     },
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # React Vite development server
-]
-
-# CORS Settings (Optional: if using React on a separate domain)
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # React development server
-]
-
 ESEWA_MERCHANT_ID = 'EPAYTEST'
 FRONTEND_URL = "http://localhost:5173" 
+
+CORS_ALLOW_ALL_ORIGINS = True

@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -15,6 +13,7 @@ import { getFutsalFieldById } from "@/api/facilities";
 import { initiatePayment } from '@/api/payment';
 import ReviewSection from "../components/ReviewSection"; // Adjust the path as needed
 import { MessageSquarePlus, Star } from 'lucide-react';
+import '../components/Calendar.css';
 
 // Animation Variants
 const fadeIn = {
@@ -42,7 +41,7 @@ const TitleBar = () => {
         scrolled ? 'bg-white shadow-lg' : 'bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
+      <div className="w-full flex justify-between items-center px-8 py-4">
         <motion.div whileHover={{ scale: 1.05 }} className="flex items-center">
           <Link to="/login" className="relative">
             <img 
@@ -123,90 +122,90 @@ const TitleBar = () => {
 
 const Footer = () => {
   return (
-    <footer className="bg-[#0a0d14] text-white py-12 w-full mt-auto">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              <div className="flex items-center space-x-4">
-                <Link to="/" className="relative">
-                  <img
-                    src={logo}
-                    alt="logo"
-                    className="h-20 w-auto transition-transform duration-200 hover:brightness-110"
-                  />
-                </Link>
-                <p className="text-m">Nepal's Only<br />Futsal Venue<br />Booking System</p>
-              </div>
-    
-              <nav>
-                <ul className="space-y-0">
-                  {[
-                    { name: 'Home', path: '/' },
-                    { name: 'About Us', path: '/aboutUs' },
-                    { name: 'Book Venue', path: '/toBook' },
-                    { name: 'Login/ Partnership', path: '/Partnership' },
-                    { name: 'Subscriptions', path: '/subscriptions' },
-                    { name: 'Blogs', path: '/newFeatures' }
-                  ].map((item) => (
-                    <motion.li key={item.name} whileHover={{ x: 10 }}>
-                      <Link
-                        to={item.path}
-                        className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
-                      >
-                        {item.name}
-                      </Link>
-                    </motion.li>
-                  ))}
-                </ul>
-              </nav>
-    
-              <div className="space-y-4">
-                <h3 className="font-bold text-lg">Contact Us</h3>
-                <ul className="space-y-2">
-                  <li>Pitch Reserve</li>
-                  <li>Kathmandu University</li>
-                  <li>+977 9741740551</li>
-                  <li>info@pitchreserve.com.np</li>
-                </ul>
-                <div className="flex space-x-4 mt-4">
-                  <a
-                    href="https://facebook.com/pitchreserve"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-green-500 transition-colors"
+    <footer className="bg-[#0a0d14] text-white py-6 w-full mt-auto">
+      <div className="w-full px-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div className="flex items-center space-x-4">
+            <Link to="/" className="relative">
+              <img
+                src={logo}
+                alt="logo"
+                className="h-20 w-auto transition-transform duration-200 hover:brightness-110"
+              />
+            </Link>
+            <p className="text-m">Nepal's Only<br />Futsal Venue<br />Booking System</p>
+          </div>
+
+          <nav>
+            <ul className="space-y-0">
+              {[
+                { name: 'Home', path: '/' },
+                { name: 'About Us', path: '/aboutUs' },
+                { name: 'Book Venue', path: '/toBook' },
+                { name: 'Login/ Partnership', path: '/Partnership' },
+                { name: 'Subscriptions', path: '/subscriptions' },
+                { name: 'Blogs', path: '/newFeatures' }
+              ].map((item) => (
+                <motion.li key={item.name} whileHover={{ x: 10 }}>
+                  <Link
+                    to={item.path}
+                    className="block px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
                   >
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-                    </svg>
-                  </a>
-                  <a
-                    href="https://instagram.com/pitchreserve"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-green-500 transition-colors"
-                  >
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-                    </svg>
-                  </a>
-                  <a
-                    href="mailto:info@pitchreserve.com.np"
-                    className="hover:text-green-500 transition-colors"
-                  >
-                    <Mail size={24} />
-                  </a>
-                </div>
-              </div>
+                    {item.name}
+                  </Link>
+                </motion.li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="space-y-4">
+            <h3 className="font-bold text-lg">Contact Us</h3>
+            <ul className="space-y-2">
+              <li>Pitch Reserve</li>
+              <li>Kathmandu University</li>
+              <li>+977 9741740551</li>
+              <li>info@pitchreserve.com.np</li>
+            </ul>
+            <div className="flex space-x-4 mt-4">
+              <a
+                href="https://facebook.com/pitchreserve"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-green-500 transition-colors"
+              >
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                </svg>
+              </a>
+              <a
+                href="https://instagram.com/pitchreserve"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-green-500 transition-colors"
+              >
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                </svg>
+              </a>
+              <a
+                href="mailto:info@pitchreserve.com.np"
+                className="hover:text-green-500 transition-colors"
+              >
+                <Mail size={24} />
+              </a>
             </div>
           </div>
-        </footer>
+        </div>
+      </div>
+    </footer>
   );
 };
+
 const FutsalDetail = () => {
   const [date, setDate] = useState(new Date());
   const [showSlots, setShowSlots] = useState(false);
-  const [selectedSlots, setSelectedSlots] = useState([]);
   const [bookingInfo, setBookingInfo] = useState(null);
   const [futsalData, setFutsalData] = useState(null);
   const [loading, setLoading] = useState(true); // Add loading state
@@ -553,18 +552,33 @@ const FutsalDetail = () => {
           {/* Calender Model */}
               <motion.div 
                   className="flex items-center justify-center lg:col-span-1" 
-                  initial={{ opacity: 0, y: 20 }} 
-                  animate={{ opacity: 1, y: 0 }} 
-                  transition={{ duration: 0.5 }}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
                 >
-                <div className="bg-white rounded-xl shadow-lg p-6 w-full sticky top-24, left-0">
-                  <h2 className="text-xl font-bold text-gray-800 mb-4">Select Date</h2>
-                  <div className="calendar-container mb-6">
+                <div className="bg-white rounded-xl shadow-lg p-6 w-full sticky top-24">
+                  <motion.h2 
+                    className="text-2xl font-bold text-gray-800 mb-6"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    Select Booking Date
+                  </motion.h2>
+                  
+                  <motion.div 
+                    className="calendar-container mb-6"
+                    initial={{ scale: 0.95 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.4 }}
+                  >
                     <Calendar
                       onChange={handleDateSelect}
                       value={date}
                       minDate={new Date()}
-                      className="shadow-sm"
+                      className="shadow-lg hover:shadow-xl transition-shadow duration-300"
                       tileClassName={({ date: tileDate, view }) => {
                         if (view === 'month') {
                           const today = new Date();
@@ -580,13 +594,20 @@ const FutsalDetail = () => {
                         return tileDate < new Date().setHours(0, 0, 0, 0);
                       }}
                     />
-                  </div>
-                  <div className="mt-6 bg-gray-50 p-4 rounded-lg">
+                  </motion.div>
+
+                  <motion.div 
+                    className="mt-6 bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-lg"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.2 }}
+                  >
                     <div className="text-sm font-medium text-gray-700 mb-2">Hourly Rate</div>
-                    <div className="text-2xl font-bold text-gray-800">
-                      Rs. {futsalData.price_per_hour}/hour
+                    <div className="text-3xl font-bold text-blue-900">
+                      Rs. {futsalData.price_per_hour}
+                      <span className="text-lg text-blue-600">/hour</span>
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
               </motion.div>
 
@@ -922,8 +943,6 @@ const FutsalDetail = () => {
             </div>
           </motion.div>
         )}
-        
-        
       </div>
       <Footer />  
     </motion.div>
