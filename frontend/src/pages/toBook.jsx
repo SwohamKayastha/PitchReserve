@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -13,6 +13,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Loading from './loading';
 import { getFutsalFields, getFutsalFieldById } from "@/api/facilities";
+import { handleProfileClick } from '../utils/auth';
 
 
 const TitleBar = () => {
@@ -88,7 +89,7 @@ const TitleBar = () => {
                     { name: 'Home', path: '/' },
                     { name: 'About Us', path: '/aboutUs' },
                     { name: 'Book Venue', path: '/toBook' },
-                    { name: 'Login/ Partnership', path: '/Partnership' },
+                    { name: 'Login/ Partnership', path: '/login' },
                     { name: 'Subscriptions', path: '/subscriptions' },
                     { name: 'Blogs', path: '/newFeatures' }
                   ].map((item) => (
@@ -192,16 +193,16 @@ const FutsalBookingPage = () => {
     }
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 mt-20">
+    <div className="w-full min-h-screen bg-gradient-to-b from-green-50 to-green-100 py-12">
       <TitleBar />
       <div className="container mx-auto py-8">
-        <h1 className="text-4xl font-bold mb-8 text-green-800 text-center">
+        <h1 className="text-5xl font-bold mb-8 text-green-800 text-center">
           Book Your Favourite Futsal
         </h1>
 
         <div className="flex gap-8">
           {/* Sidebar Filters */}
-          <div className="w-64 flex-shrink-0 bg-white p-6 rounded-lg shadow-md space-y-6">
+          <div className="w-64 flex-shrink-0 bg-gradient-to-r from-aqua-800 to-gray-300 p-6 rounded-xl shadow-2xl space-y-6">
             {/* Search Bar */}
             <div className="mb-6">
               <div className="relative">

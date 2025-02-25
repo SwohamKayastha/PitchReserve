@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,} from 'react';
 import { motion } from 'framer-motion'; // Import motion
 import { Link } from 'react-router-dom';
 import { Search, Clock, MapPin, Calendar, Trophy, AlertCircle, Settings, X, Upload } from 'lucide-react';
@@ -10,6 +10,7 @@ import { fetchUserBookings } from '@/api/user-booking';
 import logo from '../assets/logo.png';
 import profileIcon from '../assets/profileIcon.png';
 import { Building2, Menu } from 'lucide-react';
+import Loading from './loading';
 
 
 const fadeIn = {
@@ -90,7 +91,7 @@ const TitleBar = () => {
                     { name: 'Home', path: '/' },
                     { name: 'About Us', path: '/aboutUs' },
                     { name: 'Book Venue', path: '/toBook' },
-                    { name: 'Login/ Partnership', path: '/Partnership' },
+                    { name: 'Login/ Partnership', path: '/login' },
                     { name: 'Subscriptions', path: '/subscriptions' },
                     { name: 'Blogs', path: '/newFeatures' }
                   ].map((item) => (
@@ -178,6 +179,7 @@ const PlayerProfile = () => {
           date_joined: data.date_joined,
           upcomingBookings,
           playingHistory,
+          date_joined: data.date_joined,
         }));
 
         const userBookings = await fetchUserBookings();
@@ -190,9 +192,12 @@ const PlayerProfile = () => {
     };
     loadData();
   }, []);
-
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   }
 
   if (error) {
@@ -258,7 +263,7 @@ const PlayerProfile = () => {
                     </div>
                     <div className="text-center border-l border-r border-blue-200">
                       <div className="text-3xl font-bold text-blue-800">{playerData.stats.cancellation}</div>
-                      <div className="text-sm font-medium text-blue-600">Cancellations</div>
+                      <div className="text-sm font-medium text-blue-600 truncate ">Cancelled</div>
                     </div>
                   </div>
 

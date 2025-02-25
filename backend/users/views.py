@@ -54,5 +54,5 @@ class ProfileView(APIView):
         return Response({
             'username': user.username,
             'email': user.email,
-            'date_joined': user.date_joined
+            'date_joined': user.date_joined,
         })
