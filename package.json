@@ -20,9 +20,11 @@
   "homepage": "https://github.com/SwohamKayastha/PitchReserve#readme",
   "description": "",
   "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1",
-    "framer-motion": "^10.x",
-    "lucide-react":"^0.x",
-    "react-router-dom": "^6.x"
+    "framer-motion": "^10.18.0",
+    "lucide-react": "^0.294.0",
+    "react-router-dom": "^6.29.0"
   }
 }

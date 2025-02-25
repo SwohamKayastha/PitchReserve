@@ -134,6 +134,17 @@ const PlayerProfile = () => {
     playingHistory: [],
   });
 
+  const calculateTotalMatches = (bookings) => {
+    let count = 0;
+    bookings.forEach((booking) => {
+      if (booking.booking_id) {
+        count++;
+      }
+    });
+    console.log(count);
+    return count;
+  };
+
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -164,6 +175,7 @@ const PlayerProfile = () => {
           ...prevData,
           username: data.username,
           email: data.email,
+          date_joined: data.date_joined,
           upcomingBookings,
           playingHistory,
         }));
@@ -241,7 +253,7 @@ const PlayerProfile = () => {
 
                   <div className="flex justify-between w-full mt-8 p-6 bg-blue-50 rounded-xl shadow-inner">
                     <div className="text-center border-l border-r border-blue-200">
-                      <div className="text-3xl font-bold text-blue-800">{playerData.stats.totalMatches}</div>
+                      <div className="text-3xl font-bold text-blue-800">{calculateTotalMatches(playerData.playingHistory)}</div>
                       <div className="text-sm font-medium text-blue-600">Total Matches</div>
                     </div>
                     <div className="text-center border-l border-r border-blue-200">
