@@ -213,7 +213,7 @@ const FutsalDetail = () => {
   const { id } = useParams(); // Get futsal ID from URL
    const [availableSlots, setAvailableSlots] = useState([]); // new state for fetched schedule slots
   const [selectedSlot, setSelectedSlot] = useState(null);  // new state for the selected schedule id
-  const API_URL = process.env.API_URL;
+  const API_URL = import.meta.env.VITE_API_URL;
 
 
   useEffect(() => {

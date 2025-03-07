@@ -130,7 +130,7 @@ const FutsalBookingPage = () => {
     image_url: "",
   });
   const [loading, setLoading] = useState(true); // Loading state
-  const API_URL = process.env.API_URL;
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchFutsals = async () => {

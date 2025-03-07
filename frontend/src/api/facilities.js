@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = process.env.API_URL;
-const SCHEDULE_URL = proccess.env.API_URL;
+const API_URL = import.meta.env.VITE_API_URL ;
+const SCHEDULE_URL = import.meta.env.VITE_API_URL ;
 
 export const createOrUpdateFacility = async (formData) => {
   const token = localStorage.getItem('owner_access_token');

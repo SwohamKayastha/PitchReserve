@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const API_URL = process.env.API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 // User API:
 export const registerUser = async (userData) => {
   try {
-    const response = await axios.post(`${API_URL}/register/`, userData);
+    const response = await axios.post(`${API_URL}/api/auth/register/`, userData);
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -14,7 +14,7 @@ export const registerUser = async (userData) => {
 
 export const loginUser = async (userData) => {
   try {
-    const response = await axios.post(`${API_URL}/login/`, userData);
+    const response = await axios.post(`${API_URL}/api/auth/login/`, userData);
     const { access_token } = response.data;
     localStorage.setItem('access_token', access_token);
     localStorage.setItem('refress_token', access_token);
@@ -31,7 +31,7 @@ export const loginUser = async (userData) => {
 
 export const fetchPlayerProfile = async () => {
   try {
-    const response = await axios.get(`${API_URL}/profile/`, {
+    const response = await axios.get(`${API_URL}/api/auth/profile/`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('access_token')}`,
       },
@@ -45,7 +45,7 @@ export const fetchPlayerProfile = async () => {
 //Owner API:
 export const registerOwner = async (ownerData) => {
   try {
-    const response = await axios.post(`${API_URL}/owner/register/`, ownerData);
+    const response = await axios.post(`${API_URL}/api/auth/owner/register/`, ownerData);
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -54,7 +54,7 @@ export const registerOwner = async (ownerData) => {
 
 export const loginOwner = async (userData) => {
   try {
-      const response = await axios.post(`${API_URL}/owner/login/`, userData);
+      const response = await axios.post(`${API_URL}/api/auth/owner/login/`, userData);
       const { access_token } = response.data;
       localStorage.setItem('owner_access_token', access_token);
       return response.data;
@@ -70,7 +70,7 @@ export const loginOwner = async (userData) => {
 
 export const fetchOwnerProfile = async () => {
   try {
-    const response = await axios.get(`${API_URL}/owner/profile/`,{
+    const response = await axios.get(`${API_URL}/api/auth/owner/profile/`,{
       headers: {
         Authorization: `Bearer ${localStorage.getItem('owner_access_token')}`,
       },
@@ -89,7 +89,7 @@ export const updateOwnerProfile = async (profileData) => {
   };
 
   try {
-    const response = await axios.put(`${API_URL}/owner/form/`, profileData, { headers });
+    const response = await axios.put(`${API_URL}/api/auth/owner/form/`, profileData, { headers });
     return response.data;
   } catch (error) {
     console.error('Error updating owner profile:', error);
