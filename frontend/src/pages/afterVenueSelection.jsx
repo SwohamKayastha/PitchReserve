@@ -213,13 +213,14 @@ const FutsalDetail = () => {
   const { id } = useParams(); // Get futsal ID from URL
    const [availableSlots, setAvailableSlots] = useState([]); // new state for fetched schedule slots
   const [selectedSlot, setSelectedSlot] = useState(null);  // new state for the selected schedule id
+  const API_URL = process.env.API_URL;
 
 
   useEffect(() => {
     const fetchFutsalData = async () => {
       setLoading(true); // Set loading to true before fetching
       try {
-        const response = await fetch(`http://localhost:8000/futsal-facilities/facilities/${id}/`);
+        const response = await fetch(`${API_URL}/futsal-facilities/facilities/${id}/`);
         const data = await response.json();
         // console.log(data)
         setFutsalData(data);
@@ -241,7 +242,7 @@ const FutsalDetail = () => {
     setDate(selectedDate);
     const formattedDate = formatLocalDate(selectedDate);
     console.log(formattedDate)
-    fetch(`http://localhost:8000/booking/facility-schedule/${id}/${formattedDate}/`)
+    fetch(`${API_URL}/booking/facility-schedule/${id}/${formattedDate}/`)
       .then((response) => response.json())
       .then((data) => {
         setAvailableSlots(data);
@@ -295,7 +296,7 @@ const FutsalDetail = () => {
   const handleSubmit = async () => {
     if (!selectedSlot) return alert("Please select a valid slot.");
     try {
-      const response = await fetch('http://localhost:8000/booking/create/', {
+      const response = await fetch(`${API_URL}/booking/create/`, {
         method: "POST",
         headers: { "Content-Type": "application/json",
           "Authorization": `Bearer ${localStorage.getItem('access_token')}`
@@ -368,7 +369,7 @@ const FutsalDetail = () => {
 
   const handlePayment = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/payment/initiate/${bookingInfo.booking_id}/`);
+      const response = await fetch(`${API_URL}/payment/initiate/${bookingInfo.booking_id}/`);
       
       // Check if response is ok
       if (!response.ok) {

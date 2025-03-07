@@ -17,6 +17,7 @@ const ReviewSection = ({ venueId }) => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [reviewToDelete, setReviewToDelete] = useState(null);
   const [hoverRating, setHoverRating] = useState(0); // Add hover rating state
+  const API_URL = process.env.API_URL;
 
   const getCurrentUserId = () => {
     const userId = localStorage.getItem('user_id');
@@ -33,7 +34,7 @@ const ReviewSection = ({ venueId }) => {
           return;
         }
 
-        const response = await axios.get(`http://127.0.0.1:8000/api/court_reviews/?court_id=${venueId}`, {
+        const response = await axios.get(`${API_URL}/api/court_reviews/?court_id=${venueId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

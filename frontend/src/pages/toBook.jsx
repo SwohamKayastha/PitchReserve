@@ -130,12 +130,13 @@ const FutsalBookingPage = () => {
     image_url: "",
   });
   const [loading, setLoading] = useState(true); // Loading state
+  const API_URL = process.env.API_URL;
 
   useEffect(() => {
     const fetchFutsals = async () => {
       setLoading(true); // Set loading to true before fetching
       try {
-        const response = await axios.get('http://localhost:8000/futsal-facilities/list/');
+        const response = await axios.get(`${API_URL}/futsal-facilities/list/`);
         console.log(response.data); 
         // const response = await getFutsalFields();
         setFutsals(response.data);

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/futsal-facilities';
-const SCHEDULE_URL = 'http://localhost:8000/schedules';
+const API_URL = process.env.API_URL;
+const SCHEDULE_URL = proccess.env.API_URL;
 
 export const createOrUpdateFacility = async (formData) => {
   const token = localStorage.getItem('owner_access_token');
@@ -11,10 +11,10 @@ export const createOrUpdateFacility = async (formData) => {
   };
 
   try {
-    const response = await axios.post(`${API_URL}/list/`, formData, { headers });
+    const response = await axios.post(`${API_URL}/futsal-facilities/list/`, formData, { headers });
     // Triggering the time slot generation for the new facility that is created from the form
     const date = new Date().toISOString().split('T')[0];
-    await axios.post(`${SCHEDULE_URL}/generate-time-slots/${response.data.id}/${date}/`, {}, { headers });
+    await axios.post(`${SCHEDULE_URL}/schedules/generate-time-slots/${response.data.id}/${date}/`, {}, { headers });
     return response.data;
   } catch (error) {
     console.error('Error creating/updating facility:', error);
@@ -29,7 +29,7 @@ export const getFutsalFields = async () => {
   };
 
   try {
-    const response = await axios.get(`${API_URL}/list/`, { headers });
+    const response = await axios.get(`${API_URL}/futsal-facilities/list/`, { headers });
     return response.data;
   } catch (error) {
     console.error('Error fetching futsal fields:', error);
@@ -44,7 +44,7 @@ export const getFutsalFieldById = async (id) => {
   };
 
   try {
-    const response = await axios.get(`${API_URL}/facilities/${id}/`, { headers });
+    const response = await axios.get(`${API_URL}/futsal-facilities/facilities/${id}/`, { headers });
     return response.data;
   } catch (error) {
     console.error('Error fetching futsal field:', error);
@@ -57,7 +57,7 @@ export const getOwnerFutsalFields = async () => {
   const headers = { Authorization: `Bearer ${token}` };
 
   try {
-    const response = await axios.get(`${API_URL}/owner/facilities/`, { headers });
+    const response = await axios.get(`${API_URL}/futsal-facilities/owner/facilities/`, { headers });
     return response.data;
   } catch (error) {
     console.error("Error fetching owner fields:", error);
@@ -70,7 +70,7 @@ export const getOwnerFutsalFieldById = async (id) => {
   const headers = { Authorization: `Bearer ${token}` };
 
   try {
-    const response = await axios.get(`${API_URL}/owner/facilities/${id}/`, { headers });
+    const response = await axios.get(`${API_URL}/futsal-facilities/owner/facilities/${id}/`, { headers });
     return response.data;
   } catch (error) {
     console.error("Error fetching field by ID:", error);
@@ -80,7 +80,7 @@ export const getOwnerFutsalFieldById = async (id) => {
 
 export const deleteOwnerFutsalField = async (fieldId) => {
   const token = localStorage.getItem("owner_access_token");
-  const response = await fetch(`${API_URL}/owner/facilities/delete/${fieldId}/`, {
+  const response = await fetch(`${API_URL}/futsal-facilities/owner/facilities/delete/${fieldId}/`, {
       method: "DELETE",
       headers: {
           "Authorization": `Bearer ${token}`,

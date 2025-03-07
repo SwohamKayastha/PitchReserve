@@ -18,7 +18,7 @@ const OwnerReviewSection = ({ venueId }) => {
           return;
         }
 
-        const response = await axios.get(`http://127.0.0.1:8000/api/court_reviews/?court_id=${venueId}`, {
+        const response = await axios.get(`${API_URL}/api/court_reviews/?court_id=${venueId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

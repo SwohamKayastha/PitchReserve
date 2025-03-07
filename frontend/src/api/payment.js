@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+const API_URL = process.env.API_URL;
+
 export const initiatePayment = async (bookingId) => {
   const token = localStorage.getItem('access_token');
-  const response = await axios.post(`http://localhost:8000/payment/initiate/${bookingId}/`, {}, {
+  const response = await axios.post(`${API_URL}/payment/initiate/${bookingId}/`, {}, {
     headers: {
       'Authorization': `Bearer ${token}`
     },

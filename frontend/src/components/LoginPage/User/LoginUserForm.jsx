@@ -17,6 +17,7 @@ const LoginUserForm = () => {
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const API_URL = process.env.API_URL;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -31,7 +32,7 @@ const LoginUserForm = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/auth/login/', {
+      const response = await axios.post(`${API_URL}/api/auth/login/`, {
         username: formData.username,
         password: formData.password,
       });
