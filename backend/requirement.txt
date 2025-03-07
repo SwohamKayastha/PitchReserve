@@ -4,4 +4,5 @@ django-cors-headers>=3.14.0
 requests>=2.26.0
 supabase>=0.1.0
 psycopg2>=2.9.3  # PostgreSQL adapter for Python
+gunicorn==23.0.0
 python-dotenv>=0.19.2  # For loading environment variables from a .env file
